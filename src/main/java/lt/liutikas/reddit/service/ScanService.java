@@ -1,6 +1,7 @@
 package lt.liutikas.reddit.service;
 
 import lt.liutikas.reddit.client.RedditClient;
+import lt.liutikas.reddit.model.NewsEvent;
 import lt.liutikas.reddit.model.ScanResult;
 import lt.liutikas.reddit.model.ScanSource;
 import lt.liutikas.reddit.model.reddit.PageCategory;
@@ -8,6 +9,7 @@ import lt.liutikas.reddit.model.reddit.Submission;
 import lt.liutikas.reddit.repository.ScanResultRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
@@ -24,10 +26,12 @@ public class ScanService {
 
     private final RedditClient redditClient;
     private final ScanResultRepository scanResultRepository;
+    private final ApplicationEventPublisher eventPublisher;
 
-    public ScanService(RedditClient redditClient, ScanResultRepository scanResultRepository) {
+    public ScanService(RedditClient redditClient, ScanResultRepository scanResultRepository, ApplicationEventPublisher eventPublisher) {
         this.redditClient = redditClient;
         this.scanResultRepository = scanResultRepository;
+        this.eventPublisher = eventPublisher;
     }
 
     private static ScanResult assembleScanResult(Submission submission) {
@@ -62,5 +66,16 @@ public class ScanService {
         scanResultRepository.saveAll(scanResults);
 
         LOG.info("Scanning reddit done. Found {} new entries.", scanResults.size());
+
+        notScannedSubmissions.stream()
+                .map(this::assembleNewsEvent)
+                .forEach(eventPublisher::publishEvent);
+    }
+
+    private NewsEvent assembleNewsEvent(Submission submission) {
+        NewsEvent newsEvent = new NewsEvent(this);
+        newsEvent.setUrl(submission.getUrl());
+        newsEvent.setHeadline(submission.getTitle());
+        return newsEvent;
     }
 }
