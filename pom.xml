@@ -9,10 +9,10 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>lt.liutikas</groupId>
-    <artifactId>reddit-scrapper</artifactId>
+    <artifactId>news-service</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>reddit-scrapper</name>
-    <description>reddit-scrapper</description>
+    <name>news-service</name>
+    <description>news-service</description>
     <properties>
         <java.version>11</java.version>
     </properties>
@@ -39,6 +39,22 @@
             <groupId>io.projectreactor</groupId>
             <artifactId>reactor-test</artifactId>
             <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>com.h2database</groupId>
+            <artifactId>h2</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>io.springfox</groupId>
+            <artifactId>springfox-boot-starter</artifactId>
+            <version>3.0.0</version>
+        </dependency>
+        <dependency>
+            <groupId>org.jsoup</groupId>
+            <artifactId>jsoup</artifactId>
+            <version>1.13.1</version>
         </dependency>
     </dependencies>
 
