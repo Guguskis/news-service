@@ -1,5 +1,6 @@
 package lt.liutikas.reddit.model.reddit;
 
+import java.net.URL;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -8,7 +9,7 @@ public class Submission {
     private Integer score;
     private LocalDateTime creationDate;
     private String title;
-    private String link;
+    private URL url;
     private Integer commentCount;
     private List<Comment> comments;
 
@@ -36,12 +37,12 @@ public class Submission {
         this.title = title;
     }
 
-    public String getLink() {
-        return link;
+    public URL getUrl() {
+        return url;
     }
 
-    public void setLink(String link) {
-        this.link = link;
+    public void setUrl(URL url) {
+        this.url = url;
     }
 
     public Integer getCommentCount() {

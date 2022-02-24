@@ -19,6 +19,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -45,13 +47,9 @@ public class RedditClient {
         Document document = Jsoup.parse(pageHtml);
         Elements submissionElements = document.getElementsByClass("link");
 
-        List<Submission> submissions = submissionElements.stream()
+        return submissionElements.stream()
                 .map(this::parseSubmission)
                 .collect(Collectors.toList());
-
-        LOG.info(String.format("Retrieved '%s' submissions for subreddit '%s'", submissions.size(), subreddit));
-
-        return submissions;
     }
 
     public List<Comment> getCommentsForSubmission(String subreddit, String submissionId) {
@@ -76,14 +74,19 @@ public class RedditClient {
         String scoreText = submissionElement.getElementsByClass("score unvoted").get(0).attr("title");
         String commentCountText = submissionElement.getElementsByClass("comments").text();
         String creationDateText = submissionElement.getElementsByClass("live-timestamp").get(0).attr("datetime");
-        String link = submissionElement.getElementsByClass("comments").get(0).attr("href");
+        String url = submissionElement.getElementsByClass("comments").get(0).attr("href");
 
         Submission submission = new Submission();
         submission.setTitle(title);
         submission.setScore(submissionParser.parseScore(scoreText));
         submission.setCommentCount(submissionParser.parseCommentCount(commentCountText));
         submission.setCreationDate(submissionParser.parseCreationDate(creationDateText));
-        submission.setLink(link);
+
+        try {
+            submission.setUrl(new URL(url));
+        } catch (MalformedURLException e) {
+            throw new RuntimeException("Could not parse URL", e);
+        }
 
         return submission;
     }
