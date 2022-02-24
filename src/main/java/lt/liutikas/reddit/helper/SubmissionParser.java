@@ -8,7 +8,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 @Component
-public class PostParser {
+public class SubmissionParser {
 
     public LocalDateTime parseCreationDate(String creationDateText) {
         return LocalDateTime.parse(creationDateText, DateTimeFormatter.ISO_DATE_TIME);

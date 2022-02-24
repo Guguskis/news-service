@@ -3,7 +3,7 @@ package lt.liutikas.reddit.model.reddit;
 import java.time.LocalDateTime;
 import java.util.List;
 
-public class Post {
+public class Submission {
 
     private Integer score;
     private LocalDateTime creationDate;

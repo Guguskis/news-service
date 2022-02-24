@@ -1,10 +1,10 @@
 package lt.liutikas.reddit.client;
 
 import lt.liutikas.reddit.helper.CommentsParser;
-import lt.liutikas.reddit.helper.PostParser;
+import lt.liutikas.reddit.helper.SubmissionParser;
 import lt.liutikas.reddit.model.reddit.Comment;
 import lt.liutikas.reddit.model.reddit.PageCategory;
-import lt.liutikas.reddit.model.reddit.Post;
+import lt.liutikas.reddit.model.reddit.Submission;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -27,65 +27,65 @@ public class RedditClient {
 
     private static final Logger LOG = LoggerFactory.getLogger(RedditClient.class);
     private static final String REDDIT_SUBREDDIT_TOP_PAST_HOUR_URL = "/r/%s/%s";
-    private static final String GET_POST_PAGE_URL = "/r/%s/comments/%s/";
-    private final PostParser postParser;
+    private static final String GET_SUBMISSION_PAGE_URL = "/r/%s/comments/%s/";
+    private final SubmissionParser submissionParser;
     private final CommentsParser commentsParser;
     private final RestTemplate restTemplate;
 
-    public RedditClient(PostParser postParser,
+    public RedditClient(SubmissionParser submissionParser,
                         CommentsParser commentsParser,
                         @Qualifier("reddit") RestTemplate restTemplate) {
-        this.postParser = postParser;
+        this.submissionParser = submissionParser;
         this.commentsParser = commentsParser;
         this.restTemplate = restTemplate;
     }
 
-    public List<Post> getPosts(String subreddit, PageCategory category) {
-        String pageHtml = getSubredditPostsHtmlPage(subreddit, category);
+    public List<Submission> getSubmissions(String subreddit, PageCategory category) {
+        String pageHtml = getSubmissionsHtmlPage(subreddit, category);
         Document document = Jsoup.parse(pageHtml);
-        Elements postElements = document.getElementsByClass("link");
+        Elements submissionElements = document.getElementsByClass("link");
 
-        List<Post> posts = postElements.stream()
-                .map(this::convertElementToPost)
+        List<Submission> submissions = submissionElements.stream()
+                .map(this::parseSubmission)
                 .collect(Collectors.toList());
 
-        LOG.info(String.format("Retrieved '%s' posts for subreddit '%s'", posts.size(), subreddit));
+        LOG.info(String.format("Retrieved '%s' submissions for subreddit '%s'", submissions.size(), subreddit));
 
-        return posts;
+        return submissions;
     }
 
-    public List<Comment> getCommentsForPost(String subreddit, String postId) {
-        String hotPostHtmlPage = getPostPage(subreddit, postId);
-        return commentsParser.parseComments(hotPostHtmlPage);
+    public List<Comment> getCommentsForSubmission(String subreddit, String submissionId) {
+        String submissionHtmlPage = getSubmissionPage(subreddit, submissionId);
+        return commentsParser.parseComments(submissionHtmlPage);
     }
 
-    public String getSubredditPostsHtmlPage(String subreddit, PageCategory category) {
+    public String getSubmissionsHtmlPage(String subreddit, PageCategory category) {
         String url = String.format(REDDIT_SUBREDDIT_TOP_PAST_HOUR_URL, subreddit, category.toString().toLowerCase());
         ResponseEntity<String> response = restTemplate.exchange(url, HttpMethod.GET, getHttpEntityWithHeaders(), String.class);
         return response.getBody();
     }
 
-    private String getPostPage(String subreddit, String postId) {
-        String url = String.format(GET_POST_PAGE_URL, subreddit, postId);
+    private String getSubmissionPage(String subreddit, String submissionId) {
+        String url = String.format(GET_SUBMISSION_PAGE_URL, subreddit, submissionId);
         ResponseEntity<String> response = restTemplate.exchange(url, HttpMethod.GET, getHttpEntityWithHeaders(), String.class);
         return response.getBody();
     }
 
-    private Post convertElementToPost(Element postElement) {
-        String title = postElement.select("a.title").text();
-        String scoreText = postElement.getElementsByClass("score unvoted").get(0).attr("title");
-        String commentCountText = postElement.getElementsByClass("comments").text();
-        String creationDateText = postElement.getElementsByClass("live-timestamp").get(0).attr("datetime");
-        String link = postElement.getElementsByClass("comments").get(0).attr("href");
+    private Submission parseSubmission(Element submissionElement) {
+        String title = submissionElement.select("a.title").text();
+        String scoreText = submissionElement.getElementsByClass("score unvoted").get(0).attr("title");
+        String commentCountText = submissionElement.getElementsByClass("comments").text();
+        String creationDateText = submissionElement.getElementsByClass("live-timestamp").get(0).attr("datetime");
+        String link = submissionElement.getElementsByClass("comments").get(0).attr("href");
 
-        Post post = new Post();
-        post.setTitle(title);
-        post.setScore(postParser.parseScore(scoreText));
-        post.setCommentCount(postParser.parseCommentCount(commentCountText));
-        post.setCreationDate(postParser.parseCreationDate(creationDateText));
-        post.setLink(link);
+        Submission submission = new Submission();
+        submission.setTitle(title);
+        submission.setScore(submissionParser.parseScore(scoreText));
+        submission.setCommentCount(submissionParser.parseCommentCount(commentCountText));
+        submission.setCreationDate(submissionParser.parseCreationDate(creationDateText));
+        submission.setLink(link);
 
-        return post;
+        return submission;
     }
 
     private HttpEntity<Object> getHttpEntityWithHeaders() {

@@ -2,7 +2,7 @@ package lt.liutikas.reddit.controller;
 
 import lt.liutikas.reddit.client.RedditClient;
 import lt.liutikas.reddit.model.reddit.PageCategory;
-import lt.liutikas.reddit.model.reddit.Post;
+import lt.liutikas.reddit.model.reddit.Submission;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -19,7 +19,7 @@ public class NewsController {
     }
 
     @RequestMapping
-    public List<Post> getNews() {
-        return redditClient.getPosts("ukraine", PageCategory.NEW);
+    public List<Submission> getNews() {
+        return redditClient.getSubmissions("ukraine", PageCategory.NEW);
     }
 }
