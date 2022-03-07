@@ -21,7 +21,7 @@ public class NewsPushService {
     @EventListener
     public void handleEvent(NewsEvent event) {
         pushTemplate.convertAndSend("/topic/news", event);
-        LOG.info("Published event \"{}\"", event.getHeadline());
+        LOG.info("Published event \"{}\"", event.getTitle());
     }
 
 }

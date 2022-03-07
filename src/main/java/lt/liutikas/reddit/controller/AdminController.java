@@ -22,7 +22,7 @@ public class AdminController {
     @PostMapping("/news/publish")
     public void sendMessage(String headline) throws MalformedURLException {
         NewsEvent event = new NewsEvent(this);
-        event.setHeadline(headline);
+        event.setTitle(headline);
         event.setUrl(new URL("https://www.reddit.com/r/worldnews/comments/7xqzqy/trump_says_he_will_not_be_president_for_next/"));
         eventPublisher.publishEvent(event);
     }

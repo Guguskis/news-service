@@ -6,19 +6,19 @@ import java.net.URL;
 
 public class NewsEvent extends ApplicationEvent {
 
-    private String headline;
+    private String title;
     private URL url;
 
     public NewsEvent(Object source) {
         super(source);
     }
 
-    public String getHeadline() {
-        return headline;
+    public String getTitle() {
+        return title;
     }
 
-    public void setHeadline(String headline) {
-        this.headline = headline;
+    public void setTitle(String title) {
+        this.title = title;
     }
 
     public URL getUrl() {
