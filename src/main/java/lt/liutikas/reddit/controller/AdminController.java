@@ -1,30 +1,29 @@
 package lt.liutikas.reddit.controller;
 
+import lt.liutikas.reddit.model.NewsEvent;
 import org.springframework.context.ApplicationEventPublisher;
-import org.springframework.messaging.handler.annotation.MessageMapping;
-import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/api/news")
-public class NewsController {
+@RequestMapping("/api/admin")
+public class AdminController {
 
     private final SimpMessagingTemplate pushTemplate;
     private final ApplicationEventPublisher eventPublisher;
 
-    public NewsController(SimpMessagingTemplate pushTemplate, ApplicationEventPublisher eventPublisher) {
+    public AdminController(SimpMessagingTemplate pushTemplate, ApplicationEventPublisher eventPublisher) {
         this.pushTemplate = pushTemplate;
         this.eventPublisher = eventPublisher;
     }
 
-    @MessageMapping("/news")
-    @SendTo("/topic/news")
-    public String news(String message) {
-
-        System.out.println(message);
-        return "Hello, " + message + "!";
+    @PostMapping("/news/publish")
+    public void sendMessage(String headline) {
+        NewsEvent event = new NewsEvent(this);
+        event.setHeadline(headline);
+        eventPublisher.publishEvent(event);
     }
 
 }
