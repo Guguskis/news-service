@@ -40,7 +40,7 @@ public class CommentsParser {
     }
 
     private LocalDateTime parseCreationDate(String createdDateString) {
-        return LocalDateTime.parse(createdDateString, DateTimeFormatter.ISO_DATE_TIME);
+        return LocalDateTime.parse(createdDateString, DateTimeFormatter.ISO_OFFSET_DATE_TIME);
     }
 
     public Integer parseScore(String text) {

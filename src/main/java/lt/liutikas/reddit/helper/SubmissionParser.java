@@ -11,7 +11,7 @@ import java.util.regex.Pattern;
 public class SubmissionParser {
 
     public LocalDateTime parseCreationDate(String creationDateText) {
-        return LocalDateTime.parse(creationDateText, DateTimeFormatter.ISO_DATE_TIME);
+        return LocalDateTime.parse(creationDateText, DateTimeFormatter.ISO_OFFSET_DATE_TIME);
     }
 
     public Integer parseScore(String text) {

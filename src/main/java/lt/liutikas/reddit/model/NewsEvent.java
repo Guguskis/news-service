@@ -1,5 +1,6 @@
 package lt.liutikas.reddit.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import org.springframework.context.ApplicationEvent;
 
 import java.net.URL;
@@ -9,6 +10,7 @@ public class NewsEvent extends ApplicationEvent {
 
     private String title;
     private URL url;
+    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss'Z'")
     private LocalDateTime created;
 
     public NewsEvent(Object source) {

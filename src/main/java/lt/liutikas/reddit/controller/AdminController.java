@@ -8,6 +8,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.time.ZoneOffset;
+import java.time.ZonedDateTime;
 
 @RestController
 @RequestMapping("/api/admin")
@@ -24,6 +26,7 @@ public class AdminController {
         NewsEvent event = new NewsEvent(this);
         event.setTitle(headline);
         event.setUrl(new URL("https://www.reddit.com/r/worldnews/comments/7xqzqy/trump_says_he_will_not_be_president_for_next/"));
+        event.setCreated(ZonedDateTime.now(ZoneOffset.UTC).toLocalDateTime());
         eventPublisher.publishEvent(event);
     }
 
