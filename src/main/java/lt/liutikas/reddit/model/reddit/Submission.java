@@ -7,7 +7,7 @@ import java.util.List;
 public class Submission {
 
     private Integer score;
-    private LocalDateTime creationDate;
+    private LocalDateTime created;
     private String title;
     private URL url;
     private Integer commentCount;
@@ -21,12 +21,12 @@ public class Submission {
         this.score = score;
     }
 
-    public LocalDateTime getCreationDate() {
-        return creationDate;
+    public LocalDateTime getCreated() {
+        return created;
     }
 
-    public void setCreationDate(LocalDateTime creationDate) {
-        this.creationDate = creationDate;
+    public void setCreated(LocalDateTime created) {
+        this.created = created;
     }
 
     public String getTitle() {

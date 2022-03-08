@@ -80,7 +80,7 @@ public class RedditClient {
         submission.setTitle(title);
         submission.setScore(submissionParser.parseScore(scoreText));
         submission.setCommentCount(submissionParser.parseCommentCount(commentCountText));
-        submission.setCreationDate(submissionParser.parseCreationDate(creationDateText));
+        submission.setCreated(submissionParser.parseCreationDate(creationDateText));
 
         try {
             submission.setUrl(new URL(url));

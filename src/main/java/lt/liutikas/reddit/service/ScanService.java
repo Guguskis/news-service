@@ -76,6 +76,7 @@ public class ScanService {
         NewsEvent newsEvent = new NewsEvent(this);
         newsEvent.setUrl(submission.getUrl());
         newsEvent.setTitle(submission.getTitle());
+        newsEvent.setCreated(submission.getCreated());
         return newsEvent;
     }
 }
