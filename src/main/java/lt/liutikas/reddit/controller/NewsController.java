@@ -1,22 +1,24 @@
 package lt.liutikas.reddit.controller;
 
-import org.springframework.context.ApplicationEventPublisher;
+import lt.liutikas.reddit.model.NewsPage;
+import lt.liutikas.reddit.model.PaginationQuery;
+import lt.liutikas.reddit.service.NewsService;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
-import org.springframework.messaging.simp.SimpMessagingTemplate;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import javax.validation.Valid;
 
 @RestController
 @RequestMapping("/api/news")
 public class NewsController {
 
-    private final SimpMessagingTemplate pushTemplate;
-    private final ApplicationEventPublisher eventPublisher;
+    private final NewsService newsService;
 
-    public NewsController(SimpMessagingTemplate pushTemplate, ApplicationEventPublisher eventPublisher) {
-        this.pushTemplate = pushTemplate;
-        this.eventPublisher = eventPublisher;
+    public NewsController(NewsService newsService) {
+        this.newsService = newsService;
     }
 
     @MessageMapping("/news")
@@ -25,6 +27,11 @@ public class NewsController {
 
         System.out.println(message);
         return "Hello, " + message + "!";
+    }
+
+    @GetMapping
+    public NewsPage news(@Valid PaginationQuery query) {
+        return newsService.getAll(query.pageRequest());
     }
 
 }

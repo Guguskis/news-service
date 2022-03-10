@@ -2,11 +2,15 @@ package lt.liutikas.reddit.service;
 
 import lt.liutikas.reddit.assembler.NewsAssembler;
 import lt.liutikas.reddit.model.News;
+import lt.liutikas.reddit.model.NewsPage;
 import lt.liutikas.reddit.model.event.ScannedNewsEvent;
 import lt.liutikas.reddit.repository.NewsRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.event.EventListener;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 
@@ -33,4 +37,15 @@ public class NewsService {
         LOG.info("Published news \"{}\"", news.getTitle());
     }
 
+    public NewsPage getAll(PageRequest pageRequest) {
+
+        pageRequest.withSort(Sort.by("created").descending());
+        Page<News> page = newsRepository.findAll(pageRequest);
+
+        NewsPage newsPage = new NewsPage();
+        newsPage.setNews(page.getContent());
+        newsPage.setNextPageToken(page);
+
+        return newsPage;
+    }
 }
