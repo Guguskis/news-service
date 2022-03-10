@@ -1,9 +1,9 @@
 package lt.liutikas.reddit.service;
 
 import lt.liutikas.reddit.client.RedditClient;
-import lt.liutikas.reddit.model.NewsEvent;
 import lt.liutikas.reddit.model.ScanResult;
 import lt.liutikas.reddit.model.ScanSource;
+import lt.liutikas.reddit.model.ScannedNewsEvent;
 import lt.liutikas.reddit.model.reddit.PageCategory;
 import lt.liutikas.reddit.model.reddit.Submission;
 import lt.liutikas.reddit.repository.ScanResultRepository;
@@ -72,11 +72,11 @@ public class ScanService {
                 .forEach(eventPublisher::publishEvent);
     }
 
-    private NewsEvent assembleNewsEvent(Submission submission) {
-        NewsEvent newsEvent = new NewsEvent(this);
-        newsEvent.setUrl(submission.getUrl());
-        newsEvent.setTitle(submission.getTitle());
-        newsEvent.setCreated(submission.getCreated());
-        return newsEvent;
+    private ScannedNewsEvent assembleNewsEvent(Submission submission) {
+        ScannedNewsEvent scannedNewsEvent = new ScannedNewsEvent(this);
+        scannedNewsEvent.setUrl(submission.getUrl());
+        scannedNewsEvent.setTitle(submission.getTitle());
+        scannedNewsEvent.setCreated(submission.getCreated());
+        return scannedNewsEvent;
     }
 }
