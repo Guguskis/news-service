@@ -2,7 +2,7 @@ package lt.liutikas.reddit.service;
 
 import lt.liutikas.reddit.assembler.NewsAssembler;
 import lt.liutikas.reddit.model.News;
-import lt.liutikas.reddit.model.ScannedNewsEvent;
+import lt.liutikas.reddit.model.event.ScannedNewsEvent;
 import lt.liutikas.reddit.repository.NewsRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

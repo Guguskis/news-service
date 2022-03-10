@@ -3,7 +3,7 @@ package lt.liutikas.reddit.service;
 import lt.liutikas.reddit.client.RedditClient;
 import lt.liutikas.reddit.model.ScanResult;
 import lt.liutikas.reddit.model.ScanSource;
-import lt.liutikas.reddit.model.ScannedNewsEvent;
+import lt.liutikas.reddit.model.event.ScannedNewsEvent;
 import lt.liutikas.reddit.model.reddit.PageCategory;
 import lt.liutikas.reddit.model.reddit.Submission;
 import lt.liutikas.reddit.repository.ScanResultRepository;

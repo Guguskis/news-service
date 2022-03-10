@@ -1,7 +1,7 @@
 package lt.liutikas.reddit.assembler;
 
 import lt.liutikas.reddit.model.News;
-import lt.liutikas.reddit.model.ScannedNewsEvent;
+import lt.liutikas.reddit.model.event.ScannedNewsEvent;
 import org.springframework.stereotype.Component;
 
 @Component

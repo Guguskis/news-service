@@ -1,6 +1,6 @@
 package lt.liutikas.reddit.controller;
 
-import lt.liutikas.reddit.model.ScannedNewsEvent;
+import lt.liutikas.reddit.model.event.ScannedNewsEvent;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;

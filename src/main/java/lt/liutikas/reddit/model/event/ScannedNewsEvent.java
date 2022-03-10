@@ -1,4 +1,4 @@
-package lt.liutikas.reddit.model;
+package lt.liutikas.reddit.model.event;
 
 import org.springframework.context.ApplicationEvent;
 
