@@ -26,7 +26,7 @@ public class NewsService {
     }
 
     @EventListener
-    public void handleEvent(ScannedNewsEvent event) {
+    public void handleScannedNewsEvent(ScannedNewsEvent event) {
         News news = newsAssembler.assembleNews(event);
         news = newsRepository.save(news);
         pushTemplate.convertAndSend("/topic/news", news);
