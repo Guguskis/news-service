@@ -39,12 +39,12 @@ public class NewsService {
 
     public NewsPage getAll(PageRequest pageRequest) {
 
-        pageRequest.withSort(Sort.by("created").descending());
+        pageRequest = pageRequest.withSort(Sort.by("created").descending());
         Page<News> page = newsRepository.findAll(pageRequest);
 
         NewsPage newsPage = new NewsPage();
         newsPage.setNews(page.getContent());
-        newsPage.setNextPageToken(page);
+        newsPage.setNextToken(page);
 
         return newsPage;
     }

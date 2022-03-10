@@ -15,7 +15,7 @@ public class PaginationResponse {
         this.nextPageToken = nextPageToken;
     }
 
-    public void setNextPageToken(Page page) {
+    public void setNextToken(Page page) {
         Pageable pageable = page.nextPageable();
 
         if (pageable.isPaged()) {
