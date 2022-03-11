@@ -9,7 +9,7 @@ public class PaginationQuery {
     @Min(0)
     private Integer pageToken = 0;
     @Min(1)
-    private Integer pageSize = 20;
+    private Integer pageSize = 10;
 
     public PageRequest pageRequest() {
         return PageRequest.of(pageToken, pageSize);
