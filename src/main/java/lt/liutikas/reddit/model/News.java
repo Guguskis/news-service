@@ -2,10 +2,7 @@ package lt.liutikas.reddit.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.net.URL;
 import java.time.LocalDateTime;
 
@@ -15,6 +12,7 @@ public class News {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
+    @Column(length = 2048)
     private String title;
     private URL url;
     @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss'Z'")
