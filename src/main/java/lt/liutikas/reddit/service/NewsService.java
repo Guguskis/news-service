@@ -46,6 +46,8 @@ public class NewsService {
         newsPage.setNews(page.getContent());
         newsPage.setNextToken(page);
 
+        LOG.info("Returning news {'pageToken': {}, 'pageSize': {}", pageRequest.getPageNumber(), pageRequest.getPageSize());
+
         return newsPage;
     }
 }
