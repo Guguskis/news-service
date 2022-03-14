@@ -12,6 +12,7 @@ public class Submission {
     private URL url;
     private Integer commentCount;
     private List<Comment> comments;
+    private String subreddit;
 
     public Integer getScore() {
         return score;
@@ -59,5 +60,13 @@ public class Submission {
 
     public void setComments(List<Comment> comments) {
         this.comments = comments;
+    }
+
+    public String getSubreddit() {
+        return subreddit;
+    }
+
+    public void setSubreddit(String subreddit) {
+        this.subreddit = subreddit;
     }
 }

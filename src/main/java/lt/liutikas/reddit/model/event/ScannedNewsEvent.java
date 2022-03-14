@@ -10,6 +10,7 @@ public class ScannedNewsEvent extends ApplicationEvent {
     private String title;
     private URL url;
     private LocalDateTime created;
+    private String channel;
 
     public ScannedNewsEvent(Object source) {
         super(source);
@@ -37,5 +38,13 @@ public class ScannedNewsEvent extends ApplicationEvent {
 
     public void setCreated(LocalDateTime created) {
         this.created = created;
+    }
+
+    public String getChannel() {
+        return channel;
+    }
+
+    public void setChannel(String channel) {
+        this.channel = channel;
     }
 }

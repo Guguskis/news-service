@@ -49,6 +49,7 @@ public class RedditClient {
 
         return submissionElements.stream()
                 .map(this::parseSubmission)
+                .peek(submission -> submission.setSubreddit("r/" + subreddit))
                 .collect(Collectors.toList());
     }
 

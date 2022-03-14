@@ -1,9 +1,9 @@
 package lt.liutikas.reddit.service;
 
+import lt.liutikas.reddit.assembler.NewsAssembler;
 import lt.liutikas.reddit.client.RedditClient;
 import lt.liutikas.reddit.model.ScanResult;
 import lt.liutikas.reddit.model.ScanSource;
-import lt.liutikas.reddit.model.event.ScannedNewsEvent;
 import lt.liutikas.reddit.model.reddit.PageCategory;
 import lt.liutikas.reddit.model.reddit.Submission;
 import lt.liutikas.reddit.repository.ScanResultRepository;
@@ -31,11 +31,13 @@ public class ScanService {
     private final RedditClient redditClient;
     private final ScanResultRepository scanResultRepository;
     private final ApplicationEventPublisher eventPublisher;
+    private final NewsAssembler newsAssembler;
 
-    public ScanService(RedditClient redditClient, ScanResultRepository scanResultRepository, ApplicationEventPublisher eventPublisher) {
+    public ScanService(RedditClient redditClient, ScanResultRepository scanResultRepository, ApplicationEventPublisher eventPublisher, NewsAssembler newsAssembler) {
         this.redditClient = redditClient;
         this.scanResultRepository = scanResultRepository;
         this.eventPublisher = eventPublisher;
+        this.newsAssembler = newsAssembler;
     }
 
     private static ScanResult assembleScanResult(Submission submission) {
@@ -74,16 +76,8 @@ public class ScanService {
         LOG.info("Scanning reddit done. {\"subreddits\": \"{}\", \"submissions\": \"{}\"}", Strings.join(SUBREDDITS, ','), scanResults.size());
 
         notScannedSubmissions.stream()
-                .map(this::assembleNewsEvent)
+                .map(newsAssembler::assembleScannedNewsEvent)
                 .forEach(eventPublisher::publishEvent);
-    }
-
-    private ScannedNewsEvent assembleNewsEvent(Submission submission) {
-        ScannedNewsEvent scannedNewsEvent = new ScannedNewsEvent(this);
-        scannedNewsEvent.setUrl(submission.getUrl());
-        scannedNewsEvent.setTitle(submission.getTitle());
-        scannedNewsEvent.setCreated(submission.getCreated());
-        return scannedNewsEvent;
     }
 
     private Stream<? extends Submission> getNewSubmissionsStream(String subreddit) {
