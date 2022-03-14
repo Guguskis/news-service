@@ -1,5 +1,6 @@
 package lt.liutikas.reddit.assembler;
 
+import lt.liutikas.reddit.model.Channel;
 import lt.liutikas.reddit.model.News;
 import lt.liutikas.reddit.model.event.ScannedNewsEvent;
 import lt.liutikas.reddit.model.reddit.Submission;
@@ -15,18 +16,20 @@ public class NewsAssembler {
         news.setUrl(event.getUrl());
         news.setCreated(event.getCreated());
         news.setChannel(event.getChannel());
+        news.setSubChannel(event.getSubChannel());
 
         return news;
     }
 
     public ScannedNewsEvent assembleScannedNewsEvent(Submission submission) {
-        ScannedNewsEvent scannedNewsEvent = new ScannedNewsEvent(this);
+        ScannedNewsEvent event = new ScannedNewsEvent(this);
 
-        scannedNewsEvent.setUrl(submission.getUrl());
-        scannedNewsEvent.setTitle(submission.getTitle());
-        scannedNewsEvent.setCreated(submission.getCreated());
-        scannedNewsEvent.setChannel(submission.getSubreddit());
+        event.setUrl(submission.getUrl());
+        event.setTitle(submission.getTitle());
+        event.setCreated(submission.getCreated());
+        event.setSubChannel(submission.getSubreddit());
+        event.setChannel(Channel.REDDIT);
 
-        return scannedNewsEvent;
+        return event;
     }
 }

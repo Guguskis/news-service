@@ -1,5 +1,6 @@
 package lt.liutikas.reddit.model.event;
 
+import lt.liutikas.reddit.model.Channel;
 import org.springframework.context.ApplicationEvent;
 
 import java.net.URL;
@@ -10,7 +11,8 @@ public class ScannedNewsEvent extends ApplicationEvent {
     private String title;
     private URL url;
     private LocalDateTime created;
-    private String channel;
+    private String subChannel;
+    private Channel channel;
 
     public ScannedNewsEvent(Object source) {
         super(source);
@@ -40,11 +42,19 @@ public class ScannedNewsEvent extends ApplicationEvent {
         this.created = created;
     }
 
-    public String getChannel() {
+    public String getSubChannel() {
+        return subChannel;
+    }
+
+    public void setSubChannel(String subChannel) {
+        this.subChannel = subChannel;
+    }
+
+    public Channel getChannel() {
         return channel;
     }
 
-    public void setChannel(String channel) {
+    public void setChannel(Channel channel) {
         this.channel = channel;
     }
 }

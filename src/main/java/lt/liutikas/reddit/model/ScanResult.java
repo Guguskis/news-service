@@ -1,6 +1,8 @@
 package lt.liutikas.reddit.model;
 
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.Id;
 import java.net.URL;
 import java.time.LocalDateTime;
@@ -11,7 +13,8 @@ public class ScanResult {
     @Id
     private URL url;
     private LocalDateTime scannedAt;
-    private ScanSource source;
+    @Enumerated(EnumType.STRING)
+    private Channel source;
 
     public URL getUrl() {
         return url;
@@ -29,11 +32,11 @@ public class ScanResult {
         this.scannedAt = scannedAt;
     }
 
-    public ScanSource getSource() {
+    public Channel getSource() {
         return source;
     }
 
-    public void setSource(ScanSource source) {
+    public void setSource(Channel source) {
         this.source = source;
     }
 }

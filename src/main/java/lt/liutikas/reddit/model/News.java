@@ -17,7 +17,9 @@ public class News {
     private URL url;
     @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss'Z'")
     private LocalDateTime created;
-    private String channel;
+    private String subChannel;
+    @Enumerated(EnumType.STRING)
+    private Channel channel;
 
     public Long getId() {
         return id;
@@ -51,11 +53,19 @@ public class News {
         this.created = created;
     }
 
-    public String getChannel() {
+    public String getSubChannel() {
+        return subChannel;
+    }
+
+    public void setSubChannel(String channel) {
+        this.subChannel = channel;
+    }
+
+    public Channel getChannel() {
         return channel;
     }
 
-    public void setChannel(String channel) {
+    public void setChannel(Channel channel) {
         this.channel = channel;
     }
 }

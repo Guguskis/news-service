@@ -2,8 +2,8 @@ package lt.liutikas.reddit.service;
 
 import lt.liutikas.reddit.assembler.NewsAssembler;
 import lt.liutikas.reddit.client.RedditClient;
+import lt.liutikas.reddit.model.Channel;
 import lt.liutikas.reddit.model.ScanResult;
-import lt.liutikas.reddit.model.ScanSource;
 import lt.liutikas.reddit.model.reddit.PageCategory;
 import lt.liutikas.reddit.model.reddit.Submission;
 import lt.liutikas.reddit.repository.ScanResultRepository;
@@ -40,14 +40,6 @@ public class ScanService {
         this.newsAssembler = newsAssembler;
     }
 
-    private static ScanResult assembleScanResult(Submission submission) {
-        ScanResult scanResult = new ScanResult();
-        scanResult.setUrl(submission.getUrl());
-        scanResult.setScannedAt(LocalDateTime.now());
-        scanResult.setSource(ScanSource.REDDIT);
-        return scanResult;
-    }
-
     @Scheduled(fixedRate = 1, timeUnit = TimeUnit.MINUTES)
     public void scanReddit() {
         LOG.info("Scanning reddit...");
@@ -82,5 +74,15 @@ public class ScanService {
 
     private Stream<? extends Submission> getNewSubmissionsStream(String subreddit) {
         return redditClient.getSubmissions(subreddit, PageCategory.NEW).stream();
+    }
+
+    private static ScanResult assembleScanResult(Submission submission) {
+        ScanResult scanResult = new ScanResult();
+
+        scanResult.setUrl(submission.getUrl());
+        scanResult.setScannedAt(LocalDateTime.now());
+        scanResult.setSource(Channel.REDDIT);
+
+        return scanResult;
     }
 }
