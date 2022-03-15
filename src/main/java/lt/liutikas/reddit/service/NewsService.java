@@ -29,6 +29,9 @@ public class NewsService {
         this.newsAssembler = newsAssembler;
     }
 
+    // todo try @SubscribeMapping
+    // https://stackoverflow.com/questions/24890450/spring-stomp-subscribemapping-for-user-destination
+
     @EventListener
     public void handleScannedNewsEvent(ScannedNewsEvent event) {
         News news = newsAssembler.assembleNews(event);
