@@ -1,11 +1,8 @@
 package lt.liutikas.reddit.service;
 
 import lt.liutikas.reddit.assembler.NewsAssembler;
-import lt.liutikas.reddit.client.RedditClient;
 import lt.liutikas.reddit.model.Channel;
 import lt.liutikas.reddit.model.ScanResult;
-import lt.liutikas.reddit.model.reddit.PageCategory;
-import lt.liutikas.reddit.model.reddit.Submission;
 import lt.liutikas.reddit.repository.ScanResultRepository;
 import org.apache.logging.log4j.util.Strings;
 import org.slf4j.Logger;
@@ -13,6 +10,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
+import some.developer.reddit.client.RedditClient;
+import some.developer.reddit.client.model.PageCategory;
+import some.developer.reddit.client.model.Submission;
 
 import java.net.URL;
 import java.time.LocalDateTime;

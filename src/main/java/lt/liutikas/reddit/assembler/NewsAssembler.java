@@ -3,8 +3,8 @@ package lt.liutikas.reddit.assembler;
 import lt.liutikas.reddit.model.Channel;
 import lt.liutikas.reddit.model.News;
 import lt.liutikas.reddit.model.event.ScannedNewsEvent;
-import lt.liutikas.reddit.model.reddit.Submission;
 import org.springframework.stereotype.Component;
+import some.developer.reddit.client.model.Submission;
 
 @Component
 public class NewsAssembler {
