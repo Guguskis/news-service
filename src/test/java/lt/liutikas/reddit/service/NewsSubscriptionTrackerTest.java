@@ -44,9 +44,20 @@ class NewsSubscriptionTrackerTest {
     }
 
     @Test
-    void getSubreddits_twoSessions_twoSubreddits() {
+    void getSubreddits_oneSession_twoSubreddits() {
+        tracker.subscribeSubreddits("user1", List.of("combatFootage", "gaming"));
+
+        List<String> subreddits = tracker.getSubreddits();
+
+        assertEquals(2, subreddits.size());
+        assertTrue(subreddits.contains("combatFootage"));
+        assertTrue(subreddits.contains("gaming"));
+    }
+
+    @Test
+    void getSubreddits_oneSessionMultipleSubscribes_twoSubreddits() {
         tracker.subscribeSubreddits("user1", List.of("combatFootage"));
-        tracker.subscribeSubreddits("user2", List.of("ukraine"));
+        tracker.subscribeSubreddits("user1", List.of("ukraine"));
 
         List<String> subreddits = tracker.getSubreddits();
 
