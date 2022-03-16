@@ -51,7 +51,7 @@ public class ScanService {
                 .collect(Collectors.toList());
 
         List<Submission> submissions = subreddits.stream()
-                .flatMap(this::getNewSubmissionsStream)
+                .flatMap(this::tryGetNewSubmissionsStream)
                 .collect(Collectors.toList());
 
         List<URL> urls = submissions.stream()
@@ -78,8 +78,13 @@ public class ScanService {
                 .forEach(eventPublisher::publishEvent);
     }
 
-    private Stream<? extends Submission> getNewSubmissionsStream(String subreddit) {
-        return redditClient.getSubmissions(subreddit, PageCategory.NEW).stream();
+    private Stream<? extends Submission> tryGetNewSubmissionsStream(String subreddit) {
+        try {
+            return redditClient.getSubmissions(subreddit, PageCategory.NEW).stream();
+        } catch (Exception e) {
+            LOG.warn("Failed to get submissions {\"subreddit\": \"{}\", \"reason\": \"{}\"", subreddit, e.getMessage());
+            return Stream.empty();
+        }
     }
 
     private static ScanResult assembleScanResult(Submission submission) {
