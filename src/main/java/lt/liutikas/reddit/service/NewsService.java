@@ -3,6 +3,7 @@ package lt.liutikas.reddit.service;
 import lt.liutikas.reddit.assembler.NewsAssembler;
 import lt.liutikas.reddit.model.News;
 import lt.liutikas.reddit.model.NewsPage;
+import lt.liutikas.reddit.model.NewsSubscriptionMessage;
 import lt.liutikas.reddit.model.event.ScannedNewsEvent;
 import lt.liutikas.reddit.repository.NewsRepository;
 import org.slf4j.Logger;
@@ -13,6 +14,8 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
+
+import java.security.Principal;
 
 @Service
 public class NewsService {
@@ -52,5 +55,9 @@ public class NewsService {
         LOG.info("Returning news {'pageToken': {}, 'pageSize': {}}", pageRequest.getPageNumber(), pageRequest.getPageSize());
 
         return newsPage;
+    }
+
+    public void subscribe(Principal principal, NewsSubscriptionMessage message) {
+        LOG.info("Subscription event: " + String.join(", ", message.getSubreddits()) + " subscribe:" + message.isSubscribe());
     }
 }
