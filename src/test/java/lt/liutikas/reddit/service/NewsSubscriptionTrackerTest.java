@@ -113,4 +113,11 @@ class NewsSubscriptionTrackerTest {
         assertTrue(subreddits.contains("ukraine"));
     }
 
+    @Test
+    void unsubscribeSubreddits_noSubreddits_noException() {
+        tracker.unsubscribeSubreddits("user1", List.of("combatFootage"));
+
+        assertTrue(true);
+    }
+
 }
