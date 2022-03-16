@@ -23,11 +23,13 @@ public class NewsService {
     private final SimpMessagingTemplate pushTemplate;
     private final NewsRepository newsRepository;
     private final NewsAssembler newsAssembler;
+    private final NewsSubscriptionTracker newsSubscriptionTracker;
 
-    public NewsService(SimpMessagingTemplate pushTemplate, NewsRepository newsRepository, NewsAssembler newsAssembler) {
+    public NewsService(SimpMessagingTemplate pushTemplate, NewsRepository newsRepository, NewsAssembler newsAssembler, NewsSubscriptionTracker newsSubscriptionTracker) {
         this.pushTemplate = pushTemplate;
         this.newsRepository = newsRepository;
         this.newsAssembler = newsAssembler;
+        this.newsSubscriptionTracker = newsSubscriptionTracker;
     }
 
     // todo try @SubscribeMapping
@@ -56,6 +58,7 @@ public class NewsService {
     }
 
     public void subscribe(String sessionId, NewsSubscriptionMessage message) {
+        newsSubscriptionTracker.subscribeSubreddits(sessionId, message.getSubreddits());
         LOG.info("Subscription event: " + String.join(", ", message.getSubreddits()) + " subscribe:" + message.isSubscribe());
     }
 }
