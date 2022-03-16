@@ -12,22 +12,28 @@ public class NewsSubscriptionTracker {
     private final Map<String, Set<String>> subscriptions = new HashMap<>();
 
     public void subscribeSubreddits(String sessionId, List<String> subreddits) {
-        for (String subreddit : subreddits) {
-            subscriptions.computeIfAbsent(subreddit, k -> new HashSet<>()).add(sessionId);
+        synchronized (subscriptions) {
+            for (String subreddit : subreddits) {
+                subscriptions.computeIfAbsent(subreddit, k -> new HashSet<>()).add(sessionId);
+            }
         }
     }
 
     public void unsubscribeSubreddits(String sessionId, List<String> subreddits) {
-        for (String subreddit : subreddits) {
-            subscriptions.computeIfPresent(subreddit, (sub, sess) -> {
-                sess.remove(sessionId);
-                return sess;
-            });
+        synchronized (subscriptions) {
+            for (String subreddit : subreddits) {
+                subscriptions.computeIfPresent(subreddit, (sub, sess) -> {
+                    sess.remove(sessionId);
+                    return sess;
+                });
+            }
         }
     }
 
     public void unsubscribeSubreddits(String sessionId) {
-        subscriptions.values().forEach(s -> s.remove(sessionId));
+        synchronized (subscriptions) {
+            subscriptions.values().forEach(s -> s.remove(sessionId));
+        }
     }
 
     public List<String> getSubreddits(String sessionId) {
