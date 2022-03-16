@@ -10,6 +10,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.HttpClientErrorException;
 import some.developer.reddit.client.RedditClient;
 import some.developer.reddit.client.model.PageCategory;
 import some.developer.reddit.client.model.Submission;
@@ -81,8 +82,8 @@ public class ScanService {
     private Stream<? extends Submission> tryGetNewSubmissionsStream(String subreddit) {
         try {
             return redditClient.getSubmissions(subreddit, PageCategory.NEW).stream();
-        } catch (Exception e) {
-            LOG.warn("Failed to get submissions {\"subreddit\": \"{}\", \"reason\": \"{}\"", subreddit, e.getMessage());
+        } catch (HttpClientErrorException e) {
+            LOG.warn("Failed to get submissions {\"subreddit\": \"{}\", \"reason\": \"{}\"}", subreddit, e.getStatusText());
             return Stream.empty();
         }
     }
