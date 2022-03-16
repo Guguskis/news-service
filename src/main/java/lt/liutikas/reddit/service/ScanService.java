@@ -32,19 +32,25 @@ public class ScanService {
     private final ScanResultRepository scanResultRepository;
     private final ApplicationEventPublisher eventPublisher;
     private final NewsAssembler newsAssembler;
+    private final NewsSubscriptionTracker subscriptionTracker;
 
-    public ScanService(RedditClient redditClient, ScanResultRepository scanResultRepository, ApplicationEventPublisher eventPublisher, NewsAssembler newsAssembler) {
+    public ScanService(RedditClient redditClient, ScanResultRepository scanResultRepository, ApplicationEventPublisher eventPublisher, NewsAssembler newsAssembler, NewsSubscriptionTracker subscriptionTracker) {
         this.redditClient = redditClient;
         this.scanResultRepository = scanResultRepository;
         this.eventPublisher = eventPublisher;
         this.newsAssembler = newsAssembler;
+        this.subscriptionTracker = subscriptionTracker;
     }
 
     @Scheduled(fixedRate = 1, timeUnit = TimeUnit.MINUTES)
     public void scanReddit() {
         LOG.info("Scanning reddit...");
 
-        List<Submission> submissions = SUBREDDITS.stream()
+        List<String> subreddits = Stream.concat(SUBREDDITS.stream(), subscriptionTracker.getSubreddits().stream())
+                .distinct()
+                .collect(Collectors.toList());
+
+        List<Submission> submissions = subreddits.stream()
                 .flatMap(this::getNewSubmissionsStream)
                 .collect(Collectors.toList());
 
@@ -65,7 +71,7 @@ public class ScanService {
 
         scanResultRepository.saveAll(scanResults);
 
-        LOG.info("Scanning reddit done. {\"subreddits\": \"{}\", \"submissions\": \"{}\"}", Strings.join(SUBREDDITS, ','), scanResults.size());
+        LOG.info("Scanning reddit done. {\"subreddits\": \"{}\", \"submissions\": \"{}\"}", Strings.join(subreddits, ','), scanResults.size());
 
         notScannedSubmissions.stream()
                 .map(newsAssembler::assembleScannedNewsEvent)

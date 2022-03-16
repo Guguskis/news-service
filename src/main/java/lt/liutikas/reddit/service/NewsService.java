@@ -57,8 +57,15 @@ public class NewsService {
         return newsPage;
     }
 
-    public void subscribe(String sessionId, NewsSubscriptionMessage message) {
-        newsSubscriptionTracker.subscribeSubreddits(sessionId, message.getSubreddits());
-        LOG.info("Subscription event: " + String.join(", ", message.getSubreddits()) + " subscribe:" + message.isSubscribe());
+    public void processNewsSubscription(String sessionId, NewsSubscriptionMessage message) {
+        if (message.isSubscribe())
+            newsSubscriptionTracker.subscribeSubreddits(sessionId, message.getSubreddits());
+        else
+            newsSubscriptionTracker.unsubscribeSubreddits(sessionId, message.getSubreddits());
+
+        LOG.info("Subscription event {\"sessionId\": \"{}\", \"subreddits\": {}, \"subscribe\": {}}",
+                sessionId,
+                message.getSubreddits(),
+                message.isSubscribe());
     }
 }

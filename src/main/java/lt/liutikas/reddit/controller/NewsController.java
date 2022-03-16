@@ -28,9 +28,10 @@ public class NewsController {
     }
 
     @MessageMapping("/news/reddit")
+//    @SendToUser("/queue/news/reddit")
     public void handleNewsSubscription(NewsSubscriptionMessage message,
                                        @Header("simpSessionId") String sessionId) {
-        newsService.subscribe(sessionId, message);
+        newsService.processNewsSubscription(sessionId, message);
     }
 
 }
