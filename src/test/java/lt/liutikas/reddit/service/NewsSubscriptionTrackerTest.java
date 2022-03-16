@@ -40,7 +40,7 @@ class NewsSubscriptionTrackerTest {
         List<String> subreddits = tracker.getSubreddits();
 
         assertEquals(1, subreddits.size());
-        assertTrue(subreddits.contains("combatFootage"));
+        assertTrue(subreddits.contains("combatfootage"));
     }
 
     @Test
@@ -50,7 +50,7 @@ class NewsSubscriptionTrackerTest {
         List<String> subreddits = tracker.getSubreddits();
 
         assertEquals(2, subreddits.size());
-        assertTrue(subreddits.contains("combatFootage"));
+        assertTrue(subreddits.contains("combatfootage"));
         assertTrue(subreddits.contains("gaming"));
     }
 
@@ -62,7 +62,7 @@ class NewsSubscriptionTrackerTest {
         List<String> subreddits = tracker.getSubreddits();
 
         assertEquals(2, subreddits.size());
-        assertTrue(subreddits.contains("combatFootage"));
+        assertTrue(subreddits.contains("combatfootage"));
         assertTrue(subreddits.contains("ukraine"));
     }
 
@@ -88,6 +88,17 @@ class NewsSubscriptionTrackerTest {
     }
 
     @Test
+    void getSubredditsBySession_sameSubredditDifferentLetterCase_oneSubreddit() {
+        tracker.subscribeSubreddits("user1", List.of("CombatFootage"));
+        tracker.subscribeSubreddits("user2", List.of("combatFootage"));
+
+        List<String> subreddits = tracker.getSubreddits();
+
+        assertEquals(1, subreddits.size());
+        assertTrue(subreddits.contains("combatfootage"));
+    }
+
+    @Test
     void getSubreddits_twoSessionsOneUserUnsubscribedAll_oneSubreddit() {
         tracker.subscribeSubreddits("user1", List.of("combatFootage"));
         tracker.subscribeSubreddits("user2", List.of("combatFootage"));
@@ -96,7 +107,7 @@ class NewsSubscriptionTrackerTest {
         List<String> subreddits = tracker.getSubreddits();
 
         assertEquals(1, subreddits.size());
-        assertTrue(subreddits.contains("combatFootage"));
+        assertTrue(subreddits.contains("combatfootage"));
     }
 
     @Test

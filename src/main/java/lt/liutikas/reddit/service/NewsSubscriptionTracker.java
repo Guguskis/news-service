@@ -14,7 +14,7 @@ public class NewsSubscriptionTracker {
     public void subscribeSubreddits(String sessionId, List<String> subreddits) {
         synchronized (subscriptions) {
             for (String subreddit : subreddits) {
-                subscriptions.computeIfAbsent(subreddit, k -> new HashSet<>()).add(sessionId);
+                subscriptions.computeIfAbsent(subreddit.toLowerCase(), k -> new HashSet<>()).add(sessionId);
             }
         }
     }
@@ -22,7 +22,7 @@ public class NewsSubscriptionTracker {
     public void unsubscribeSubreddits(String sessionId, List<String> subreddits) {
         synchronized (subscriptions) {
             for (String subreddit : subreddits) {
-                subscriptions.computeIfPresent(subreddit, (sub, sess) -> {
+                subscriptions.computeIfPresent(subreddit.toLowerCase(), (sub, sess) -> {
                     sess.remove(sessionId);
                     return sess;
                 });
