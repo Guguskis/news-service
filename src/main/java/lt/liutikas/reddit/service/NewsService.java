@@ -15,8 +15,6 @@ import org.springframework.data.domain.Sort;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 
-import java.security.Principal;
-
 @Service
 public class NewsService {
 
@@ -57,7 +55,7 @@ public class NewsService {
         return newsPage;
     }
 
-    public void subscribe(Principal principal, NewsSubscriptionMessage message) {
+    public void subscribe(String sessionId, NewsSubscriptionMessage message) {
         LOG.info("Subscription event: " + String.join(", ", message.getSubreddits()) + " subscribe:" + message.isSubscribe());
     }
 }

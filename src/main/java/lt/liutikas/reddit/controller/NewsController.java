@@ -4,13 +4,13 @@ import lt.liutikas.reddit.model.NewsPage;
 import lt.liutikas.reddit.model.NewsSubscriptionMessage;
 import lt.liutikas.reddit.model.PaginationQuery;
 import lt.liutikas.reddit.service.NewsService;
+import org.springframework.messaging.handler.annotation.Header;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
-import java.security.Principal;
 
 @RestController
 @RequestMapping("/api/news")
@@ -27,11 +27,10 @@ public class NewsController {
         return newsService.getAll(query.pageRequest());
     }
 
-
-    //    todo check ~ @SubscribeMapping
-    @MessageMapping("/news")
-    public void handleNewsSubscription(Principal principal, NewsSubscriptionMessage message) {
-        newsService.subscribe(principal, message);
+    @MessageMapping("/news/reddit")
+    public void handleNewsSubscription(NewsSubscriptionMessage message,
+                                       @Header("simpSessionId") String sessionId) {
+        newsService.subscribe(sessionId, message);
     }
 
 }
