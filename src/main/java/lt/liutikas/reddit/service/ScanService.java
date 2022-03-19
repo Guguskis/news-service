@@ -11,6 +11,7 @@ import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpClientErrorException;
+import org.springframework.web.client.ResourceAccessException;
 import some.developer.reddit.client.RedditClient;
 import some.developer.reddit.client.model.PageCategory;
 import some.developer.reddit.client.model.Submission;
@@ -84,6 +85,9 @@ public class ScanService {
             return redditClient.getSubmissions(subreddit, PageCategory.NEW).stream();
         } catch (HttpClientErrorException e) {
             LOG.warn("Failed to get submissions {\"subreddit\": \"{}\", \"reason\": \"{}\"}", subreddit, e.getStatusText());
+            return Stream.empty();
+        } catch (ResourceAccessException e) {
+            LOG.warn("Failed to get submissions {\"subreddit\": \"{}\", \"reason\": \"{}\"}", subreddit, e.getMessage());
             return Stream.empty();
         }
     }
