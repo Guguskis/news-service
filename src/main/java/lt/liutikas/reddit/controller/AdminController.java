@@ -1,6 +1,7 @@
 package lt.liutikas.reddit.controller;
 
 import lt.liutikas.reddit.ActiveUserRegistry;
+import lt.liutikas.reddit.model.Channel;
 import lt.liutikas.reddit.model.User;
 import lt.liutikas.reddit.model.event.ScannedNewsEvent;
 import org.springframework.context.ApplicationEventPublisher;
@@ -28,11 +29,13 @@ public class AdminController {
     }
 
     @PostMapping("/news/publish")
-    public void sendMessage(String headline) throws MalformedURLException {
+    public void sendMessage(String headline, Channel channel, String subChannel) throws MalformedURLException {
         ScannedNewsEvent event = new ScannedNewsEvent(this);
         event.setTitle(headline);
         event.setUrl(new URL("https://www.reddit.com/r/worldnews/comments/7xqzqy/trump_says_he_will_not_be_president_for_next/"));
         event.setCreated(ZonedDateTime.now(ZoneOffset.UTC).toLocalDateTime());
+        event.setChannel(channel);
+        event.setSubChannel(subChannel);
         eventPublisher.publishEvent(event);
     }
 
