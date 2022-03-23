@@ -49,6 +49,7 @@ public class ScanService {
         LOG.info("Scanning reddit...");
 
         List<String> subreddits = Stream.concat(SUBREDDITS.stream(), subscriptionTracker.getSubreddits().stream())
+                .map(String::toLowerCase)
                 .distinct()
                 .collect(Collectors.toList());
 
