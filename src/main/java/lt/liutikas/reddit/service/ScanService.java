@@ -28,7 +28,7 @@ import java.util.stream.Stream;
 public class ScanService {
 
     private static final Logger LOG = LoggerFactory.getLogger(ScanService.class);
-    private static final List<String> SUBREDDITS = Arrays.asList("ukraine", "combatFootage");
+    private static final List<String> SUBREDDITS = Arrays.asList("ukraine", "combatFootage", "cryptocurrency", "xrp", "ripple");
 
     private final RedditClient redditClient;
     private final ScanResultRepository scanResultRepository;
