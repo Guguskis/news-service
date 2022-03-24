@@ -6,6 +6,7 @@ import lt.liutikas.reddit.model.News;
 import lt.liutikas.reddit.model.NewsPage;
 import lt.liutikas.reddit.model.NewsSubscriptionMessage;
 import lt.liutikas.reddit.model.User;
+import lt.liutikas.reddit.model.api.GetNewsRequest;
 import lt.liutikas.reddit.model.event.ScannedNewsEvent;
 import lt.liutikas.reddit.repository.NewsRepository;
 import org.slf4j.Logger;
@@ -19,6 +20,7 @@ import org.springframework.messaging.simp.SimpMessageType;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @Service
@@ -69,18 +71,26 @@ public class NewsService {
         return subreddits.contains(news.getSubChannel());
     }
 
-    public NewsPage getAll(PageRequest pageRequest) {
-
-        pageRequest = pageRequest.withSort(Sort.by("created").descending());
-        Page<News> page = newsRepository.findAll(pageRequest);
+    public NewsPage getAll(@Valid GetNewsRequest request) {
+        PageRequest pageRequest = request.pageRequest();
+        PageRequest sort = pageRequest.withSort(Sort.by("created").descending());
+        Page<News> page = getNewsWithSort(request, sort);
 
         NewsPage newsPage = new NewsPage();
         newsPage.setNews(page.getContent());
         newsPage.setNextToken(page);
 
-        LOG.info("Returning news {'pageToken': {}, 'pageSize': {}}", pageRequest.getPageNumber(), pageRequest.getPageSize());
+        LOG.info("Returning news {'pageToken': {}, 'pageSize': {}}", pageRequest.getPageNumber(), request.getPageSize());
 
         return newsPage;
+    }
+
+    private Page<News> getNewsWithSort(GetNewsRequest request, PageRequest sort) {
+        if (request.getSubChannels().isEmpty()) {
+            return newsRepository.findAll(sort);
+        } else {
+            return newsRepository.findBySubChannelInIgnoreCase(request.getSubChannels(), sort);
+        }
     }
 
     public void processNewsSubscription(String sessionId, NewsSubscriptionMessage message) {

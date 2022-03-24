@@ -1,7 +1,7 @@
 package lt.liutikas.reddit.controller;
 
 import lt.liutikas.reddit.model.NewsPage;
-import lt.liutikas.reddit.model.PaginationQuery;
+import lt.liutikas.reddit.model.api.GetNewsRequest;
 import lt.liutikas.reddit.service.NewsService;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,8 +20,8 @@ public class NewsController {
     }
 
     @GetMapping
-    public NewsPage getAll(@Valid PaginationQuery query) {
-        return newsService.getAll(query.pageRequest());
+    public NewsPage getAll(@Valid GetNewsRequest request) {
+        return newsService.getAll(request);
     }
 
 }

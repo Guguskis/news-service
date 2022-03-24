@@ -4,6 +4,7 @@ import org.springframework.data.domain.PageRequest;
 
 import javax.validation.constraints.Min;
 
+// todo move to model.api
 public class PaginationQuery {
 
     @Min(0)
