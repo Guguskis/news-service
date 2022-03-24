@@ -1,7 +1,5 @@
 package lt.liutikas.reddit.model.api;
 
-import lt.liutikas.reddit.model.PaginationQuery;
-
 import java.util.ArrayList;
 import java.util.List;
 
