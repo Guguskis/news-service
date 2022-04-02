@@ -50,19 +50,20 @@ public class NewsService {
         News news = newsAssembler.assembleNews(event);
         news = newsRepository.save(news);
         for (User user : userRegistry.getActiveUsers()) {
-            if (isSubscribed(user, news)) {
-                sendToUser(user, news);
+            if (isSubscribed(user, news) || true) { // fixme return only per subscription news
+//            if (isSubscribed(user, news) || true) {
+                sendNews(user.getSessionId(), news);
             }
         }
         LOG.info("Published news \"{}\"", news.getTitle());
     }
 
-    private void sendToUser(User user, News news) {
+    private void sendNews(String sessionId, News news) {
         SimpMessageHeaderAccessor headerAccessor = SimpMessageHeaderAccessor.create(SimpMessageType.MESSAGE);
-        headerAccessor.setSessionId(user.getSessionId());
+        headerAccessor.setSessionId(sessionId);
         headerAccessor.setLeaveMutable(true);
 
-        pushTemplate.convertAndSendToUser(user.getSessionId(), "/topic/news", news, headerAccessor.getMessageHeaders());
+        pushTemplate.convertAndSendToUser(sessionId, "/topic/news", news, headerAccessor.getMessageHeaders());
     }
 
     private boolean isSubscribed(User user, News news) {
