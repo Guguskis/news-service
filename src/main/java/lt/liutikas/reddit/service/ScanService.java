@@ -1,6 +1,8 @@
 package lt.liutikas.reddit.service;
 
 import lt.liutikas.reddit.assembler.NewsAssembler;
+import lt.liutikas.reddit.assembler.ScanAssembler;
+import lt.liutikas.reddit.config.properties.ScanProperties;
 import lt.liutikas.reddit.model.Channel;
 import lt.liutikas.reddit.model.ScanResult;
 import lt.liutikas.reddit.repository.ScanResultRepository;
@@ -17,8 +19,6 @@ import some.developer.reddit.client.model.PageCategory;
 import some.developer.reddit.client.model.Submission;
 
 import java.net.URL;
-import java.time.LocalDateTime;
-import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
@@ -28,27 +28,33 @@ import java.util.stream.Stream;
 public class ScanService {
 
     private static final Logger LOG = LoggerFactory.getLogger(ScanService.class);
-    private static final List<String> SUBREDDITS = Arrays.asList("ukraine", "combatFootage");
 
     private final RedditClient redditClient;
     private final ScanResultRepository scanResultRepository;
     private final ApplicationEventPublisher eventPublisher;
     private final NewsAssembler newsAssembler;
     private final NewsSubscriptionTracker subscriptionTracker;
+    private final ScanProperties scanProperties;
+    private final ScanAssembler scanAssembler;
 
-    public ScanService(RedditClient redditClient, ScanResultRepository scanResultRepository, ApplicationEventPublisher eventPublisher, NewsAssembler newsAssembler, NewsSubscriptionTracker subscriptionTracker) {
+    public ScanService(RedditClient redditClient, ScanResultRepository scanResultRepository, ApplicationEventPublisher eventPublisher, NewsAssembler newsAssembler, NewsSubscriptionTracker subscriptionTracker, ScanProperties scanProperties, ScanAssembler scanAssembler) {
         this.redditClient = redditClient;
         this.scanResultRepository = scanResultRepository;
         this.eventPublisher = eventPublisher;
         this.newsAssembler = newsAssembler;
         this.subscriptionTracker = subscriptionTracker;
+        this.scanProperties = scanProperties;
+        this.scanAssembler = scanAssembler;
     }
 
     @Scheduled(fixedRate = 1, timeUnit = TimeUnit.MINUTES)
     public void scanReddit() {
         LOG.info("Scanning reddit...");
 
-        List<String> subreddits = Stream.concat(SUBREDDITS.stream(), subscriptionTracker.getSubreddits().stream())
+        List<String> subreddits = Stream.concat(
+                        scanProperties.getSubreddits().stream(),
+                        subscriptionTracker.getSubreddits().stream())
+                .map(String::toLowerCase)
                 .distinct()
                 .collect(Collectors.toList());
 
@@ -68,7 +74,8 @@ public class ScanService {
                 .collect(Collectors.toList());
 
         List<ScanResult> scanResults = notScannedSubmissions.stream()
-                .map(ScanService::assembleScanResult)
+                .map(scanAssembler::assembleScanResult)
+                .peek(scanResult -> scanResult.setSource(Channel.REDDIT))
                 .collect(Collectors.toList());
 
         scanResultRepository.saveAll(scanResults);
@@ -92,13 +99,4 @@ public class ScanService {
         }
     }
 
-    private static ScanResult assembleScanResult(Submission submission) {
-        ScanResult scanResult = new ScanResult();
-
-        scanResult.setUrl(submission.getUrl());
-        scanResult.setScannedAt(LocalDateTime.now());
-        scanResult.setSource(Channel.REDDIT);
-
-        return scanResult;
-    }
 }

@@ -1,4 +1,4 @@
-package lt.liutikas.reddit.model;
+package lt.liutikas.reddit.model.api;
 
 import org.springframework.data.domain.PageRequest;
 

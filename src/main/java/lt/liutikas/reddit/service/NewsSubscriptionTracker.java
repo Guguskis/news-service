@@ -13,7 +13,7 @@ public class NewsSubscriptionTracker {
 
     public void subscribeSubreddits(String sessionId, List<String> subreddits) {
         synchronized (subscriptions) {
-            for (String subreddit : subreddits) {
+            for (String subreddit : cleanSubreddits(subreddits)) {
                 subscriptions.computeIfAbsent(subreddit.toLowerCase(), k -> new HashSet<>()).add(sessionId);
             }
         }
@@ -21,7 +21,7 @@ public class NewsSubscriptionTracker {
 
     public void unsubscribeSubreddits(String sessionId, List<String> subreddits) {
         synchronized (subscriptions) {
-            for (String subreddit : subreddits) {
+            for (String subreddit : cleanSubreddits(subreddits)) {
                 subscriptions.computeIfPresent(subreddit.toLowerCase(), (sub, sess) -> {
                     sess.remove(sessionId);
                     return sess;
@@ -48,6 +48,12 @@ public class NewsSubscriptionTracker {
                 .filter(e -> e.getValue().size() > 0)
                 .map(Map.Entry::getKey)
                 .collect(Collectors.toList());
+    }
+
+    private List<String> cleanSubreddits(List<String> subreddits) {
+        return subreddits.stream()
+                .map(String::toLowerCase)
+                .distinct().collect(Collectors.toList());
     }
 
 }
