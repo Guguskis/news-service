@@ -23,3 +23,10 @@ web:
 reddit:
   host: https://old.reddit.com
   user-agent: "Reddit-Bot (by /u/guguskis)"
+scan:
+  subreddits:
+    - "ukraine"
+    - "combatFootage"
+    - "cryptocurrency"
+    - "xrp"
+    - "ripple"
