@@ -3,10 +3,10 @@ package lt.liutikas.reddit.model;
 import javax.validation.constraints.NotNull;
 import java.util.List;
 
-public class NewsSubscriptionMessage {
+public class RedditSubscriptionMessage {
 
     @NotNull
-    private boolean subscribe;
+    private SubscriptionAction action;
     @NotNull
     private List<String> subreddits;
 
@@ -18,11 +18,11 @@ public class NewsSubscriptionMessage {
         this.subreddits = subreddits;
     }
 
-    public boolean isSubscribe() {
-        return subscribe;
+    public SubscriptionAction getAction() {
+        return action;
     }
 
-    public void setSubscribe(boolean subscribe) {
-        this.subscribe = subscribe;
+    public void setAction(SubscriptionAction action) {
+        this.action = action;
     }
 }

@@ -3,7 +3,7 @@ package lt.liutikas.reddit.service;
 import lt.liutikas.reddit.ActiveUserRegistry;
 import lt.liutikas.reddit.assembler.NewsAssembler;
 import lt.liutikas.reddit.model.News;
-import lt.liutikas.reddit.model.NewsSubscriptionMessage;
+import lt.liutikas.reddit.model.RedditSubscriptionMessage;
 import lt.liutikas.reddit.model.User;
 import lt.liutikas.reddit.model.api.GetNewsRequest;
 import lt.liutikas.reddit.model.api.NewsPage;
@@ -94,15 +94,22 @@ public class NewsService {
         }
     }
 
-    public void processNewsSubscription(String sessionId, NewsSubscriptionMessage message) {
-        if (message.isSubscribe())
-            newsSubscriptionTracker.subscribeSubreddits(sessionId, message.getSubreddits());
-        else
-            newsSubscriptionTracker.unsubscribeSubreddits(sessionId, message.getSubreddits());
+    public void processNewsSubscription(String sessionId, RedditSubscriptionMessage message) {
 
-        LOG.info("Subscription event {\"sessionId\": \"{}\", \"subreddits\": {}, \"subscribe\": {}}",
+        switch (message.getAction()) {
+            case SUBSCRIBE:
+                newsSubscriptionTracker.subscribeSubreddits(sessionId, message.getSubreddits());
+                break;
+            case UNSUBSCRIBE:
+                newsSubscriptionTracker.unsubscribeSubreddits(sessionId, message.getSubreddits());
+                break;
+            default:
+                throw new IllegalArgumentException("Action not implemented: " + message.getAction());
+        }
+
+        LOG.info("Subscription event {\"sessionId\": \"{}\", \"subreddits\": {}, \"action\": {}}",
                 sessionId,
                 message.getSubreddits(),
-                message.isSubscribe());
+                message.getAction());
     }
 }
