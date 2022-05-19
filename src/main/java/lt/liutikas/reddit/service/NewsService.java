@@ -50,8 +50,7 @@ public class NewsService {
         News news = newsAssembler.assembleNews(event);
         news = newsRepository.save(news);
         for (User user : userRegistry.getActiveUsers()) {
-            if (isSubscribed(user, news) || true) { // fixme return only per subscription news
-//            if (isSubscribed(user, news) || true) {
+            if (isSubscribed(user, news)) {
                 sendNews(user.getSessionId(), news);
             }
         }
