@@ -66,8 +66,7 @@ public class NewsService {
     }
 
     private boolean isSubscribed(User user, News news) {
-        String sessionId = user.getSessionId();
-        List<String> subreddits = newsSubscriptionTracker.getSubreddits(sessionId);
+        List<String> subreddits = newsSubscriptionTracker.getSubreddits(user.getSessionId());
         return subreddits.contains(news.getSubChannel());
     }
 
