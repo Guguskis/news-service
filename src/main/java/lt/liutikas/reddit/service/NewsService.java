@@ -103,6 +103,10 @@ public class NewsService {
             case UNSUBSCRIBE:
                 newsSubscriptionTracker.unsubscribeSubreddits(sessionId, message.getSubreddits());
                 break;
+            case SET:
+                newsSubscriptionTracker.unsubscribeSubreddits(sessionId);
+                newsSubscriptionTracker.subscribeSubreddits(sessionId, message.getSubreddits());
+                break;
             default:
                 throw new IllegalArgumentException("Action not implemented: " + message.getAction());
         }
