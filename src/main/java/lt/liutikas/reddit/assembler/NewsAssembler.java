@@ -1,6 +1,5 @@
 package lt.liutikas.reddit.assembler;
 
-import lt.liutikas.reddit.model.Channel;
 import lt.liutikas.reddit.model.News;
 import lt.liutikas.reddit.model.event.ScannedNewsEvent;
 import org.springframework.stereotype.Component;
@@ -28,7 +27,6 @@ public class NewsAssembler {
         event.setTitle(submission.getTitle());
         event.setCreated(submission.getCreated());
         event.setSubChannel(submission.getSubreddit());
-        event.setChannel(Channel.REDDIT);
 
         return event;
     }

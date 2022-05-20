@@ -53,7 +53,7 @@ public class ScanService {
 
         List<String> subreddits = Stream.concat(
                         scanProperties.getSubreddits().stream(),
-                        subscriptionTracker.getSubreddits().stream())
+                        subscriptionTracker.getSubChannels(Channel.REDDIT).stream())
                 .map(String::toLowerCase)
                 .distinct()
                 .collect(Collectors.toList());
@@ -84,6 +84,7 @@ public class ScanService {
 
         notScannedSubmissions.stream()
                 .map(newsAssembler::assembleScannedNewsEvent)
+                .peek(event -> event.setChannel(Channel.REDDIT))
                 .forEach(eventPublisher::publishEvent);
     }
 

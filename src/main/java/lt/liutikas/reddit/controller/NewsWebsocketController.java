@@ -1,6 +1,6 @@
 package lt.liutikas.reddit.controller;
 
-import lt.liutikas.reddit.model.RedditSubscriptionMessage;
+import lt.liutikas.reddit.model.NewsSubscription;
 import lt.liutikas.reddit.service.NewsService;
 import org.springframework.messaging.handler.annotation.Header;
 import org.springframework.messaging.handler.annotation.MessageMapping;
@@ -15,7 +15,7 @@ public class NewsWebsocketController {
     }
 
     @MessageMapping("/queue/news/reddit")
-    public void handleNewsSubscription(RedditSubscriptionMessage message,
+    public void handleNewsSubscription(NewsSubscription message,
                                        @Header("simpSessionId") String sessionId) {
         newsService.processNewsSubscription(sessionId, message);
     }

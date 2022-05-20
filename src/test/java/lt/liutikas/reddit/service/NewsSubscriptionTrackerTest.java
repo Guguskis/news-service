@@ -1,5 +1,7 @@
 package lt.liutikas.reddit.service;
 
+import lt.liutikas.reddit.model.Channel;
+import lt.liutikas.reddit.model.NewsSubscription;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -19,25 +21,31 @@ class NewsSubscriptionTrackerTest {
 
     @Test
     void getSubreddits_noSessions_noSubreddits() {
-        List<String> subreddits = tracker.getSubreddits("user1");
+        List<String> subreddits = tracker.getSubChannels("user1", Channel.REDDIT);
 
         assertTrue(subreddits.isEmpty());
     }
 
     @Test
     void getSubreddits_oneSession_noSubreddits() {
-        tracker.subscribeSubreddits("user1", List.of());
+        NewsSubscription subscription = new NewsSubscription();
+        subscription.setChannel(Channel.REDDIT);
 
-        List<String> subreddits = tracker.getSubreddits();
+        tracker.subscribe("user1", subscription);
+
+        List<String> subreddits = tracker.getSubChannels(Channel.REDDIT);
 
         assertTrue(subreddits.isEmpty());
     }
 
     @Test
     void getSubreddits_oneSession_oneSubreddit() {
-        tracker.subscribeSubreddits("user1", List.of("combatFootage"));
+        NewsSubscription subscription = new NewsSubscription();
+        subscription.setChannel(Channel.REDDIT);
+        subscription.setSubChannels(List.of("combatFootage"));
+        tracker.subscribe("user1", subscription);
 
-        List<String> subreddits = tracker.getSubreddits();
+        List<String> subreddits = tracker.getSubChannels(Channel.REDDIT);
 
         assertEquals(1, subreddits.size());
         assertTrue(subreddits.contains("combatfootage"));
@@ -45,9 +53,12 @@ class NewsSubscriptionTrackerTest {
 
     @Test
     void getSubreddits_oneSession_twoSubreddits() {
-        tracker.subscribeSubreddits("user1", List.of("combatFootage", "gaming"));
+        NewsSubscription subscription = new NewsSubscription();
+        subscription.setChannel(Channel.REDDIT);
+        subscription.setSubChannels(List.of("combatFootage", "gaming"));
+        tracker.subscribe("user1", subscription);
 
-        List<String> subreddits = tracker.getSubreddits();
+        List<String> subreddits = tracker.getSubChannels(Channel.REDDIT);
 
         assertEquals(2, subreddits.size());
         assertTrue(subreddits.contains("combatfootage"));
@@ -56,10 +67,18 @@ class NewsSubscriptionTrackerTest {
 
     @Test
     void getSubreddits_oneSessionMultipleSubscribes_twoSubreddits() {
-        tracker.subscribeSubreddits("user1", List.of("combatFootage"));
-        tracker.subscribeSubreddits("user1", List.of("ukraine"));
+        NewsSubscription subscription1 = new NewsSubscription();
+        subscription1.setChannel(Channel.REDDIT);
+        subscription1.setSubChannels(List.of("combatFootage"));
 
-        List<String> subreddits = tracker.getSubreddits();
+        NewsSubscription subscription2 = new NewsSubscription();
+        subscription2.setChannel(Channel.REDDIT);
+        subscription2.setSubChannels(List.of("ukraine"));
+
+        tracker.subscribe("user1", subscription1);
+        tracker.subscribe("user1", subscription2);
+
+        List<String> subreddits = tracker.getSubChannels(Channel.REDDIT);
 
         assertEquals(2, subreddits.size());
         assertTrue(subreddits.contains("combatfootage"));
@@ -68,20 +87,36 @@ class NewsSubscriptionTrackerTest {
 
     @Test
     void getSubreddits_oneSessionUnsubscribed_noSubreddits() {
-        tracker.subscribeSubreddits("user1", List.of("combatFootage"));
-        tracker.unsubscribeSubreddits("user1", List.of("combatFootage"));
+        NewsSubscription subscription = new NewsSubscription();
+        subscription.setChannel(Channel.REDDIT);
+        subscription.setSubChannels(List.of("combatFootage"));
 
-        List<String> subreddits = tracker.getSubreddits();
+        NewsSubscription unsubscription = new NewsSubscription();
+        unsubscription.setChannel(Channel.REDDIT);
+        unsubscription.setSubChannels(List.of("combatFootage"));
+
+        tracker.subscribe("user1", subscription);
+        tracker.unsubscribe("user1", unsubscription);
+
+        List<String> subreddits = tracker.getSubChannels(Channel.REDDIT);
 
         assertTrue(subreddits.isEmpty());
     }
 
     @Test
     void getSubreddits_oneSessionUnsubscribedHalf_oneSubreddit() {
-        tracker.subscribeSubreddits("user1", List.of("combatFootage", "ukraine"));
-        tracker.unsubscribeSubreddits("user1", List.of("combatFootage"));
+        NewsSubscription subscription = new NewsSubscription();
+        subscription.setChannel(Channel.REDDIT);
+        subscription.setSubChannels(List.of("combatFootage", "ukraine"));
 
-        List<String> subreddits = tracker.getSubreddits();
+        NewsSubscription unsubscription = new NewsSubscription();
+        unsubscription.setChannel(Channel.REDDIT);
+        unsubscription.setSubChannels(List.of("combatFootage"));
+
+        tracker.subscribe("user1", subscription);
+        tracker.unsubscribe("user1", unsubscription);
+
+        List<String> subreddits = tracker.getSubChannels(Channel.REDDIT);
 
         assertEquals(1, subreddits.size());
         assertTrue(subreddits.contains("ukraine"));
@@ -89,10 +124,18 @@ class NewsSubscriptionTrackerTest {
 
     @Test
     void getSubredditsBySession_sameSubredditDifferentLetterCase_oneSubreddit() {
-        tracker.subscribeSubreddits("user1", List.of("CombatFootage"));
-        tracker.subscribeSubreddits("user2", List.of("combatFootage"));
+        NewsSubscription subscription = new NewsSubscription();
+        subscription.setChannel(Channel.REDDIT);
+        subscription.setSubChannels(List.of("CombatFootage"));
 
-        List<String> subreddits = tracker.getSubreddits();
+        NewsSubscription unsubscription = new NewsSubscription();
+        unsubscription.setChannel(Channel.REDDIT);
+        unsubscription.setSubChannels(List.of("combatfootage"));
+
+        tracker.subscribe("user1", subscription);
+        tracker.subscribe("user2", unsubscription);
+
+        List<String> subreddits = tracker.getSubChannels(Channel.REDDIT);
 
         assertEquals(1, subreddits.size());
         assertTrue(subreddits.contains("combatfootage"));
@@ -100,11 +143,24 @@ class NewsSubscriptionTrackerTest {
 
     @Test
     void getSubreddits_twoSessionsOneUserUnsubscribedAll_oneSubreddit() {
-        tracker.subscribeSubreddits("user1", List.of("combatFootage"));
-        tracker.subscribeSubreddits("user2", List.of("combatFootage"));
-        tracker.unsubscribeSubreddits("user1", List.of("combatFootage"));
+        NewsSubscription subscription1 = new NewsSubscription();
+        subscription1.setChannel(Channel.REDDIT);
+        subscription1.setSubChannels(List.of("combatFootage"));
 
-        List<String> subreddits = tracker.getSubreddits();
+        NewsSubscription subscription2 = new NewsSubscription();
+        subscription2.setChannel(Channel.REDDIT);
+        subscription2.setSubChannels(List.of("combatFootage"));
+
+        NewsSubscription unsubscription = new NewsSubscription();
+        unsubscription.setChannel(Channel.REDDIT);
+        unsubscription.setSubChannels(List.of("combatFootage"));
+
+
+        tracker.subscribe("user1", subscription1);
+        tracker.subscribe("user2", subscription2);
+        tracker.unsubscribe("user1", unsubscription);
+
+        List<String> subreddits = tracker.getSubChannels(Channel.REDDIT);
 
         assertEquals(1, subreddits.size());
         assertTrue(subreddits.contains("combatfootage"));
@@ -112,11 +168,23 @@ class NewsSubscriptionTrackerTest {
 
     @Test
     void getSubredditsBySession_multipleSessions_correctSessionSubredditsReturned() {
-        tracker.subscribeSubreddits("user1", List.of("combatFootage", "ukraine"));
-        tracker.subscribeSubreddits("user2", List.of("sunflowers", "war", "ukraine"));
-        tracker.unsubscribeSubreddits("user1", List.of("combatFootage", "ukraine"));
+        NewsSubscription subscription1 = new NewsSubscription();
+        subscription1.setChannel(Channel.REDDIT);
+        subscription1.setSubChannels(List.of("combatFootage", "ukraine"));
 
-        List<String> subreddits = tracker.getSubreddits("user2");
+        NewsSubscription subscription2 = new NewsSubscription();
+        subscription2.setChannel(Channel.REDDIT);
+        subscription2.setSubChannels(List.of("sunflowers", "war", "ukraine"));
+
+        NewsSubscription unsubscription = new NewsSubscription();
+        unsubscription.setChannel(Channel.REDDIT);
+        unsubscription.setSubChannels(List.of("combatFootage", "ukraine"));
+
+        tracker.subscribe("user1", subscription1);
+        tracker.subscribe("user2", subscription2);
+        tracker.unsubscribe("user1", unsubscription);
+
+        List<String> subreddits = tracker.getSubChannels("user2", Channel.REDDIT);
 
         assertEquals(3, subreddits.size());
         assertTrue(subreddits.contains("sunflowers"));
@@ -126,7 +194,10 @@ class NewsSubscriptionTrackerTest {
 
     @Test
     void unsubscribeSubreddits_noSubreddits_noException() {
-        tracker.unsubscribeSubreddits("user1", List.of("combatFootage"));
+        NewsSubscription unsubscription = new NewsSubscription();
+        unsubscription.setChannel(Channel.REDDIT);
+        unsubscription.setSubChannels(List.of("combatFootage"));
+        tracker.unsubscribe("user1", unsubscription);
 
         assertTrue(true);
     }

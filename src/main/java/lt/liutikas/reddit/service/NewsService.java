@@ -2,9 +2,7 @@ package lt.liutikas.reddit.service;
 
 import lt.liutikas.reddit.ActiveUserRegistry;
 import lt.liutikas.reddit.assembler.NewsAssembler;
-import lt.liutikas.reddit.model.News;
-import lt.liutikas.reddit.model.RedditSubscriptionMessage;
-import lt.liutikas.reddit.model.User;
+import lt.liutikas.reddit.model.*;
 import lt.liutikas.reddit.model.api.GetNewsRequest;
 import lt.liutikas.reddit.model.api.NewsPage;
 import lt.liutikas.reddit.model.event.ScannedNewsEvent;
@@ -66,8 +64,8 @@ public class NewsService {
     }
 
     private boolean isSubscribed(User user, News news) {
-        List<String> subreddits = newsSubscriptionTracker.getSubreddits(user.getSessionId());
-        return subreddits.contains(news.getSubChannel());
+        List<String> subChannels = newsSubscriptionTracker.getSubChannels(user.getSessionId(), news.getChannel());
+        return subChannels.contains(news.getSubChannel());
     }
 
     public NewsPage getAll(@Valid GetNewsRequest request) {
@@ -92,26 +90,31 @@ public class NewsService {
         }
     }
 
-    public void processNewsSubscription(String sessionId, RedditSubscriptionMessage message) {
+    public void processNewsSubscription(String sessionId, NewsSubscription subscription) {
 
-        switch (message.getAction()) {
+        SubscriptionAction action = subscription.getAction();
+        Channel channel = subscription.getChannel();
+        List<String> subChannels = subscription.getSubChannels();
+
+        switch (action) {
             case SUBSCRIBE:
-                newsSubscriptionTracker.subscribeSubreddits(sessionId, message.getSubreddits());
+                newsSubscriptionTracker.subscribe(sessionId, subscription);
                 break;
             case UNSUBSCRIBE:
-                newsSubscriptionTracker.unsubscribeSubreddits(sessionId, message.getSubreddits());
+                newsSubscriptionTracker.unsubscribe(sessionId, subscription);
                 break;
             case SET:
-                newsSubscriptionTracker.unsubscribeSubreddits(sessionId);
-                newsSubscriptionTracker.subscribeSubreddits(sessionId, message.getSubreddits());
+                newsSubscriptionTracker.unsubscribe(sessionId, channel);
+                newsSubscriptionTracker.subscribe(sessionId, subscription);
                 break;
             default:
-                throw new IllegalArgumentException("Action not implemented: " + message.getAction());
+                throw new IllegalArgumentException("Action not implemented: " + action);
         }
 
-        LOG.info("Subscription event {\"sessionId\": \"{}\", \"subreddits\": {}, \"action\": {}}",
+        LOG.info("Subscription event {\"sessionId\": \"{}\", \"channel\": \"{}\", \"subChannels\": {}, \"action\": {}}",
                 sessionId,
-                message.getSubreddits(),
-                message.getAction());
+                channel,
+                subChannels,
+                action);
     }
 }

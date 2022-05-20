@@ -1,5 +1,7 @@
 package lt.liutikas.reddit.service;
 
+import lt.liutikas.reddit.model.Channel;
+import lt.liutikas.reddit.model.NewsSubscription;
 import org.springframework.stereotype.Component;
 
 import java.util.*;
@@ -9,20 +11,20 @@ import java.util.stream.Collectors;
 public class NewsSubscriptionTracker {
 
     // one subreddit -> many sessionId
-    private final Map<String, Set<String>> subscriptions = new HashMap<>();
+    private final Map<String, Set<String>> subChannels = new HashMap<>();
 
-    public void subscribeSubreddits(String sessionId, List<String> subreddits) {
-        synchronized (subscriptions) {
-            for (String subreddit : cleanSubreddits(subreddits)) {
-                subscriptions.computeIfAbsent(subreddit.toLowerCase(), k -> new HashSet<>()).add(sessionId);
+    public void subscribe(String sessionId, NewsSubscription subscription) {
+        synchronized (subChannels) {
+            for (String subreddit : cleanSubChannels(subscription.getSubChannels())) {
+                subChannels.computeIfAbsent(subreddit.toLowerCase(), k -> new HashSet<>()).add(sessionId);
             }
         }
     }
 
-    public void unsubscribeSubreddits(String sessionId, List<String> subreddits) {
-        synchronized (subscriptions) {
-            for (String subreddit : cleanSubreddits(subreddits)) {
-                subscriptions.computeIfPresent(subreddit.toLowerCase(), (sub, sess) -> {
+    public void unsubscribe(String sessionId, NewsSubscription subscription) {
+        synchronized (subChannels) {
+            for (String subChannel : cleanSubChannels(subscription.getSubChannels())) {
+                subChannels.computeIfPresent(subChannel.toLowerCase(), (sub, sess) -> {
                     sess.remove(sessionId);
                     return sess;
                 });
@@ -30,30 +32,29 @@ public class NewsSubscriptionTracker {
         }
     }
 
-    public void unsubscribeSubreddits(String sessionId) {
-        synchronized (subscriptions) {
-            subscriptions.values().forEach(s -> s.remove(sessionId));
+    public void unsubscribe(String sessionId, Channel channel) {
+        synchronized (subChannels) {
+            subChannels.values().forEach(s -> s.remove(sessionId));
         }
     }
 
-    public List<String> getSubreddits(String sessionId) {
-        return subscriptions.entrySet().stream()
+    public List<String> getSubChannels(String sessionId, Channel channel) {
+        return subChannels.entrySet().stream()
                 .filter(e -> e.getValue().contains(sessionId))
                 .map(Map.Entry::getKey)
                 .collect(Collectors.toList());
     }
 
-    public List<String> getSubreddits() {
-        return subscriptions.entrySet().stream()
+    public List<String> getSubChannels(Channel channel) {
+        return subChannels.entrySet().stream()
                 .filter(e -> e.getValue().size() > 0)
                 .map(Map.Entry::getKey)
                 .collect(Collectors.toList());
     }
 
-    private List<String> cleanSubreddits(List<String> subreddits) {
+    private List<String> cleanSubChannels(List<String> subreddits) {
         return subreddits.stream()
                 .map(String::toLowerCase)
                 .distinct().collect(Collectors.toList());
     }
-
 }
