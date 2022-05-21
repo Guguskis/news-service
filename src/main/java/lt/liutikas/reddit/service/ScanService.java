@@ -19,6 +19,7 @@ import some.developer.reddit.client.model.PageCategory;
 import some.developer.reddit.client.model.Submission;
 
 import java.net.URL;
+import java.util.Comparator;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
@@ -83,6 +84,7 @@ public class ScanService {
         LOG.info("Scanning reddit done. {\"subreddits\": \"{}\", \"submissions\": \"{}\"}", Strings.join(subreddits, ','), scanResults.size());
 
         notScannedSubmissions.stream()
+                .sorted(Comparator.comparing(Submission::getCreated))
                 .map(newsAssembler::assembleScannedNewsEvent)
                 .peek(event -> event.setChannel(Channel.REDDIT))
                 .forEach(eventPublisher::publishEvent);
