@@ -14,7 +14,7 @@ public class NewsWebsocketController {
         this.newsService = newsService;
     }
 
-    @MessageMapping("/queue/news/reddit")
+    @MessageMapping("/queue/news")
     public void handleNewsSubscription(NewsSubscription message,
                                        @Header("simpSessionId") String sessionId) {
         newsService.processNewsSubscription(sessionId, message);
