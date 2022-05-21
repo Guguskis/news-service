@@ -4,6 +4,7 @@ import lt.liutikas.reddit.ActiveUserRegistry;
 import lt.liutikas.reddit.model.Channel;
 import lt.liutikas.reddit.model.User;
 import lt.liutikas.reddit.model.event.ScannedNewsEvent;
+import lt.liutikas.reddit.service.ScanService;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -22,10 +23,12 @@ public class AdminController {
 
     private final ApplicationEventPublisher eventPublisher;
     private final ActiveUserRegistry activeUserRegistry;
+    private final ScanService scanService;
 
-    public AdminController(ApplicationEventPublisher eventPublisher, ActiveUserRegistry activeUserRegistry) {
+    public AdminController(ApplicationEventPublisher eventPublisher, ActiveUserRegistry activeUserRegistry, ScanService scanService) {
         this.eventPublisher = eventPublisher;
         this.activeUserRegistry = activeUserRegistry;
+        this.scanService = scanService;
     }
 
     @PostMapping("/news/publish")
@@ -42,6 +45,11 @@ public class AdminController {
     @GetMapping("/users")
     public List<User> getUsers() {
         return activeUserRegistry.getActiveUsers();
+    }
+
+    @PostMapping("/news/reddit/scan")
+    public void scanNews() {
+        scanService.scanReddit();
     }
 
 }
