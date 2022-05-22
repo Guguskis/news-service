@@ -5,7 +5,6 @@ import java.util.List;
 
 public class GetNewsRequest extends PaginationQuery {
 
-    // todo maybe add channel and subChannels
     public List<String> subChannels = new ArrayList<>();
 
     public List<String> getSubChannels() {

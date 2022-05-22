@@ -18,7 +18,6 @@ import org.springframework.messaging.simp.SimpMessageType;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 
-import javax.validation.Valid;
 import java.util.List;
 
 @Service
@@ -47,31 +46,21 @@ public class NewsService {
     public void handleScannedNewsEvent(ScannedNewsEvent event) {
         News news = newsAssembler.assembleNews(event);
         news = newsRepository.save(news);
+
         for (User user : userRegistry.getActiveUsers()) {
             if (isSubscribed(user, news)) {
                 sendNews(user.getSessionId(), news);
             }
         }
+
         LOG.info("Published news \"{}\"", news.getTitle());
     }
 
-    private void sendNews(String sessionId, News news) {
-        SimpMessageHeaderAccessor headerAccessor = SimpMessageHeaderAccessor.create(SimpMessageType.MESSAGE);
-        headerAccessor.setSessionId(sessionId);
-        headerAccessor.setLeaveMutable(true);
+    public NewsPage getNews(GetNewsRequest request) {
+        PageRequest pageRequest = getPageRequestByCreatedDesc(request);
+        List<String> subChannels = request.getSubChannels();
 
-        pushTemplate.convertAndSendToUser(sessionId, "/topic/news", news, headerAccessor.getMessageHeaders());
-    }
-
-    private boolean isSubscribed(User user, News news) {
-        List<String> subChannels = newsSubscriptionTracker.getSubChannels(user.getSessionId(), news.getChannel());
-        return subChannels.contains(news.getSubChannel());
-    }
-
-    public NewsPage getAll(@Valid GetNewsRequest request) {
-        PageRequest pageRequest = request.pageRequest();
-        PageRequest sort = pageRequest.withSort(Sort.by("created").descending());
-        Page<News> page = getNewsWithSort(request, sort);
+        Page<News> page = findNews(pageRequest, subChannels);
 
         NewsPage newsPage = new NewsPage();
         newsPage.setNews(page.getContent());
@@ -82,12 +71,18 @@ public class NewsService {
         return newsPage;
     }
 
-    private Page<News> getNewsWithSort(GetNewsRequest request, PageRequest sort) {
-        if (request.getSubChannels().isEmpty()) {
-            return newsRepository.findAll(sort);
-        } else {
-            return newsRepository.findBySubChannelInIgnoreCase(request.getSubChannels(), sort);
-        }
+    public NewsPage getNews(Channel channel, GetNewsRequest request) {
+        PageRequest pageRequest = getPageRequestByCreatedDesc(request);
+        List<String> subChannels = request.getSubChannels();
+        Page<News> page = findNews(channel, subChannels, pageRequest);
+
+        NewsPage newsPage = new NewsPage();
+        newsPage.setNews(page.getContent());
+        newsPage.setNextToken(page);
+
+        LOG.info("Returning news {'channel': '{}''pageToken': {}, 'pageSize': {}}", channel, pageRequest.getPageNumber(), request.getPageSize());
+
+        return newsPage;
     }
 
     public void processNewsSubscription(String sessionId, NewsSubscription subscription) {
@@ -116,5 +111,40 @@ public class NewsService {
                 channel,
                 subChannels,
                 action);
+    }
+
+    private Page<News> findNews(PageRequest pageRequest, List<String> subChannels) {
+        if (subChannels.isEmpty()) {
+            return newsRepository.findAll(pageRequest);
+        } else {
+            return newsRepository.findBySubChannelInIgnoreCase(subChannels, pageRequest);
+        }
+    }
+
+    private Page<News> findNews(Channel channel, List<String> subChannels, PageRequest pageRequest) {
+        if (subChannels.isEmpty()) {
+            return newsRepository.findByChannel(channel, pageRequest);
+        } else {
+            return newsRepository.findByChannelAndSubChannelInIgnoreCase(channel, subChannels, pageRequest);
+        }
+    }
+
+    private boolean isSubscribed(User user, News news) {
+        List<String> subChannels = newsSubscriptionTracker.getSubChannels(user.getSessionId(), news.getChannel());
+        return subChannels.contains(news.getSubChannel());
+    }
+
+    private PageRequest getPageRequestByCreatedDesc(GetNewsRequest request) {
+        PageRequest pageRequest = request.pageRequest();
+        Sort sort = Sort.by("created").descending();
+        return pageRequest.withSort(sort);
+    }
+
+    private void sendNews(String sessionId, News news) {
+        SimpMessageHeaderAccessor headerAccessor = SimpMessageHeaderAccessor.create(SimpMessageType.MESSAGE);
+        headerAccessor.setSessionId(sessionId);
+        headerAccessor.setLeaveMutable(true);
+
+        pushTemplate.convertAndSendToUser(sessionId, "/topic/news", news, headerAccessor.getMessageHeaders());
     }
 }
