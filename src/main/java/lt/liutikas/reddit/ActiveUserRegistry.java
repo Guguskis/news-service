@@ -20,6 +20,6 @@ public class ActiveUserRegistry {
     }
 
     public void removeUserBySessionId(String sessionId) {
-        activeUsers.removeIf(user -> user.getSessionId().equals(sessionId));
+        activeUsers.removeIf(user -> user.getSessionId().equals(sessionId)); // fixme somehow activeUsers ended up with null user
     }
 }
