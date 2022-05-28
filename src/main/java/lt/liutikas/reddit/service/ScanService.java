@@ -1,11 +1,11 @@
 package lt.liutikas.reddit.service;
 
+import lt.liutikas.reddit.assembler.EventAssembler;
 import lt.liutikas.reddit.assembler.NewsAssembler;
 import lt.liutikas.reddit.assembler.ScanAssembler;
 import lt.liutikas.reddit.config.properties.ScanProperties;
 import lt.liutikas.reddit.model.Channel;
 import lt.liutikas.reddit.model.ScanResult;
-import lt.liutikas.reddit.model.event.SavedNewsEvent;
 import lt.liutikas.reddit.repository.NewsRepository;
 import lt.liutikas.reddit.repository.ScanResultRepository;
 import org.apache.logging.log4j.util.Strings;
@@ -72,11 +72,7 @@ public class ScanService {
                 .sorted(Comparator.comparing(Submission::getCreated))
                 .map(newsAssembler::assembleNews)
                 .map(newsRepository::save)
-                .map(news -> {
-                    SavedNewsEvent event = new SavedNewsEvent(this);
-                    event.setNews(news);
-                    return event;
-                })
+                .map(EventAssembler::assembleSavedNewsEvent)
                 .forEach(eventPublisher::publishEvent);
 
         LOG.info("Scanning reddit done. {\"subreddits\": \"{}\", \"submissions\": \"{}\"}", Strings.join(subreddits, ','), scanResults.size());
