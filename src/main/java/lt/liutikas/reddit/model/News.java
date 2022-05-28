@@ -20,6 +20,8 @@ public class News {
     private String subChannel;
     @Enumerated(EnumType.STRING)
     private Channel channel;
+    @OneToOne(cascade = CascadeType.ALL)
+    private Sentiment sentiment;
 
     public Long getId() {
         return id;
@@ -67,5 +69,13 @@ public class News {
 
     public void setChannel(Channel channel) {
         this.channel = channel;
+    }
+
+    public Sentiment getSentiment() {
+        return sentiment;
+    }
+
+    public void setSentiment(Sentiment sentiment) {
+        this.sentiment = sentiment;
     }
 }

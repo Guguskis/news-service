@@ -5,6 +5,7 @@ import lt.liutikas.reddit.assembler.ScanAssembler;
 import lt.liutikas.reddit.config.properties.ScanProperties;
 import lt.liutikas.reddit.model.Channel;
 import lt.liutikas.reddit.model.ScanResult;
+import lt.liutikas.reddit.model.event.SavedNewsEvent;
 import lt.liutikas.reddit.repository.NewsRepository;
 import lt.liutikas.reddit.repository.ScanResultRepository;
 import org.apache.logging.log4j.util.Strings;
@@ -55,36 +56,39 @@ public class ScanService {
     public void scanReddit() {
         LOG.info("Scanning reddit...");
 
-        List<String> subreddits = Stream.concat(
-                        scanProperties.getSubreddits().stream(),
-                        subscriptionTracker.getSubChannels(Channel.REDDIT).stream())
+        List<String> subreddits = getSubredditsToScanStream()
                 .map(String::toLowerCase)
                 .distinct()
                 .collect(Collectors.toList());
 
-        List<Submission> submissions = saveNews(subreddits);
+        List<Submission> submissions = getNewSubmissions(subreddits);
 
         List<ScanResult> scanResults = submissions.stream()
                 .map(scanAssembler::assembleScanResult)
-                .peek(scanResult -> scanResult.setSource(Channel.REDDIT))
+                .map(scanResultRepository::save)
                 .collect(Collectors.toList());
-
-        scanResultRepository.saveAll(scanResults);
-
-        for (Submission submission : submissions) {
-            newsAssembler.assembleNews(submission);
-        }
 
         submissions.stream()
                 .sorted(Comparator.comparing(Submission::getCreated))
                 .map(newsAssembler::assembleNews)
                 .map(newsRepository::save)
+                .map(news -> {
+                    SavedNewsEvent event = new SavedNewsEvent(this);
+                    event.setNews(news);
+                    return event;
+                })
                 .forEach(eventPublisher::publishEvent);
 
         LOG.info("Scanning reddit done. {\"subreddits\": \"{}\", \"submissions\": \"{}\"}", Strings.join(subreddits, ','), scanResults.size());
     }
 
-    private List<Submission> saveNews(List<String> subreddits) {
+    private Stream<String> getSubredditsToScanStream() {
+        return Stream.concat(
+                scanProperties.getSubreddits().stream(),
+                subscriptionTracker.getSubChannels(Channel.REDDIT).stream());
+    }
+
+    private List<Submission> getNewSubmissions(List<String> subreddits) {
         List<Submission> submissions = subreddits.stream()
                 .flatMap(this::tryGetNewSubmissionsStream)
                 .collect(Collectors.toList());
@@ -92,14 +96,14 @@ public class ScanService {
         List<URL> urls = submissions.stream()
                 .map(Submission::getUrl)
                 .collect(Collectors.toList());
+
         List<URL> scannedUrls = scanResultRepository.findAllById(urls).stream()
                 .map(ScanResult::getUrl)
                 .collect(Collectors.toList());
 
-        List<Submission> notScannedSubmissions = submissions.stream()
+        return submissions.stream()
                 .filter(submission -> !scannedUrls.contains(submission.getUrl()))
                 .collect(Collectors.toList());
-        return notScannedSubmissions;
     }
 
     private Stream<? extends Submission> tryGetNewSubmissionsStream(String subreddit) {
