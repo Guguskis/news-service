@@ -113,7 +113,6 @@
             <artifactId>azure-ai-textanalytics</artifactId>
             <version>5.1.9</version>
         </dependency>
-
     </dependencies>
 
     <!--    <dependencyManagement>-->
