@@ -62,4 +62,9 @@ public class AdminController {
         scanService.scanReddit();
     }
 
+    @PostMapping("/news/sentiments/process")
+    public void processSentiment() {
+        sentimentService.processSentiments();
+    }
+
 }

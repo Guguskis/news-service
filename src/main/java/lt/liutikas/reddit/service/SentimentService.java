@@ -3,12 +3,10 @@ package lt.liutikas.reddit.service;
 import com.azure.ai.textanalytics.TextAnalyticsClient;
 import com.azure.ai.textanalytics.models.AnalyzeSentimentOptions;
 import com.azure.ai.textanalytics.models.AnalyzeSentimentResult;
-import com.azure.ai.textanalytics.models.DocumentSentiment;
-import com.azure.ai.textanalytics.util.AnalyzeSentimentResultCollection;
+import com.azure.ai.textanalytics.models.SentenceSentiment;
 import lt.liutikas.reddit.assembler.SentimentAssembler;
 import lt.liutikas.reddit.model.News;
 import lt.liutikas.reddit.model.ProcessingStatus;
-import lt.liutikas.reddit.model.Sentiment;
 import lt.liutikas.reddit.model.SentimentResult;
 import lt.liutikas.reddit.model.event.SavedNewsEvent;
 import lt.liutikas.reddit.repository.NewsRepository;
@@ -20,6 +18,7 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
@@ -27,8 +26,8 @@ import java.util.stream.Collectors;
 @Component
 public class SentimentService {
 
+    public static final String RESPONSE_MAPPING_ERROR_MESSAGE = "Sentiment response mapping failed, could not find analysed news by text { \"text\": \"{}\", \"{}\"}";
     private static final Logger LOG = LoggerFactory.getLogger(SentimentService.class);
-
     private final TextAnalyticsClient textAnalyticsClient;
     private final NewsRepository newsRepository;
     private final SentimentAssembler sentimentAssembler;
@@ -73,28 +72,42 @@ public class SentimentService {
                 .map(SentimentResult::getNews)
                 .collect(Collectors.toList());
 
-        AnalyzeSentimentResultCollection sentimentResults = textAnalyticsClient.analyzeSentimentBatch(getTitles(news), "en", new AnalyzeSentimentOptions());
+        List<AnalyzeSentimentResult> sentimentResults = analyseSentiments(news);
 
-        for (int i = 0; sentimentResults.iterator().hasNext(); i++) {
-            News newsItem = results.get(i).getNews();
+        for (AnalyzeSentimentResult result : sentimentResults) {
+            String text = getText(result);
+            Optional<SentimentResult> optional = results.stream()
+                    .filter(r -> r.getNews().getTitle().equals(text))
+                    .findFirst();
 
-            AnalyzeSentimentResult result = sentimentResults.iterator().next();
-            newsItem.setSentiment(getSentiment(result));
+            if (optional.isEmpty()) {
+                LOG.error(RESPONSE_MAPPING_ERROR_MESSAGE, text, news);
+                continue;
+            }
+
+            News newsItem = optional.get().getNews();
+            newsItem.setSentiment(sentimentAssembler.assembleSentiment(result));
         }
 
         return results;
+    }
+
+    private List<AnalyzeSentimentResult> analyseSentiments(List<News> news) {
+        return textAnalyticsClient.analyzeSentimentBatch(getTitles(news), "en", new AnalyzeSentimentOptions())
+                .stream().collect(Collectors.toList());
+    }
+
+    private String getText(AnalyzeSentimentResult result) {
+        return result.getDocumentSentiment()
+                .getSentences().stream()
+                .map(SentenceSentiment::getText)
+                .collect(Collectors.joining(""));
     }
 
     private List<String> getTitles(List<News> news) {
         return news.stream()
                 .map(News::getTitle)
                 .collect(Collectors.toList());
-    }
-
-    private Sentiment getSentiment(AnalyzeSentimentResult result) {
-        DocumentSentiment documentSentiment = result.getDocumentSentiment();
-        Sentiment sentiment = sentimentAssembler.assembleSentiment(documentSentiment);
-        return sentiment;
     }
 
     private Consumer<SentimentResult> setStatus(ProcessingStatus status) {

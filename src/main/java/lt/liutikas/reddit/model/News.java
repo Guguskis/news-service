@@ -78,4 +78,17 @@ public class News {
     public void setSentiment(Sentiment sentiment) {
         this.sentiment = sentiment;
     }
+
+    @Override
+    public String toString() {
+        return "News{" +
+                "id=" + id +
+                ", title='" + title + '\'' +
+                ", url=" + url +
+                ", created=" + created +
+                ", subChannel='" + subChannel + '\'' +
+                ", channel=" + channel +
+                ", sentiment=" + sentiment +
+                '}';
+    }
 }

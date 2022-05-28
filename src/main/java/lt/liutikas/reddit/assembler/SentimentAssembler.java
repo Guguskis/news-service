@@ -1,5 +1,6 @@
 package lt.liutikas.reddit.assembler;
 
+import com.azure.ai.textanalytics.models.AnalyzeSentimentResult;
 import com.azure.ai.textanalytics.models.DocumentSentiment;
 import lt.liutikas.reddit.model.Sentiment;
 import lt.liutikas.reddit.model.SentimentType;
@@ -8,7 +9,9 @@ import org.springframework.stereotype.Component;
 @Component
 public class SentimentAssembler {
 
-    public Sentiment assembleSentiment(DocumentSentiment documentSentiment) {
+    public Sentiment assembleSentiment(AnalyzeSentimentResult analyzeSentimentResult) {
+        DocumentSentiment documentSentiment = analyzeSentimentResult.getDocumentSentiment();
+
         Sentiment sentiment = new Sentiment();
 
         sentiment.setSentiment(SentimentType.valueOf(documentSentiment.getSentiment().toString().toUpperCase()));
