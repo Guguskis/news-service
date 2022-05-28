@@ -74,8 +74,9 @@ public class SentimentService {
             newsRepository.save(newsItem);
         }
 
-        results.forEach(result -> result.setStatus(ProcessingStatus.FINISHED));
-        sentimentResultRepository.saveAll(results);
+        results.stream()
+                .peek(result -> result.setStatus(ProcessingStatus.FINISHED))
+                .forEach(sentimentResultRepository::save);
 
         LOG.info("Sentiments processing finished { \"count\": {} }", results.size());
     }
