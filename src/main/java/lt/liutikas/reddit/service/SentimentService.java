@@ -4,9 +4,11 @@ import com.azure.ai.textanalytics.TextAnalyticsClient;
 import com.azure.ai.textanalytics.models.AnalyzeSentimentOptions;
 import com.azure.ai.textanalytics.models.AnalyzeSentimentResult;
 import com.azure.ai.textanalytics.models.DocumentSentiment;
+import com.azure.ai.textanalytics.util.AnalyzeSentimentResultCollection;
 import lt.liutikas.reddit.assembler.SentimentAssembler;
 import lt.liutikas.reddit.model.News;
 import lt.liutikas.reddit.model.ProcessingStatus;
+import lt.liutikas.reddit.model.Sentiment;
 import lt.liutikas.reddit.model.SentimentResult;
 import lt.liutikas.reddit.model.event.SavedNewsEvent;
 import lt.liutikas.reddit.repository.NewsRepository;
@@ -19,6 +21,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.concurrent.TimeUnit;
+import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 @Component
@@ -56,29 +59,45 @@ public class SentimentService {
             return;
         }
 
-        List<News> news = results.stream()
+        enrichWithSentimentAnalysis(results).stream()
+                .peek(setStatus(ProcessingStatus.FINISHED))
+                .map(sentimentResultRepository::save)
                 .map(SentimentResult::getNews)
-                .collect(Collectors.toList());
-
-        List<String> documents = news.stream()
-                .map(News::getTitle)
-                .collect(Collectors.toList());
-
-        List<AnalyzeSentimentResult> analysisResults = textAnalyticsClient.analyzeSentimentBatch(documents, "en", new AnalyzeSentimentOptions())
-                .stream().collect(Collectors.toList());
-
-        for (int i = 0; i < analysisResults.size(); i++) {
-            DocumentSentiment documentSentiment = analysisResults.get(i).getDocumentSentiment();
-            News newsItem = news.get(i);
-            newsItem.setSentiment(sentimentAssembler.assembleSentiment(documentSentiment));
-            newsRepository.save(newsItem);
-        }
-
-        results.stream()
-                .peek(result -> result.setStatus(ProcessingStatus.FINISHED))
-                .forEach(sentimentResultRepository::save);
+                .forEach(newsRepository::save);
 
         LOG.info("Sentiments processing finished { \"count\": {} }", results.size());
     }
 
+    private List<SentimentResult> enrichWithSentimentAnalysis(List<SentimentResult> results) {
+        List<News> news = results.stream()
+                .map(SentimentResult::getNews)
+                .collect(Collectors.toList());
+
+        AnalyzeSentimentResultCollection sentimentResults = textAnalyticsClient.analyzeSentimentBatch(getTitles(news), "en", new AnalyzeSentimentOptions());
+
+        for (int i = 0; sentimentResults.iterator().hasNext(); i++) {
+            News newsItem = results.get(i).getNews();
+
+            AnalyzeSentimentResult result = sentimentResults.iterator().next();
+            newsItem.setSentiment(getSentiment(result));
+        }
+
+        return results;
+    }
+
+    private List<String> getTitles(List<News> news) {
+        return news.stream()
+                .map(News::getTitle)
+                .collect(Collectors.toList());
+    }
+
+    private Sentiment getSentiment(AnalyzeSentimentResult result) {
+        DocumentSentiment documentSentiment = result.getDocumentSentiment();
+        Sentiment sentiment = sentimentAssembler.assembleSentiment(documentSentiment);
+        return sentiment;
+    }
+
+    private Consumer<SentimentResult> setStatus(ProcessingStatus status) {
+        return sentimentResult -> sentimentResult.setStatus(status);
+    }
 }
