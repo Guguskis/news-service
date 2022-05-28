@@ -1,5 +1,6 @@
 package lt.liutikas.reddit.config;
 
+import lt.liutikas.reddit.config.properties.WebProperties;
 import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Component;
 

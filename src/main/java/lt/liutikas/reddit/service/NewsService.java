@@ -5,10 +5,11 @@ import lt.liutikas.reddit.assembler.NewsAssembler;
 import lt.liutikas.reddit.model.*;
 import lt.liutikas.reddit.model.api.GetNewsRequest;
 import lt.liutikas.reddit.model.api.NewsPage;
-import lt.liutikas.reddit.model.event.ScannedNewsEvent;
+import lt.liutikas.reddit.model.event.SavedNewsEvent;
 import lt.liutikas.reddit.repository.NewsRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.event.EventListener;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -30,28 +31,31 @@ public class NewsService {
     private final NewsAssembler newsAssembler;
     private final NewsSubscriptionTracker newsSubscriptionTracker;
     private final ActiveUserRegistry userRegistry;
+    private final ApplicationEventPublisher eventPublisher;
 
-    public NewsService(SimpMessagingTemplate pushTemplate, NewsRepository newsRepository, NewsAssembler newsAssembler, NewsSubscriptionTracker newsSubscriptionTracker, ActiveUserRegistry userRegistry) {
+    public NewsService(SimpMessagingTemplate pushTemplate, NewsRepository newsRepository, NewsAssembler newsAssembler, NewsSubscriptionTracker newsSubscriptionTracker, ActiveUserRegistry userRegistry, ApplicationEventPublisher eventPublisher) {
         this.pushTemplate = pushTemplate;
         this.newsRepository = newsRepository;
         this.newsAssembler = newsAssembler;
         this.newsSubscriptionTracker = newsSubscriptionTracker;
         this.userRegistry = userRegistry;
+        this.eventPublisher = eventPublisher;
     }
 
     // todo try @SubscribeMapping
     // https://stackoverflow.com/questions/24890450/spring-stomp-subscribemapping-for-user-destination
 
     @EventListener
-    public void handleScannedNewsEvent(ScannedNewsEvent event) {
-        News news = newsAssembler.assembleNews(event);
-        news = newsRepository.save(news);
+    public void handleScannedNewsEvent(SavedNewsEvent event) {
+        News news = event.getNews();
 
         for (User user : userRegistry.getActiveUsers()) {
             if (isSubscribed(user, news)) {
                 sendNews(user.getSessionId(), news);
             }
         }
+
+        eventPublisher.publishEvent(news);
 
         LOG.info("Published news \"{}\"", news.getTitle());
     }

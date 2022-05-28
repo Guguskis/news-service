@@ -1,15 +1,16 @@
 package lt.liutikas.reddit.controller;
 
+import com.azure.ai.textanalytics.models.DocumentSentiment;
 import lt.liutikas.reddit.ActiveUserRegistry;
 import lt.liutikas.reddit.model.Channel;
+import lt.liutikas.reddit.model.News;
 import lt.liutikas.reddit.model.User;
-import lt.liutikas.reddit.model.event.ScannedNewsEvent;
+import lt.liutikas.reddit.model.event.SavedNewsEvent;
+import lt.liutikas.reddit.repository.NewsRepository;
 import lt.liutikas.reddit.service.ScanService;
+import lt.liutikas.reddit.service.SentimentService;
 import org.springframework.context.ApplicationEventPublisher;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -24,21 +25,28 @@ public class AdminController {
     private final ApplicationEventPublisher eventPublisher;
     private final ActiveUserRegistry activeUserRegistry;
     private final ScanService scanService;
+    private final SentimentService sentimentService;
+    private final NewsRepository newsRepository;
 
-    public AdminController(ApplicationEventPublisher eventPublisher, ActiveUserRegistry activeUserRegistry, ScanService scanService) {
+    public AdminController(ApplicationEventPublisher eventPublisher, ActiveUserRegistry activeUserRegistry, ScanService scanService, SentimentService sentimentService, NewsRepository newsRepository) {
         this.eventPublisher = eventPublisher;
         this.activeUserRegistry = activeUserRegistry;
         this.scanService = scanService;
+        this.sentimentService = sentimentService;
+        this.newsRepository = newsRepository;
     }
 
     @PostMapping("/news/publish")
     public void sendMessage(String headline, Channel channel, String subChannel) throws MalformedURLException {
-        ScannedNewsEvent event = new ScannedNewsEvent(this);
-        event.setTitle(headline);
-        event.setUrl(new URL("https://www.reddit.com/r/worldnews/comments/7xqzqy/trump_says_he_will_not_be_president_for_next/"));
-        event.setCreated(ZonedDateTime.now(ZoneOffset.UTC).toLocalDateTime());
-        event.setChannel(channel);
-        event.setSubChannel(subChannel);
+        News news = new News();
+        news.setTitle(headline);
+        news.setUrl(new URL("https://www.reddit.com/r/worldnews/comments/7xqzqy/trump_says_he_will_not_be_president_for_next/"));
+        news.setCreated(ZonedDateTime.now(ZoneOffset.UTC).toLocalDateTime());
+        news.setChannel(channel);
+        news.setSubChannel(subChannel);
+
+        SavedNewsEvent event = new SavedNewsEvent(this);
+        event.setNews(newsRepository.save(news));
         eventPublisher.publishEvent(event);
     }
 
@@ -50,6 +58,11 @@ public class AdminController {
     @PostMapping("/news/reddit/scan")
     public void scanNews() {
         scanService.scanReddit();
+    }
+
+    @PostMapping("/admin/sentiment")
+    public DocumentSentiment getSentiment(@RequestBody News news) {
+        return sentimentService.getSentiment(news.getTitle());
     }
 
 }

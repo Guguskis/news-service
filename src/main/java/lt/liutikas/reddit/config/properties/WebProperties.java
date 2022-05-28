@@ -1,4 +1,4 @@
-package lt.liutikas.reddit.config;
+package lt.liutikas.reddit.config.properties;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
