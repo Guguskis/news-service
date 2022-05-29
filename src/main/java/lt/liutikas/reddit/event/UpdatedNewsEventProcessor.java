@@ -4,14 +4,12 @@ import lt.liutikas.reddit.ActiveUserRegistry;
 import lt.liutikas.reddit.model.News;
 import lt.liutikas.reddit.model.ProcessingStatus;
 import lt.liutikas.reddit.model.SentimentResult;
-import lt.liutikas.reddit.model.User;
 import lt.liutikas.reddit.model.event.UpdatedNewsEvent;
 import lt.liutikas.reddit.repository.SentimentResultRepository;
 import lt.liutikas.reddit.service.NewsService;
 import lt.liutikas.reddit.service.NewsSubscriptionTracker;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.event.EventListener;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Component;
@@ -27,15 +25,15 @@ public class UpdatedNewsEventProcessor {
     private final ActiveUserRegistry userRegistry;
     private final NewsSubscriptionTracker newsSubscriptionTracker;
     private final SentimentResultRepository sentimentResultRepository;
-    private final SimpMessagingTemplate websocketTemplate;
     private final NewsService newsService;
+    private final NewsPublisher newsPublisher;
 
-    public UpdatedNewsEventProcessor(ActiveUserRegistry userRegistry, SentimentResultRepository sentimentResultRepository, ApplicationEventPublisher eventPublisher, NewsSubscriptionTracker newsSubscriptionTracker, SimpMessagingTemplate websocketTemplate, NewsService newsService) {
+    public UpdatedNewsEventProcessor(ActiveUserRegistry userRegistry, SentimentResultRepository sentimentResultRepository, NewsSubscriptionTracker newsSubscriptionTracker, SimpMessagingTemplate websocketTemplate, NewsService newsService, NewsPublisher newsPublisher) {
         this.userRegistry = userRegistry;
         this.sentimentResultRepository = sentimentResultRepository;
         this.newsSubscriptionTracker = newsSubscriptionTracker;
-        this.websocketTemplate = websocketTemplate;
         this.newsService = newsService;
+        this.newsPublisher = newsPublisher;
     }
 
     @EventListener
@@ -53,19 +51,9 @@ public class UpdatedNewsEventProcessor {
     public void notifySubscribers(UpdatedNewsEvent event) {
         List<News> news = event.getNews();
 
-        for (User user : userRegistry.getActiveUsers()) {
-            for (News n : news) {
-                publishNews(n, user);
-            }
-        }
+        newsPublisher.publishNews(news);
 
         LOG.info("Notified subscribers about updated news { \"count\": {} }", news.size());
-    }
-
-    private void publishNews(News news, User user) {
-        if (newsSubscriptionTracker.isSubscribed(user, news)) {
-            newsService.publishNews(user.getSessionId(), news);
-        }
     }
 
     private SentimentResult assembleNotStartedSentimentResult(News news) {
