@@ -1,14 +1,13 @@
 package lt.liutikas.reddit.controller;
 
 import lt.liutikas.reddit.ActiveUserRegistry;
+import lt.liutikas.reddit.event.EventPublisher;
 import lt.liutikas.reddit.model.Channel;
 import lt.liutikas.reddit.model.News;
 import lt.liutikas.reddit.model.User;
-import lt.liutikas.reddit.model.event.UpdatedNewsEvent;
 import lt.liutikas.reddit.repository.NewsRepository;
 import lt.liutikas.reddit.service.ScanService;
 import lt.liutikas.reddit.service.SentimentService;
-import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -24,13 +23,13 @@ import java.util.List;
 @RequestMapping("/api/admin")
 public class AdminController {
 
-    private final ApplicationEventPublisher eventPublisher;
+    private final EventPublisher eventPublisher;
     private final ActiveUserRegistry activeUserRegistry;
     private final ScanService scanService;
     private final SentimentService sentimentService;
     private final NewsRepository newsRepository;
 
-    public AdminController(ApplicationEventPublisher eventPublisher, ActiveUserRegistry activeUserRegistry, ScanService scanService, SentimentService sentimentService, NewsRepository newsRepository) {
+    public AdminController(EventPublisher eventPublisher, ActiveUserRegistry activeUserRegistry, ScanService scanService, SentimentService sentimentService, NewsRepository newsRepository) {
         this.eventPublisher = eventPublisher;
         this.activeUserRegistry = activeUserRegistry;
         this.scanService = scanService;
@@ -47,9 +46,7 @@ public class AdminController {
         news.setChannel(channel);
         news.setSubChannel(subChannel);
 
-        UpdatedNewsEvent event = new UpdatedNewsEvent(this);
-        event.setNews(newsRepository.save(news));
-        eventPublisher.publishEvent(event);
+        eventPublisher.publishUpdatedNewsEvent(List.of(news));
     }
 
     @GetMapping("/users")

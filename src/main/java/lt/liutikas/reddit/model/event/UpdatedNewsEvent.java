@@ -3,19 +3,21 @@ package lt.liutikas.reddit.model.event;
 import lt.liutikas.reddit.model.News;
 import org.springframework.context.ApplicationEvent;
 
+import java.util.List;
+
 public class UpdatedNewsEvent extends ApplicationEvent {
 
-    private News news;
+    private List<News> news;
 
     public UpdatedNewsEvent(Object source) {
         super(source);
     }
 
-    public News getNews() {
+    public List<News> getNews() {
         return news;
     }
 
-    public void setNews(News news) {
+    public void setNews(List<News> news) {
         this.news = news;
     }
 }

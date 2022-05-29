@@ -16,6 +16,9 @@ import org.springframework.context.event.EventListener;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Component
 public class UpdatedNewsEventProcessor {
 
@@ -37,21 +40,26 @@ public class UpdatedNewsEventProcessor {
 
     @EventListener
     public void queueSentimentUpdate(UpdatedNewsEvent event) {
-        News news = event.getNews();
-        SentimentResult sentimentResult = assembleNotStartedSentimentResult(news);
-        sentimentResultRepository.save(sentimentResult);
+        List<SentimentResult> sentimentResult = event.getNews().stream()
+                .map(this::assembleNotStartedSentimentResult)
+                .collect(Collectors.toList());
+
+        sentimentResultRepository.saveAll(sentimentResult);
+
+        LOG.info("Queued sentiment update for news { \"count\": {} }", sentimentResult.size());
     }
 
     @EventListener
     public void notifySubscribers(UpdatedNewsEvent event) {
-        News news = event.getNews();
+        List<News> news = event.getNews();
 
         for (User user : userRegistry.getActiveUsers()) {
-            publishNews(news, user);
+            for (News n : news) {
+                publishNews(n, user);
+            }
         }
-//        eventPublisher.publishEvent(news);
 
-        LOG.info("Published news \"{}\"", news.getTitle());
+        LOG.info("Notified subscribers about updated news { \"count\": {} }", news.size());
     }
 
     private void publishNews(News news, User user) {

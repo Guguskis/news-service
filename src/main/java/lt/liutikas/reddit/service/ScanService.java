@@ -1,17 +1,17 @@
 package lt.liutikas.reddit.service;
 
-import lt.liutikas.reddit.assembler.EventAssembler;
 import lt.liutikas.reddit.assembler.NewsAssembler;
 import lt.liutikas.reddit.assembler.ScanAssembler;
 import lt.liutikas.reddit.config.properties.ScanProperties;
+import lt.liutikas.reddit.event.EventPublisher;
 import lt.liutikas.reddit.model.Channel;
+import lt.liutikas.reddit.model.News;
 import lt.liutikas.reddit.model.ScanResult;
 import lt.liutikas.reddit.repository.NewsRepository;
 import lt.liutikas.reddit.repository.ScanResultRepository;
 import org.apache.logging.log4j.util.Strings;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpClientErrorException;
@@ -33,14 +33,14 @@ public class ScanService {
 
     private final RedditClient redditClient;
     private final ScanResultRepository scanResultRepository;
-    private final ApplicationEventPublisher eventPublisher;
+    private final EventPublisher eventPublisher;
     private final NewsAssembler newsAssembler;
     private final NewsSubscriptionTracker subscriptionTracker;
     private final ScanProperties scanProperties;
     private final ScanAssembler scanAssembler;
     private final NewsRepository newsRepository;
 
-    public ScanService(RedditClient redditClient, ScanResultRepository scanResultRepository, ApplicationEventPublisher eventPublisher, NewsAssembler newsAssembler, NewsSubscriptionTracker subscriptionTracker, ScanProperties scanProperties, ScanAssembler scanAssembler, NewsRepository newsRepository) {
+    public ScanService(RedditClient redditClient, ScanResultRepository scanResultRepository, EventPublisher eventPublisher, NewsAssembler newsAssembler, NewsSubscriptionTracker subscriptionTracker, ScanProperties scanProperties, ScanAssembler scanAssembler, NewsRepository newsRepository) {
         this.redditClient = redditClient;
         this.scanResultRepository = scanResultRepository;
         this.eventPublisher = eventPublisher;
@@ -67,12 +67,13 @@ public class ScanService {
                 .map(scanResultRepository::save)
                 .collect(Collectors.toList());
 
-        submissions.stream()
+        List<News> news = submissions.stream()
                 .sorted(Comparator.comparing(Submission::getCreated))
                 .map(newsAssembler::assembleNews)
                 .map(newsRepository::save)
-                .map(EventAssembler::assembleSavedNewsEvent)
-                .forEach(eventPublisher::publishEvent);
+                .collect(Collectors.toList());
+
+        eventPublisher.publishUpdatedNewsEvent(news);
 
         LOG.info("Scanning reddit done. {\"subreddits\": \"{}\", \"submissions\": \"{}\"}", Strings.join(subreddits, ','), scanResults.size());
     }
