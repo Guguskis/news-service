@@ -23,7 +23,6 @@ import some.developer.reddit.client.model.Submission;
 import java.net.URL;
 import java.util.Comparator;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -52,7 +51,7 @@ public class ScanService {
         this.newsRepository = newsRepository;
     }
 
-    @Scheduled(fixedRate = 1, timeUnit = TimeUnit.MINUTES)
+    @Scheduled(cron = "0 0/1 * * * *")
     public void scanReddit() {
         LOG.info("Scanning reddit...");
 
