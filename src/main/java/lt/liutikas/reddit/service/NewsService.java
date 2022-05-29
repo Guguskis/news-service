@@ -1,22 +1,18 @@
 package lt.liutikas.reddit.service;
 
-import lt.liutikas.reddit.ActiveUserRegistry;
 import lt.liutikas.reddit.config.exception.NotFoundException;
-import lt.liutikas.reddit.model.*;
+import lt.liutikas.reddit.model.Channel;
+import lt.liutikas.reddit.model.News;
+import lt.liutikas.reddit.model.NewsSubscription;
+import lt.liutikas.reddit.model.SubscriptionAction;
 import lt.liutikas.reddit.model.api.GetNewsRequest;
 import lt.liutikas.reddit.model.api.NewsPage;
-import lt.liutikas.reddit.model.event.SavedNewsEvent;
 import lt.liutikas.reddit.repository.NewsRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.context.ApplicationEventPublisher;
-import org.springframework.context.event.EventListener;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
-import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
-import org.springframework.messaging.simp.SimpMessageType;
-import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -27,37 +23,16 @@ public class NewsService {
 
     private static final Logger LOG = LoggerFactory.getLogger(NewsService.class);
 
-    private final ActiveUserRegistry userRegistry;
-    private final ApplicationEventPublisher eventPublisher;
     private final NewsRepository newsRepository;
     private final NewsSubscriptionTracker newsSubscriptionTracker;
-    private final SimpMessagingTemplate pushTemplate;
 
-    public NewsService(SimpMessagingTemplate pushTemplate, NewsRepository newsRepository, NewsSubscriptionTracker newsSubscriptionTracker, ActiveUserRegistry userRegistry, ApplicationEventPublisher eventPublisher) {
-        this.pushTemplate = pushTemplate;
+    public NewsService(NewsRepository newsRepository, NewsSubscriptionTracker newsSubscriptionTracker) {
         this.newsRepository = newsRepository;
         this.newsSubscriptionTracker = newsSubscriptionTracker;
-        this.userRegistry = userRegistry;
-        this.eventPublisher = eventPublisher;
     }
 
     // todo try @SubscribeMapping
     // https://stackoverflow.com/questions/24890450/spring-stomp-subscribemapping-for-user-destination
-
-    @EventListener
-    public void handleScannedNewsEvent(SavedNewsEvent event) {
-        News news = event.getNews();
-
-        for (User user : userRegistry.getActiveUsers()) {
-            if (isSubscribed(user, news)) {
-                sendNews(user.getSessionId(), news);
-            }
-        }
-
-        eventPublisher.publishEvent(news);
-
-        LOG.info("Published news \"{}\"", news.getTitle());
-    }
 
     public News getNews(Long id) {
         Optional<News> optional = newsRepository.findById(id);
@@ -141,22 +116,10 @@ public class NewsService {
         }
     }
 
-    private boolean isSubscribed(User user, News news) {
-        List<String> subChannels = newsSubscriptionTracker.getSubChannels(user.getSessionId(), news.getChannel());
-        return subChannels.contains(news.getSubChannel());
-    }
-
     private PageRequest getPageRequestByCreatedDesc(GetNewsRequest request) {
         PageRequest pageRequest = request.pageRequest();
         Sort sort = Sort.by("created").descending();
         return pageRequest.withSort(sort);
     }
 
-    private void sendNews(String sessionId, News news) {
-        SimpMessageHeaderAccessor headerAccessor = SimpMessageHeaderAccessor.create(SimpMessageType.MESSAGE);
-        headerAccessor.setSessionId(sessionId);
-        headerAccessor.setLeaveMutable(true);
-
-        pushTemplate.convertAndSendToUser(sessionId, "/topic/news", news, headerAccessor.getMessageHeaders());
-    }
 }

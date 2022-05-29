@@ -1,12 +1,12 @@
 package lt.liutikas.reddit.assembler;
 
 import lt.liutikas.reddit.model.News;
-import lt.liutikas.reddit.model.event.SavedNewsEvent;
+import lt.liutikas.reddit.model.event.UpdatedNewsEvent;
 
 public class EventAssembler {
 
-    public static SavedNewsEvent assembleSavedNewsEvent(News news) {
-        SavedNewsEvent event = new SavedNewsEvent(news);
+    public static UpdatedNewsEvent assembleSavedNewsEvent(News news) {
+        UpdatedNewsEvent event = new UpdatedNewsEvent(news);
 
         event.setNews(news);
 

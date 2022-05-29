@@ -3,11 +3,11 @@ package lt.liutikas.reddit.model.event;
 import lt.liutikas.reddit.model.News;
 import org.springframework.context.ApplicationEvent;
 
-public class SavedNewsEvent extends ApplicationEvent {
+public class UpdatedNewsEvent extends ApplicationEvent {
 
     private News news;
 
-    public SavedNewsEvent(Object source) {
+    public UpdatedNewsEvent(Object source) {
         super(source);
     }
 

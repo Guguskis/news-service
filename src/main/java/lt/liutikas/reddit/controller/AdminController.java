@@ -4,7 +4,7 @@ import lt.liutikas.reddit.ActiveUserRegistry;
 import lt.liutikas.reddit.model.Channel;
 import lt.liutikas.reddit.model.News;
 import lt.liutikas.reddit.model.User;
-import lt.liutikas.reddit.model.event.SavedNewsEvent;
+import lt.liutikas.reddit.model.event.UpdatedNewsEvent;
 import lt.liutikas.reddit.repository.NewsRepository;
 import lt.liutikas.reddit.service.ScanService;
 import lt.liutikas.reddit.service.SentimentService;
@@ -47,7 +47,7 @@ public class AdminController {
         news.setChannel(channel);
         news.setSubChannel(subChannel);
 
-        SavedNewsEvent event = new SavedNewsEvent(this);
+        UpdatedNewsEvent event = new UpdatedNewsEvent(this);
         event.setNews(newsRepository.save(news));
         eventPublisher.publishEvent(event);
     }

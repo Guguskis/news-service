@@ -9,12 +9,10 @@ import lt.liutikas.reddit.model.News;
 import lt.liutikas.reddit.model.ProcessingStatus;
 import lt.liutikas.reddit.model.Sentiment;
 import lt.liutikas.reddit.model.SentimentResult;
-import lt.liutikas.reddit.model.event.SavedNewsEvent;
 import lt.liutikas.reddit.repository.NewsRepository;
 import lt.liutikas.reddit.repository.SentimentResultRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.context.event.EventListener;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
@@ -41,15 +39,7 @@ public class SentimentService {
         this.newsRepository = newsRepository;
     }
 
-    @EventListener
-    public void handleScannedNewsEvent(SavedNewsEvent event) {
-        News news = event.getNews();
-        SentimentResult sentimentResult = new SentimentResult();
-        sentimentResult.setNews(news);
-        sentimentResult.setStatus(ProcessingStatus.NOT_STARTED);
 
-        sentimentResultRepository.save(sentimentResult);
-    }
 
     @Scheduled(cron = "10 0/1 * * * *")
     public void processSentiments() {
