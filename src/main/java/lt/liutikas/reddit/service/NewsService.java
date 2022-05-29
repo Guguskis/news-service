@@ -2,6 +2,7 @@ package lt.liutikas.reddit.service;
 
 import lt.liutikas.reddit.ActiveUserRegistry;
 import lt.liutikas.reddit.assembler.NewsAssembler;
+import lt.liutikas.reddit.config.exception.NotFoundException;
 import lt.liutikas.reddit.model.*;
 import lt.liutikas.reddit.model.api.GetNewsRequest;
 import lt.liutikas.reddit.model.api.NewsPage;
@@ -20,6 +21,7 @@ import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class NewsService {
@@ -58,6 +60,15 @@ public class NewsService {
         eventPublisher.publishEvent(news);
 
         LOG.info("Published news \"{}\"", news.getTitle());
+    }
+
+    public News getNews(Long id) {
+        Optional<News> optional = newsRepository.findById(id);
+
+        if (optional.isEmpty())
+            throw new NotFoundException(String.format("News not found { \"id\": %s }", id));
+
+        return optional.get();
     }
 
     public NewsPage getNews(GetNewsRequest request) {
