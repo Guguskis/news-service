@@ -73,9 +73,10 @@ public class ScanService {
                 .map(newsRepository::save)
                 .collect(Collectors.toList());
 
-        eventPublisher.publishSavedNewsEvent(news);
-
         LOG.info("Scanning reddit done. {\"subreddits\": \"{}\", \"submissions\": \"{}\"}", Strings.join(subreddits, ','), scanResults.size());
+
+        if (!news.isEmpty())
+            eventPublisher.publishSavedNewsEvent(news);
     }
 
     private Stream<String> getSubredditsToScanStream() {

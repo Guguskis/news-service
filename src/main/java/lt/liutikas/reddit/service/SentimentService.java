@@ -52,6 +52,9 @@ public class SentimentService {
         }
 
         List<SentimentResult> sentimentResults = enrichWithSentimentAnalysis(results);
+        List<News> news = sentimentResults.stream()
+                .map(SentimentResult::getNews)
+                .collect(Collectors.toList());
 
         for (SentimentResult result : sentimentResults) {
             result.setStatus(ProcessingStatus.FINISHED);
@@ -59,13 +62,10 @@ public class SentimentService {
             newsRepository.save(result.getNews());
         }
 
-        List<News> news = sentimentResults.stream()
-                .map(SentimentResult::getNews)
-                .collect(Collectors.toList());
-
-        eventPublisher.publishUpdatedNewsEvent(news);
-
         LOG.info("Sentiments processing finished { \"count\": {} }", results.size());
+
+        if (!news.isEmpty())
+            eventPublisher.publishUpdatedNewsEvent(news);
     }
 
     private List<SentimentResult> enrichWithSentimentAnalysis(List<SentimentResult> results) {

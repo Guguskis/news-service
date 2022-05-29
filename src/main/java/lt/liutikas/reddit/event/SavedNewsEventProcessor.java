@@ -26,13 +26,13 @@ public class SavedNewsEventProcessor {
 
     @EventListener
     public void queueSentimentUpdate(SavedNewsEvent event) {
-        List<SentimentResult> sentimentResult = event.getNews().stream()
+        List<SentimentResult> sentimentResults = event.getNews().stream()
                 .map(this::assembleNotStartedSentimentResult)
                 .collect(Collectors.toList());
 
-        sentimentResultRepository.saveAll(sentimentResult);
+        sentimentResultRepository.saveAll(sentimentResults);
 
-        LOG.info("Queued sentiment update for news { \"count\": {} }", sentimentResult.size());
+        LOG.info("Queued sentiment update for news { \"count\": {} }", sentimentResults.size());
     }
 
     private SentimentResult assembleNotStartedSentimentResult(News news) {
