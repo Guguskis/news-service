@@ -1,13 +1,18 @@
 package lt.liutikas.reddit.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import javax.persistence.*;
 
 @Entity
 public class Sentiment {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
+    @OneToOne(mappedBy = "sentiment")
+    @JsonBackReference
+    private News news;
     @Enumerated(EnumType.STRING)
     private SentimentType sentiment;
     private double scoreNegative;
@@ -20,6 +25,14 @@ public class Sentiment {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public News getNews() {
+        return news;
+    }
+
+    public void setNews(News news) {
+        this.news = news;
     }
 
     public SentimentType getSentiment() {

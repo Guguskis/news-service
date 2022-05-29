@@ -2,17 +2,17 @@ server:
   port: 9081
 spring:
   datasource:
-    url: jdbc:h2:file:C:/Dev/h2databases/news-service
-    driverClassName: org.h2.Driver
-    username: admin
-  h2:
-    console:
-      enabled: true
-      path: /database
-      settings:
-        web-allow-others: true
+    url: jdbc:mysql://localhost:3306/news-service
+    driverClassName: com.mysql.cj.jdbc.Driver
+    username: root
+  #  h2:
+  #    console:
+  #      enabled: true
+  #      path: /database
+  #      settings:
+  #        web-allow-others: true
   jpa:
-    database-platform: org.hibernate.dialect.H2Dialect
+    #    database-platform: org.hibernate.dialect.H2Dialect
     hibernate:
       ddl-auto: update
 web:

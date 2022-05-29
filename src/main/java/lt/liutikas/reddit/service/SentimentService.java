@@ -7,6 +7,7 @@ import com.azure.ai.textanalytics.models.SentenceSentiment;
 import lt.liutikas.reddit.assembler.SentimentAssembler;
 import lt.liutikas.reddit.model.News;
 import lt.liutikas.reddit.model.ProcessingStatus;
+import lt.liutikas.reddit.model.Sentiment;
 import lt.liutikas.reddit.model.SentimentResult;
 import lt.liutikas.reddit.model.event.SavedNewsEvent;
 import lt.liutikas.reddit.repository.NewsRepository;
@@ -19,25 +20,25 @@ import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.concurrent.TimeUnit;
-import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 @Component
 public class SentimentService {
 
-    public static final String RESPONSE_MAPPING_ERROR_MESSAGE = "Sentiment response mapping failed, could not find analysed news by text { \"text\": \"{}\", \"{}\"}";
     private static final Logger LOG = LoggerFactory.getLogger(SentimentService.class);
+
+    private static final String RESPONSE_MAPPING_ERROR_MESSAGE = "Sentiment response mapping failed, could not find analysed news by text { \"text\": \"{}\", \"{}\"}";
+
     private final TextAnalyticsClient textAnalyticsClient;
-    private final NewsRepository newsRepository;
     private final SentimentAssembler sentimentAssembler;
     private final SentimentResultRepository sentimentResultRepository;
+    private final NewsRepository newsRepository;
 
-    public SentimentService(TextAnalyticsClient textAnalyticsClient, NewsRepository newsRepository, SentimentAssembler sentimentAssembler, SentimentResultRepository sentimentResultRepository) {
+    public SentimentService(TextAnalyticsClient textAnalyticsClient, SentimentAssembler sentimentAssembler, SentimentResultRepository sentimentResultRepository, NewsRepository newsRepository) {
         this.textAnalyticsClient = textAnalyticsClient;
-        this.newsRepository = newsRepository;
         this.sentimentAssembler = sentimentAssembler;
         this.sentimentResultRepository = sentimentResultRepository;
+        this.newsRepository = newsRepository;
     }
 
     @EventListener
@@ -50,7 +51,7 @@ public class SentimentService {
         sentimentResultRepository.save(sentimentResult);
     }
 
-    @Scheduled(fixedRate = 1, timeUnit = TimeUnit.MINUTES)
+    @Scheduled(cron = "10 0/1 * * * *")
     public void processSentiments() {
         List<SentimentResult> results = sentimentResultRepository.findTop5ByStatus(ProcessingStatus.NOT_STARTED);
 
@@ -58,11 +59,11 @@ public class SentimentService {
             return;
         }
 
-        enrichWithSentimentAnalysis(results).stream()
-                .peek(setStatus(ProcessingStatus.FINISHED))
-                .map(sentimentResultRepository::save)
-                .map(SentimentResult::getNews)
-                .forEach(newsRepository::save);
+        for (SentimentResult result : enrichWithSentimentAnalysis(results)) {
+            result.setStatus(ProcessingStatus.FINISHED);
+            sentimentResultRepository.save(result);
+            newsRepository.save(result.getNews());
+        }
 
         LOG.info("Sentiments processing finished { \"count\": {} }", results.size());
     }
@@ -86,7 +87,9 @@ public class SentimentService {
             }
 
             News newsItem = optional.get().getNews();
-            newsItem.setSentiment(sentimentAssembler.assembleSentiment(result));
+            Sentiment sentiment = sentimentAssembler.assembleSentiment(newsItem, result);
+            newsItem.setSentiment(sentiment);
+
         }
 
         return results;
@@ -108,9 +111,5 @@ public class SentimentService {
         return news.stream()
                 .map(News::getTitle)
                 .collect(Collectors.toList());
-    }
-
-    private Consumer<SentimentResult> setStatus(ProcessingStatus status) {
-        return sentimentResult -> sentimentResult.setStatus(status);
     }
 }

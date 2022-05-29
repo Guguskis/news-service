@@ -1,6 +1,7 @@
 package lt.liutikas.reddit.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import javax.persistence.*;
 import java.net.URL;
@@ -10,7 +11,7 @@ import java.time.LocalDateTime;
 public class News {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     @Column(length = 2048)
     private String title;
@@ -21,6 +22,8 @@ public class News {
     @Enumerated(EnumType.STRING)
     private Channel channel;
     @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(referencedColumnName = "id")
+    @JsonManagedReference
     private Sentiment sentiment;
 
     public Long getId() {
@@ -59,8 +62,8 @@ public class News {
         return subChannel;
     }
 
-    public void setSubChannel(String channel) {
-        this.subChannel = channel;
+    public void setSubChannel(String subChannel) {
+        this.subChannel = subChannel;
     }
 
     public Channel getChannel() {

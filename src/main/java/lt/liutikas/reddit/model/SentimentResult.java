@@ -6,7 +6,7 @@ import javax.persistence.*;
 public class SentimentResult {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     @OneToOne
     private News news;
