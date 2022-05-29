@@ -2,12 +2,21 @@ package lt.liutikas.reddit.assembler;
 
 import lt.liutikas.reddit.model.Channel;
 import lt.liutikas.reddit.model.News;
+import lt.liutikas.reddit.model.api.SaveNewsRequest;
 import org.springframework.stereotype.Component;
 import some.developer.reddit.client.model.Submission;
+
+import java.time.Clock;
+import java.time.LocalDateTime;
 
 @Component
 public class NewsAssembler {
 
+    private final Clock clock;
+
+    public NewsAssembler(Clock clock) {
+        this.clock = clock;
+    }
 
     public News assembleNews(Submission submission) {
         News news = new News();
@@ -21,4 +30,15 @@ public class NewsAssembler {
         return news;
     }
 
+    public News assembleNews(SaveNewsRequest request) {
+        News news = new News();
+
+        news.setTitle(request.getTitle());
+        news.setUrl(request.getUrl());
+        news.setCreated(LocalDateTime.now(clock));
+        news.setChannel(request.getChannel());
+        news.setSubChannel(request.getSubreddit());
+
+        return news;
+    }
 }

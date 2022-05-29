@@ -1,5 +1,6 @@
 package lt.liutikas.reddit.service;
 
+import lt.liutikas.reddit.assembler.NewsAssembler;
 import lt.liutikas.reddit.config.exception.NotFoundException;
 import lt.liutikas.reddit.event.EventPublisher;
 import lt.liutikas.reddit.model.Channel;
@@ -8,6 +9,7 @@ import lt.liutikas.reddit.model.NewsSubscription;
 import lt.liutikas.reddit.model.SubscriptionAction;
 import lt.liutikas.reddit.model.api.GetNewsRequest;
 import lt.liutikas.reddit.model.api.NewsPage;
+import lt.liutikas.reddit.model.api.SaveNewsRequest;
 import lt.liutikas.reddit.repository.NewsRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,11 +29,13 @@ public class NewsService {
     private final NewsRepository newsRepository;
     private final NewsSubscriptionTracker newsSubscriptionTracker;
     private final EventPublisher eventPublisher;
+    private final NewsAssembler newsAssembler;
 
-    public NewsService(NewsRepository newsRepository, NewsSubscriptionTracker newsSubscriptionTracker, EventPublisher eventPublisher) {
+    public NewsService(NewsRepository newsRepository, NewsSubscriptionTracker newsSubscriptionTracker, EventPublisher eventPublisher, NewsAssembler newsAssembler) {
         this.newsRepository = newsRepository;
         this.newsSubscriptionTracker = newsSubscriptionTracker;
         this.eventPublisher = eventPublisher;
+        this.newsAssembler = newsAssembler;
     }
 
     // todo try @SubscribeMapping
@@ -56,7 +60,7 @@ public class NewsService {
         newsPage.setNews(page.getContent());
         newsPage.setNextToken(page);
 
-        LOG.info("Returning news {'pageToken': {}, 'pageSize': {}}", pageRequest.getPageNumber(), request.getPageSize());
+        LOG.info("Returning news { 'pageToken': {}, 'pageSize': {} }", pageRequest.getPageNumber(), request.getPageSize());
 
         return newsPage;
     }
@@ -70,7 +74,7 @@ public class NewsService {
         newsPage.setNews(page.getContent());
         newsPage.setNextToken(page);
 
-        LOG.info("Returning news {'channel': '{}''pageToken': {}, 'pageSize': {}}", channel, pageRequest.getPageNumber(), request.getPageSize());
+        LOG.info("Returning news { 'channel': '{}''pageToken': {}, 'pageSize': {} }", channel, pageRequest.getPageNumber(), request.getPageSize());
 
         return newsPage;
     }
@@ -96,7 +100,7 @@ public class NewsService {
                 throw new IllegalArgumentException("Action not implemented: " + action);
         }
 
-        LOG.info("Subscription event {\"sessionId\": \"{}\", \"channel\": \"{}\", \"subChannels\": {}, \"action\": {}}",
+        LOG.info("Subscription event {\"sessionId\": \"{}\", \"channel\": \"{}\", \"subChannels\": {}, \"action\": {} }",
                 sessionId,
                 channel,
                 subChannels,
@@ -125,13 +129,14 @@ public class NewsService {
         return pageRequest.withSort(sort);
     }
 
-    public News saveNews(News news) {
-        News savedNews = newsRepository.save(news);
+    public News saveNews(SaveNewsRequest request) {
+        News news = newsAssembler.assembleNews(request);
+        news = newsRepository.save(news);
 
-        LOG.info("Saved news { \"id\": {}}", savedNews.getId());
+        LOG.info("Saved news { \"id\": {} }", news.getId());
 
         eventPublisher.publishSavedNewsEvent(List.of(news));
 
-        return savedNews;
+        return news;
     }
 }

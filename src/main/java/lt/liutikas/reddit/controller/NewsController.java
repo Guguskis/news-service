@@ -4,6 +4,7 @@ import lt.liutikas.reddit.model.Channel;
 import lt.liutikas.reddit.model.News;
 import lt.liutikas.reddit.model.api.GetNewsRequest;
 import lt.liutikas.reddit.model.api.NewsPage;
+import lt.liutikas.reddit.model.api.SaveNewsRequest;
 import lt.liutikas.reddit.service.NewsService;
 import org.springframework.web.bind.annotation.*;
 
@@ -35,7 +36,7 @@ public class NewsController {
     }
 
     @PostMapping
-    public News saveNews(@RequestBody News news) {
+    public News saveNews(@RequestBody SaveNewsRequest news) {
         return newsService.saveNews(news);
     }
 
