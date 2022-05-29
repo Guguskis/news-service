@@ -24,7 +24,16 @@ public class NewsPublisher {
         this.simpMessagingTemplate = simpMessagingTemplate;
     }
 
+    public void publishNews(String sessionId, News news) {
+        SimpMessageHeaderAccessor headerAccessor = SimpMessageHeaderAccessor.create(SimpMessageType.MESSAGE);
+        headerAccessor.setSessionId(sessionId);
+        headerAccessor.setLeaveMutable(true);
+
+        simpMessagingTemplate.convertAndSendToUser(sessionId, "/topic/news", news, headerAccessor.getMessageHeaders());
+    }
+
     public void publishNews(List<News> news) {
+        news.sort(this::compareCreatedDesc);
         for (User user : userRegistry.getActiveUsers()) {
             for (News newsItem : news) {
                 if (newsSubscriptionTracker.isSubscribed(user, newsItem)) {
@@ -34,12 +43,8 @@ public class NewsPublisher {
         }
     }
 
-    public void publishNews(String sessionId, News news) {
-        SimpMessageHeaderAccessor headerAccessor = SimpMessageHeaderAccessor.create(SimpMessageType.MESSAGE);
-        headerAccessor.setSessionId(sessionId);
-        headerAccessor.setLeaveMutable(true);
-
-        simpMessagingTemplate.convertAndSendToUser(sessionId, "/topic/news", news, headerAccessor.getMessageHeaders());
+    private int compareCreatedDesc(News n1, News n2) {
+        return n1.getCreated().compareTo(n2.getCreated());
     }
 
 }
