@@ -24,7 +24,7 @@ public class NewsPublisher {
         this.simpMessagingTemplate = simpMessagingTemplate;
     }
 
-    void publishNews(List<News> news) {
+    public void publishNews(List<News> news) {
         for (User user : userRegistry.getActiveUsers()) {
             for (News newsItem : news) {
                 if (newsSubscriptionTracker.isSubscribed(user, newsItem)) {
