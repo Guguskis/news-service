@@ -5,10 +5,7 @@ import lt.liutikas.reddit.model.News;
 import lt.liutikas.reddit.model.api.GetNewsRequest;
 import lt.liutikas.reddit.model.api.NewsPage;
 import lt.liutikas.reddit.service.NewsService;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
@@ -35,6 +32,11 @@ public class NewsController {
     @GetMapping("/channel/{channel}")
     public NewsPage getChannelNews(@PathVariable Channel channel, @Valid GetNewsRequest request) {
         return newsService.getNews(channel, request);
+    }
+
+    @PostMapping
+    public News saveNews(@RequestBody News news) {
+        return newsService.saveNews(news);
     }
 
 }

@@ -1,6 +1,7 @@
 package lt.liutikas.reddit.service;
 
 import lt.liutikas.reddit.config.exception.NotFoundException;
+import lt.liutikas.reddit.event.EventPublisher;
 import lt.liutikas.reddit.model.Channel;
 import lt.liutikas.reddit.model.News;
 import lt.liutikas.reddit.model.NewsSubscription;
@@ -25,10 +26,12 @@ public class NewsService {
 
     private final NewsRepository newsRepository;
     private final NewsSubscriptionTracker newsSubscriptionTracker;
+    private final EventPublisher eventPublisher;
 
-    public NewsService(NewsRepository newsRepository, NewsSubscriptionTracker newsSubscriptionTracker) {
+    public NewsService(NewsRepository newsRepository, NewsSubscriptionTracker newsSubscriptionTracker, EventPublisher eventPublisher) {
         this.newsRepository = newsRepository;
         this.newsSubscriptionTracker = newsSubscriptionTracker;
+        this.eventPublisher = eventPublisher;
     }
 
     // todo try @SubscribeMapping
@@ -122,4 +125,13 @@ public class NewsService {
         return pageRequest.withSort(sort);
     }
 
+    public News saveNews(News news) {
+        News savedNews = newsRepository.save(news);
+
+        LOG.info("Saved news { \"id\": {}}", savedNews.getId());
+
+        eventPublisher.publishSavedNewsEvent(List.of(news));
+
+        return savedNews;
+    }
 }

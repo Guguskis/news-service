@@ -2,8 +2,6 @@ package lt.liutikas.reddit.controller;
 
 import lt.liutikas.reddit.ActiveUserRegistry;
 import lt.liutikas.reddit.event.EventPublisher;
-import lt.liutikas.reddit.model.Channel;
-import lt.liutikas.reddit.model.News;
 import lt.liutikas.reddit.model.User;
 import lt.liutikas.reddit.service.ScanService;
 import lt.liutikas.reddit.service.SentimentService;
@@ -12,10 +10,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.time.ZoneOffset;
-import java.time.ZonedDateTime;
 import java.util.List;
 
 @RestController
@@ -32,18 +26,6 @@ public class AdminController {
         this.activeUserRegistry = activeUserRegistry;
         this.scanService = scanService;
         this.sentimentService = sentimentService;
-    }
-
-    @PostMapping("/event/updatedNewsEvent")
-    public void sendMessage(String headline, Channel channel, String subChannel) throws MalformedURLException {
-        News news = new News();
-        news.setTitle(headline);
-        news.setUrl(new URL("https://www.reddit.com/r/worldnews/comments/7xqzqy/trump_says_he_will_not_be_president_for_next/"));
-        news.setCreated(ZonedDateTime.now(ZoneOffset.UTC).toLocalDateTime());
-        news.setChannel(channel);
-        news.setSubChannel(subChannel);
-
-        eventPublisher.publishUpdatedNewsEvent(List.of(news));
     }
 
     @GetMapping("/users")
