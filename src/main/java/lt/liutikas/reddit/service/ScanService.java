@@ -73,7 +73,7 @@ public class ScanService {
                 .map(newsRepository::save)
                 .collect(Collectors.toList());
 
-        eventPublisher.publishUpdatedNewsEvent(news);
+        eventPublisher.publishSavedNewsEvent(news);
 
         LOG.info("Scanning reddit done. {\"subreddits\": \"{}\", \"submissions\": \"{}\"}", Strings.join(subreddits, ','), scanResults.size());
     }

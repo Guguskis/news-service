@@ -13,7 +13,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
-import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -26,12 +25,10 @@ public class NewsService {
 
     private final NewsRepository newsRepository;
     private final NewsSubscriptionTracker newsSubscriptionTracker;
-    private final SimpMessagingTemplate simpMessagingTemplate;
 
-    public NewsService(NewsRepository newsRepository, NewsSubscriptionTracker newsSubscriptionTracker, SimpMessagingTemplate simpMessagingTemplate) {
+    public NewsService(NewsRepository newsRepository, NewsSubscriptionTracker newsSubscriptionTracker) {
         this.newsRepository = newsRepository;
         this.newsSubscriptionTracker = newsSubscriptionTracker;
-        this.simpMessagingTemplate = simpMessagingTemplate;
     }
 
     // todo try @SubscribeMapping

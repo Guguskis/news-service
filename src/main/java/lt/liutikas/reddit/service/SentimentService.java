@@ -5,6 +5,7 @@ import com.azure.ai.textanalytics.models.AnalyzeSentimentOptions;
 import com.azure.ai.textanalytics.models.AnalyzeSentimentResult;
 import com.azure.ai.textanalytics.models.SentenceSentiment;
 import lt.liutikas.reddit.assembler.SentimentAssembler;
+import lt.liutikas.reddit.event.EventPublisher;
 import lt.liutikas.reddit.model.News;
 import lt.liutikas.reddit.model.ProcessingStatus;
 import lt.liutikas.reddit.model.Sentiment;
@@ -31,14 +32,15 @@ public class SentimentService {
     private final SentimentAssembler sentimentAssembler;
     private final SentimentResultRepository sentimentResultRepository;
     private final NewsRepository newsRepository;
+    private final EventPublisher eventPublisher;
 
-    public SentimentService(TextAnalyticsClient textAnalyticsClient, SentimentAssembler sentimentAssembler, SentimentResultRepository sentimentResultRepository, NewsRepository newsRepository) {
+    public SentimentService(TextAnalyticsClient textAnalyticsClient, SentimentAssembler sentimentAssembler, SentimentResultRepository sentimentResultRepository, NewsRepository newsRepository, EventPublisher eventPublisher) {
         this.textAnalyticsClient = textAnalyticsClient;
         this.sentimentAssembler = sentimentAssembler;
         this.sentimentResultRepository = sentimentResultRepository;
         this.newsRepository = newsRepository;
+        this.eventPublisher = eventPublisher;
     }
-
 
 
     @Scheduled(cron = "10 0/1 * * * *")
@@ -49,11 +51,19 @@ public class SentimentService {
             return;
         }
 
-        for (SentimentResult result : enrichWithSentimentAnalysis(results)) {
+        List<SentimentResult> sentimentResults = enrichWithSentimentAnalysis(results);
+
+        for (SentimentResult result : sentimentResults) {
             result.setStatus(ProcessingStatus.FINISHED);
             sentimentResultRepository.save(result);
             newsRepository.save(result.getNews());
         }
+
+        List<News> news = sentimentResults.stream()
+                .map(SentimentResult::getNews)
+                .collect(Collectors.toList());
+
+        eventPublisher.publishUpdatedNewsEvent(news);
 
         LOG.info("Sentiments processing finished { \"count\": {} }", results.size());
     }

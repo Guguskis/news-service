@@ -5,7 +5,6 @@ import lt.liutikas.reddit.event.EventPublisher;
 import lt.liutikas.reddit.model.Channel;
 import lt.liutikas.reddit.model.News;
 import lt.liutikas.reddit.model.User;
-import lt.liutikas.reddit.repository.NewsRepository;
 import lt.liutikas.reddit.service.ScanService;
 import lt.liutikas.reddit.service.SentimentService;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -27,17 +26,15 @@ public class AdminController {
     private final ActiveUserRegistry activeUserRegistry;
     private final ScanService scanService;
     private final SentimentService sentimentService;
-    private final NewsRepository newsRepository;
 
-    public AdminController(EventPublisher eventPublisher, ActiveUserRegistry activeUserRegistry, ScanService scanService, SentimentService sentimentService, NewsRepository newsRepository) {
+    public AdminController(EventPublisher eventPublisher, ActiveUserRegistry activeUserRegistry, ScanService scanService, SentimentService sentimentService) {
         this.eventPublisher = eventPublisher;
         this.activeUserRegistry = activeUserRegistry;
         this.scanService = scanService;
         this.sentimentService = sentimentService;
-        this.newsRepository = newsRepository;
     }
 
-    @PostMapping("/news/publish")
+    @PostMapping("/event/updatedNewsEvent")
     public void sendMessage(String headline, Channel channel, String subChannel) throws MalformedURLException {
         News news = new News();
         news.setTitle(headline);

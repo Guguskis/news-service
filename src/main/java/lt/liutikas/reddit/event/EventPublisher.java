@@ -2,6 +2,7 @@ package lt.liutikas.reddit.event;
 
 import lt.liutikas.reddit.assembler.EventAssembler;
 import lt.liutikas.reddit.model.News;
+import lt.liutikas.reddit.model.event.SavedNewsEvent;
 import lt.liutikas.reddit.model.event.UpdatedNewsEvent;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Component;
@@ -20,8 +21,12 @@ public class EventPublisher {
     }
 
     public void publishUpdatedNewsEvent(List<News> news) {
-        UpdatedNewsEvent event = eventAssembler.assembleSavedNewsEvent(news);
+        UpdatedNewsEvent event = eventAssembler.assembleUpdatedNewsEvent(news);
         publisher.publishEvent(event);
     }
 
+    public void publishSavedNewsEvent(List<News> news) {
+        SavedNewsEvent event = eventAssembler.assembleSavedNewsEvent(news);
+        publisher.publishEvent(event);
+    }
 }
