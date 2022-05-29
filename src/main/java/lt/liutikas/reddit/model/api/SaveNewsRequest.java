@@ -9,7 +9,7 @@ public class SaveNewsRequest {
     private String title;
     private URL url;
     private Channel channel;
-    private String subreddit;
+    private String subChannel;
 
     public String getTitle() {
         return title;
@@ -35,11 +35,11 @@ public class SaveNewsRequest {
         this.channel = channel;
     }
 
-    public String getSubreddit() {
-        return subreddit;
+    public String getSubChannel() {
+        return subChannel;
     }
 
-    public void setSubreddit(String subreddit) {
-        this.subreddit = subreddit;
+    public void setSubChannel(String subChannel) {
+        this.subChannel = subChannel;
     }
 }

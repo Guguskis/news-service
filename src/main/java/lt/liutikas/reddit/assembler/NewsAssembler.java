@@ -37,7 +37,7 @@ public class NewsAssembler {
         news.setUrl(request.getUrl());
         news.setCreated(LocalDateTime.now(clock));
         news.setChannel(request.getChannel());
-        news.setSubChannel(request.getSubreddit());
+        news.setSubChannel(request.getSubChannel());
 
         return news;
     }
