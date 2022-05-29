@@ -1,7 +1,6 @@
 package lt.liutikas.reddit.service;
 
 import lt.liutikas.reddit.ActiveUserRegistry;
-import lt.liutikas.reddit.assembler.NewsAssembler;
 import lt.liutikas.reddit.config.exception.NotFoundException;
 import lt.liutikas.reddit.model.*;
 import lt.liutikas.reddit.model.api.GetNewsRequest;
@@ -28,17 +27,15 @@ public class NewsService {
 
     private static final Logger LOG = LoggerFactory.getLogger(NewsService.class);
 
-    private final SimpMessagingTemplate pushTemplate;
-    private final NewsRepository newsRepository;
-    private final NewsAssembler newsAssembler;
-    private final NewsSubscriptionTracker newsSubscriptionTracker;
     private final ActiveUserRegistry userRegistry;
     private final ApplicationEventPublisher eventPublisher;
+    private final NewsRepository newsRepository;
+    private final NewsSubscriptionTracker newsSubscriptionTracker;
+    private final SimpMessagingTemplate pushTemplate;
 
-    public NewsService(SimpMessagingTemplate pushTemplate, NewsRepository newsRepository, NewsAssembler newsAssembler, NewsSubscriptionTracker newsSubscriptionTracker, ActiveUserRegistry userRegistry, ApplicationEventPublisher eventPublisher) {
+    public NewsService(SimpMessagingTemplate pushTemplate, NewsRepository newsRepository, NewsSubscriptionTracker newsSubscriptionTracker, ActiveUserRegistry userRegistry, ApplicationEventPublisher eventPublisher) {
         this.pushTemplate = pushTemplate;
         this.newsRepository = newsRepository;
-        this.newsAssembler = newsAssembler;
         this.newsSubscriptionTracker = newsSubscriptionTracker;
         this.userRegistry = userRegistry;
         this.eventPublisher = eventPublisher;
