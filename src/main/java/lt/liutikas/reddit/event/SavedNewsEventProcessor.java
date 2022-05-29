@@ -19,9 +19,11 @@ public class SavedNewsEventProcessor {
     private static final Logger LOG = LoggerFactory.getLogger(SavedNewsEventProcessor.class);
 
     private final SentimentResultRepository sentimentResultRepository;
+    private final NewsPublisher newsPublisher;
 
-    public SavedNewsEventProcessor(SentimentResultRepository sentimentResultRepository) {
+    public SavedNewsEventProcessor(SentimentResultRepository sentimentResultRepository, NewsPublisher newsPublisher) {
         this.sentimentResultRepository = sentimentResultRepository;
+        this.newsPublisher = newsPublisher;
     }
 
     @EventListener
@@ -33,6 +35,15 @@ public class SavedNewsEventProcessor {
         sentimentResultRepository.saveAll(sentimentResults);
 
         LOG.info("Queued sentiment update for news { \"count\": {} }", sentimentResults.size());
+    }
+
+    @EventListener
+    public void notifySubscribers(SavedNewsEvent event) {
+        List<News> news = event.getNews();
+
+        newsPublisher.publishNews(news);
+
+        LOG.info("Notified subscribers about saved news { \"count\": {} }", news.size());
     }
 
     private SentimentResult assembleNotStartedSentimentResult(News news) {
