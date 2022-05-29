@@ -1,7 +1,9 @@
 package lt.liutikas.reddit.service;
 
 import lt.liutikas.reddit.model.Channel;
+import lt.liutikas.reddit.model.News;
 import lt.liutikas.reddit.model.NewsSubscription;
+import lt.liutikas.reddit.model.User;
 import org.springframework.stereotype.Component;
 
 import java.util.*;
@@ -12,6 +14,12 @@ public class NewsSubscriptionTracker {
 
     // one subreddit -> many sessionId
     private final Map<String, Set<String>> subChannels = new HashMap<>();
+
+    // todo cover with tests
+    public boolean isSubscribed(User user, News news) {
+        List<String> subChannels = getSubChannels(user.getSessionId(), news.getChannel());
+        return subChannels.contains(news.getSubChannel());
+    }
 
     public void subscribe(String sessionId, NewsSubscription subscription) {
         synchronized (subChannels) {
