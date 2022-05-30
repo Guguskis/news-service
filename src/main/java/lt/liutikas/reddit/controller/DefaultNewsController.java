@@ -1,42 +1,40 @@
 package lt.liutikas.reddit.controller;
 
+import lt.liutikas.reddit.api.NewsController;
 import lt.liutikas.reddit.model.Channel;
 import lt.liutikas.reddit.model.News;
 import lt.liutikas.reddit.model.api.GetNewsRequest;
 import lt.liutikas.reddit.model.api.NewsPage;
 import lt.liutikas.reddit.model.api.SaveNewsRequest;
 import lt.liutikas.reddit.service.NewsService;
-import org.springframework.web.bind.annotation.*;
-
-import javax.validation.Valid;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/api/news")
-public class NewsController {
+public class DefaultNewsController implements NewsController {
 
     private final NewsService newsService;
 
-    public NewsController(NewsService newsService) {
+    public DefaultNewsController(NewsService newsService) {
         this.newsService = newsService;
     }
 
-    @GetMapping
-    public NewsPage getAll(@Valid GetNewsRequest request) {
+    @Override
+    public NewsPage getAll(GetNewsRequest request) {
         return newsService.getNews(request);
     }
 
-    @GetMapping("{id}")
-    public News getById(@PathVariable Long id) {
+    @Override
+    public News getById(Long id) {
         return newsService.getNews(id);
     }
 
-    @GetMapping("/channel/{channel}")
-    public NewsPage getChannelNews(@PathVariable Channel channel, @Valid GetNewsRequest request) {
+    @Override
+    public NewsPage getChannelNews(Channel channel, GetNewsRequest request) {
         return newsService.getNews(channel, request);
     }
 
-    @PostMapping
-    public News saveNews(@RequestBody SaveNewsRequest news) {
+    @Override
+    public News saveNews(SaveNewsRequest news) {
         return newsService.saveNews(news);
     }
 
