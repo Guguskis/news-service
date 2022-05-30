@@ -1,4 +1,7 @@
-package lt.liutikas.reddit.model;
+package lt.liutikas.reddit.api.model;
+
+import lt.liutikas.reddit.model.Channel;
+import lt.liutikas.reddit.model.SubscriptionAction;
 
 import javax.validation.constraints.NotNull;
 import java.util.ArrayList;

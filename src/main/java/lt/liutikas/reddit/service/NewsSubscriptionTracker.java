@@ -1,8 +1,8 @@
 package lt.liutikas.reddit.service;
 
+import lt.liutikas.reddit.api.model.NewsSubscription;
 import lt.liutikas.reddit.model.Channel;
 import lt.liutikas.reddit.model.News;
-import lt.liutikas.reddit.model.NewsSubscription;
 import lt.liutikas.reddit.model.User;
 import org.springframework.stereotype.Component;
 

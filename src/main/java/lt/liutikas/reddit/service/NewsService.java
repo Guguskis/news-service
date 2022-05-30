@@ -2,13 +2,13 @@ package lt.liutikas.reddit.service;
 
 import lt.liutikas.reddit.api.model.GetNewsRequest;
 import lt.liutikas.reddit.api.model.NewsPage;
+import lt.liutikas.reddit.api.model.NewsSubscription;
 import lt.liutikas.reddit.api.model.SaveNewsRequest;
 import lt.liutikas.reddit.assembler.NewsAssembler;
 import lt.liutikas.reddit.config.exception.NotFoundException;
 import lt.liutikas.reddit.event.EventPublisher;
 import lt.liutikas.reddit.model.Channel;
 import lt.liutikas.reddit.model.News;
-import lt.liutikas.reddit.model.NewsSubscription;
 import lt.liutikas.reddit.model.SubscriptionAction;
 import lt.liutikas.reddit.repository.NewsRepository;
 import org.slf4j.Logger;

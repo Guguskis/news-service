@@ -11,7 +11,6 @@ import javax.validation.Valid;
 
 @RequestMapping("/api/news")
 public interface NewsController {
-
     @GetMapping
     NewsPage getAll(@Valid GetNewsRequest request);
 

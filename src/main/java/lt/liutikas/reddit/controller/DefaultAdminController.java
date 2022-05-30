@@ -1,41 +1,38 @@
 package lt.liutikas.reddit.controller;
 
 import lt.liutikas.reddit.ActiveUserRegistry;
+import lt.liutikas.reddit.api.controller.AdminController;
 import lt.liutikas.reddit.model.User;
 import lt.liutikas.reddit.service.ScanService;
 import lt.liutikas.reddit.service.SentimentService;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/admin")
-public class AdminController {
+public class DefaultAdminController implements AdminController {
 
     private final ActiveUserRegistry activeUserRegistry;
     private final ScanService scanService;
     private final SentimentService sentimentService;
 
-    public AdminController(ActiveUserRegistry activeUserRegistry, ScanService scanService, SentimentService sentimentService) {
+    public DefaultAdminController(ActiveUserRegistry activeUserRegistry, ScanService scanService, SentimentService sentimentService) {
         this.activeUserRegistry = activeUserRegistry;
         this.scanService = scanService;
         this.sentimentService = sentimentService;
     }
 
-    @GetMapping("/users")
+    @Override
     public List<User> getUsers() {
         return activeUserRegistry.getActiveUsers();
     }
 
-    @PostMapping("/news/reddit/scan")
+    @Override
     public void scanNews() {
         scanService.scanReddit();
     }
 
-    @PostMapping("/news/sentiments/process")
+    @Override
     public void processSentiment() {
         sentimentService.processSentiments();
     }
