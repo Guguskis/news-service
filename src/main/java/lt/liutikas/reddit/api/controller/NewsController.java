@@ -1,10 +1,10 @@
-package lt.liutikas.reddit.api;
+package lt.liutikas.reddit.api.controller;
 
+import lt.liutikas.reddit.api.model.GetNewsRequest;
+import lt.liutikas.reddit.api.model.NewsPage;
+import lt.liutikas.reddit.api.model.SaveNewsRequest;
 import lt.liutikas.reddit.model.Channel;
 import lt.liutikas.reddit.model.News;
-import lt.liutikas.reddit.model.api.GetNewsRequest;
-import lt.liutikas.reddit.model.api.NewsPage;
-import lt.liutikas.reddit.model.api.SaveNewsRequest;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;

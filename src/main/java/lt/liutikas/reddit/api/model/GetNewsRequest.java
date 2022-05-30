@@ -1,4 +1,4 @@
-package lt.liutikas.reddit.model.api;
+package lt.liutikas.reddit.api.model;
 
 import java.util.ArrayList;
 import java.util.List;

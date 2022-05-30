@@ -1,11 +1,11 @@
 package lt.liutikas.reddit.controller;
 
-import lt.liutikas.reddit.api.NewsController;
+import lt.liutikas.reddit.api.controller.NewsController;
+import lt.liutikas.reddit.api.model.GetNewsRequest;
+import lt.liutikas.reddit.api.model.NewsPage;
+import lt.liutikas.reddit.api.model.SaveNewsRequest;
 import lt.liutikas.reddit.model.Channel;
 import lt.liutikas.reddit.model.News;
-import lt.liutikas.reddit.model.api.GetNewsRequest;
-import lt.liutikas.reddit.model.api.NewsPage;
-import lt.liutikas.reddit.model.api.SaveNewsRequest;
 import lt.liutikas.reddit.service.NewsService;
 import org.springframework.web.bind.annotation.RestController;
 

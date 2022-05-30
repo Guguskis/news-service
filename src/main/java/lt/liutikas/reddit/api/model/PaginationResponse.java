@@ -1,4 +1,4 @@
-package lt.liutikas.reddit.model.api;
+package lt.liutikas.reddit.api.model;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
