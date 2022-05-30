@@ -18,6 +18,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -135,7 +136,7 @@ public class NewsService {
 
         LOG.info("Saved news { \"id\": {} }", news.getId());
 
-        eventPublisher.publishSavedNewsEvent(List.of(news));
+        eventPublisher.publishSavedNewsEvent(Arrays.asList(news));
 
         return news;
     }
