@@ -6,7 +6,7 @@ Swagger API docs `http://localhost:9081/swagger-ui/index.html`
 
 ### Stomp Websocket
 
-`ws://86.100.240.140:9081/news/websocket`
+`ws://localhost:9081/news/websocket`
 
 Subscribe to news feed:
 
