@@ -1,119 +1,67 @@
 package lt.liutikas.reddit.service;
 
-import lt.liutikas.reddit.assembler.NewsAssembler;
 import lt.liutikas.reddit.assembler.ScanAssembler;
-import lt.liutikas.reddit.config.properties.ScanProperties;
 import lt.liutikas.reddit.event.EventPublisher;
-import lt.liutikas.reddit.model.Channel;
 import lt.liutikas.reddit.model.News;
 import lt.liutikas.reddit.model.ScanResult;
-import lt.liutikas.reddit.registry.NewsSubscriptionRegistry;
 import lt.liutikas.reddit.repository.NewsRepository;
 import lt.liutikas.reddit.repository.ScanResultRepository;
-import org.apache.logging.log4j.util.Strings;
+import lt.liutikas.reddit.source.NewsSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.HttpClientErrorException;
-import org.springframework.web.client.ResourceAccessException;
-import some.developer.reddit.client.RedditClient;
-import some.developer.reddit.client.model.PageCategory;
-import some.developer.reddit.client.model.Submission;
 
-import java.net.URL;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @Service
 public class ScanService {
 
     private static final Logger LOG = LoggerFactory.getLogger(ScanService.class);
 
-    private final RedditClient redditClient;
     private final ScanResultRepository scanResultRepository;
-    private final EventPublisher eventPublisher;
-    private final NewsAssembler newsAssembler;
-    private final NewsSubscriptionRegistry subscriptionTracker;
-    private final ScanProperties scanProperties;
-    private final ScanAssembler scanAssembler;
     private final NewsRepository newsRepository;
+    private final EventPublisher eventPublisher;
+    private final ScanAssembler scanAssembler;
+    private final List<NewsSource> newsSources;
 
-    public ScanService(RedditClient redditClient, ScanResultRepository scanResultRepository, EventPublisher eventPublisher, NewsAssembler newsAssembler, NewsSubscriptionRegistry subscriptionTracker, ScanProperties scanProperties, ScanAssembler scanAssembler, NewsRepository newsRepository) {
-        this.redditClient = redditClient;
+    public ScanService(ScanResultRepository scanResultRepository, EventPublisher eventPublisher, ScanAssembler scanAssembler, List<NewsSource> newsSources, NewsRepository newsRepository) {
         this.scanResultRepository = scanResultRepository;
         this.eventPublisher = eventPublisher;
-        this.newsAssembler = newsAssembler;
-        this.subscriptionTracker = subscriptionTracker;
-        this.scanProperties = scanProperties;
         this.scanAssembler = scanAssembler;
+        this.newsSources = newsSources;
         this.newsRepository = newsRepository;
     }
 
     @Scheduled(cron = "0 0/1 * * * *")
     public void scanReddit() {
-        LOG.info("Scanning reddit...");
-
-        List<String> subreddits = getSubredditsToScanStream()
-                .map(String::toLowerCase)
-                .distinct()
+        List<News> news = newsSources.stream()
+                .parallel()
+                .map(NewsSource::getNews)
+                .flatMap(List::stream)
+                .filter(this::notScanned)
+                .sorted(Comparator.comparing(News::getCreated))
+                .map(newsRepository::save)
                 .collect(Collectors.toList());
 
-        List<Submission> submissions = getNewSubmissions(subreddits);
-
-        List<ScanResult> scanResults = submissions.stream()
+        List<ScanResult> scanResults = news.stream()
                 .map(scanAssembler::assembleScanResult)
                 .map(scanResultRepository::save)
                 .collect(Collectors.toList());
 
-        List<News> news = submissions.stream()
-                .sorted(Comparator.comparing(Submission::getCreated))
-                .map(newsAssembler::assembleNews)
-                .map(newsRepository::save)
-                .collect(Collectors.toList());
-
-        LOG.info("Scanning reddit done. {\"subreddits\": \"{}\", \"submissions\": \"{}\"}", Strings.join(subreddits, ','), scanResults.size());
+        LOG.info("Scanning done. { \"scanResults\": \"{}\" }", scanResults.size());
 
         if (!news.isEmpty())
             eventPublisher.publishSavedNewsEvent(news);
     }
 
-    private Stream<String> getSubredditsToScanStream() {
-        return Stream.concat(
-                scanProperties.getSubreddits().stream(),
-                subscriptionTracker.getSubChannels(Channel.REDDIT).stream());
-    }
 
-    private List<Submission> getNewSubmissions(List<String> subreddits) {
-        List<Submission> submissions = subreddits.stream()
-                .flatMap(this::tryGetNewSubmissionsStream)
-                .collect(Collectors.toList());
-
-        List<URL> urls = submissions.stream()
-                .map(Submission::getUrl)
-                .collect(Collectors.toList());
-
-        List<URL> scannedUrls = scanResultRepository.findAllById(urls).stream()
-                .map(ScanResult::getUrl)
-                .collect(Collectors.toList());
-
-        return submissions.stream()
-                .filter(submission -> !scannedUrls.contains(submission.getUrl()))
-                .collect(Collectors.toList());
-    }
-
-    private Stream<? extends Submission> tryGetNewSubmissionsStream(String subreddit) {
-        try {
-            return redditClient.getSubmissions(subreddit, PageCategory.NEW).stream();
-        } catch (HttpClientErrorException e) {
-            LOG.warn("Failed to get submissions {\"subreddit\": \"{}\", \"reason\": \"{}\"}", subreddit, e.getStatusText());
-            return Stream.empty();
-        } catch (ResourceAccessException e) {
-            LOG.warn("Failed to get submissions {\"subreddit\": \"{}\", \"reason\": \"{}\"}", subreddit, e.getMessage());
-            return Stream.empty();
-        }
+    private boolean notScanned(News news) {
+        return scanResultRepository.findById(news.getUrl()).stream()
+                .findFirst()
+                .isEmpty();
     }
 
 }

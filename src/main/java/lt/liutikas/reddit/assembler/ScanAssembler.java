@@ -1,6 +1,7 @@
 package lt.liutikas.reddit.assembler;
 
 import lt.liutikas.reddit.model.Channel;
+import lt.liutikas.reddit.model.News;
 import lt.liutikas.reddit.model.ScanResult;
 import org.springframework.stereotype.Component;
 import some.developer.reddit.client.model.Submission;
@@ -16,6 +17,16 @@ public class ScanAssembler {
         scanResult.setUrl(submission.getUrl());
         scanResult.setScannedAt(LocalDateTime.now());
         scanResult.setSource(Channel.REDDIT);
+
+        return scanResult;
+    }
+
+    public ScanResult assembleScanResult(News news) {
+        ScanResult scanResult = new ScanResult();
+
+        scanResult.setUrl(news.getUrl());
+        scanResult.setScannedAt(LocalDateTime.now());
+        scanResult.setSource(news.getChannel());
 
         return scanResult;
     }
