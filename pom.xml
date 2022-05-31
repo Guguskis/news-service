@@ -103,9 +103,9 @@
             <version>2.13.2.1</version>
         </dependency>
         <dependency>
-            <groupId>some.developer.client</groupId>
+            <groupId>releases.some.developer.client</groupId>
             <artifactId>reddit-client</artifactId>
-            <version>1.0.0</version>
+            <version>1.0.1</version>
         </dependency>
 
         <dependency>
@@ -138,6 +138,13 @@
             </dependency>
         </dependencies>
     </dependencyManagement>
+
+    <repositories>
+        <repository>
+            <id>github</id>
+            <url>https://${env.GITHUB_USERNAME}:${env.GITHUB_TOKEN}@maven.pkg.github.com/Guguskis/reddit-client</url>
+        </repository>
+    </repositories>
 
     <build>
         <plugins>
