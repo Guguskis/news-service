@@ -2,14 +2,12 @@ package lt.liutikas.reddit.service;
 
 import lt.liutikas.reddit.api.model.GetNewsRequest;
 import lt.liutikas.reddit.api.model.NewsPage;
-import lt.liutikas.reddit.api.model.NewsSubscription;
 import lt.liutikas.reddit.api.model.SaveNewsRequest;
 import lt.liutikas.reddit.assembler.NewsAssembler;
 import lt.liutikas.reddit.config.exception.NotFoundException;
 import lt.liutikas.reddit.event.EventPublisher;
 import lt.liutikas.reddit.model.Channel;
 import lt.liutikas.reddit.model.News;
-import lt.liutikas.reddit.model.SubscriptionAction;
 import lt.liutikas.reddit.repository.NewsRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,14 +25,12 @@ public class NewsService {
 
     private static final Logger LOG = LoggerFactory.getLogger(NewsService.class);
 
-    private final NewsRepository newsRepository;
-    private final NewsSubscriptionTracker newsSubscriptionTracker;
-    private final EventPublisher eventPublisher;
     private final NewsAssembler newsAssembler;
+    private final NewsRepository newsRepository;
+    private final EventPublisher eventPublisher;
 
-    public NewsService(NewsRepository newsRepository, NewsSubscriptionTracker newsSubscriptionTracker, EventPublisher eventPublisher, NewsAssembler newsAssembler) {
+    public NewsService(NewsRepository newsRepository, EventPublisher eventPublisher, NewsAssembler newsAssembler) {
         this.newsRepository = newsRepository;
-        this.newsSubscriptionTracker = newsSubscriptionTracker;
         this.eventPublisher = eventPublisher;
         this.newsAssembler = newsAssembler;
     }
@@ -78,34 +74,6 @@ public class NewsService {
         LOG.info("Returning news { 'channel': '{}''pageToken': {}, 'pageSize': {} }", channel, pageRequest.getPageNumber(), request.getPageSize());
 
         return newsPage;
-    }
-
-    public void processNewsSubscription(String sessionId, NewsSubscription subscription) {
-
-        SubscriptionAction action = subscription.getAction();
-        Channel channel = subscription.getChannel();
-        List<String> subChannels = subscription.getSubChannels();
-
-        switch (action) {
-            case SUBSCRIBE:
-                newsSubscriptionTracker.subscribe(sessionId, subscription);
-                break;
-            case UNSUBSCRIBE:
-                newsSubscriptionTracker.unsubscribe(sessionId, subscription);
-                break;
-            case SET:
-                newsSubscriptionTracker.unsubscribe(sessionId, channel);
-                newsSubscriptionTracker.subscribe(sessionId, subscription);
-                break;
-            default:
-                throw new IllegalArgumentException("Action not implemented: " + action);
-        }
-
-        LOG.info("Subscription event {\"sessionId\": \"{}\", \"channel\": \"{}\", \"subChannels\": {}, \"action\": {} }",
-                sessionId,
-                channel,
-                subChannels,
-                action);
     }
 
     private Page<News> findNews(PageRequest pageRequest, List<String> subChannels) {

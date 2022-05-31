@@ -2,22 +2,22 @@ package lt.liutikas.reddit.controller;
 
 import lt.liutikas.reddit.api.controller.NewsWebsocketController;
 import lt.liutikas.reddit.api.model.NewsSubscription;
-import lt.liutikas.reddit.service.NewsService;
+import lt.liutikas.reddit.event.EventPublisher;
 import org.springframework.messaging.handler.annotation.Header;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 public class DefaultNewsWebsocketController implements NewsWebsocketController {
-    private final NewsService newsService;
+    private final EventPublisher eventPublisher;
 
-    public DefaultNewsWebsocketController(NewsService newsService) {
-        this.newsService = newsService;
+    public DefaultNewsWebsocketController(EventPublisher eventPublisher) {
+        this.eventPublisher = eventPublisher;
     }
 
     @Override
     @MessageMapping("/queue/news")
     public void handleNewsSubscription(NewsSubscription message, @Header("simpSessionId") String sessionId) {
-        newsService.processNewsSubscription(sessionId, message);
+        eventPublisher.publishNewsSubscriptionEvent(message, sessionId);
     }
 }

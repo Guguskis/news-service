@@ -1,6 +1,8 @@
 package lt.liutikas.reddit.assembler;
 
+import lt.liutikas.reddit.api.model.NewsSubscription;
 import lt.liutikas.reddit.model.News;
+import lt.liutikas.reddit.model.event.NewsSubscriptionEvent;
 import lt.liutikas.reddit.model.event.SavedNewsEvent;
 import lt.liutikas.reddit.model.event.UpdatedNewsEvent;
 import org.springframework.stereotype.Component;
@@ -26,4 +28,12 @@ public class EventAssembler {
         return event;
     }
 
+    public NewsSubscriptionEvent assembleNewsSubscriptionEvent(NewsSubscription message, String sessionId) {
+        NewsSubscriptionEvent event = new NewsSubscriptionEvent();
+
+        event.setNewsSubscription(message);
+        event.setSessionId(sessionId);
+
+        return event;
+    }
 }
