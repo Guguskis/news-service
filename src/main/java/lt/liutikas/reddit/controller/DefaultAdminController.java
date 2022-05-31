@@ -29,7 +29,7 @@ public class DefaultAdminController implements AdminController {
 
     @Override
     public void scanNews() {
-        scanService.scanReddit();
+        scanService.scan();
     }
 
     @Override

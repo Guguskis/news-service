@@ -36,7 +36,7 @@ public class ScanService {
     }
 
     @Scheduled(cron = "0 0/1 * * * *")
-    public void scanReddit() {
+    public void scan() {
         List<News> news = newsSources.stream()
                 .parallel()
                 .map(NewsSource::getNews)
