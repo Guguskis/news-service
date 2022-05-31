@@ -4,7 +4,7 @@ import lt.liutikas.reddit.api.model.NewsSubscription;
 import lt.liutikas.reddit.model.Channel;
 import lt.liutikas.reddit.model.SubscriptionAction;
 import lt.liutikas.reddit.model.event.NewsSubscriptionEvent;
-import lt.liutikas.reddit.service.NewsSubscriptionRegistry;
+import lt.liutikas.reddit.registry.NewsSubscriptionRegistry;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.event.EventListener;

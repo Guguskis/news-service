@@ -1,4 +1,4 @@
-package lt.liutikas.reddit.service;
+package lt.liutikas.reddit.registry;
 
 import lt.liutikas.reddit.api.model.NewsSubscription;
 import lt.liutikas.reddit.model.Channel;

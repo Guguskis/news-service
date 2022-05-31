@@ -7,6 +7,7 @@ import lt.liutikas.reddit.event.EventPublisher;
 import lt.liutikas.reddit.model.Channel;
 import lt.liutikas.reddit.model.News;
 import lt.liutikas.reddit.model.ScanResult;
+import lt.liutikas.reddit.registry.NewsSubscriptionRegistry;
 import lt.liutikas.reddit.repository.NewsRepository;
 import lt.liutikas.reddit.repository.ScanResultRepository;
 import org.apache.logging.log4j.util.Strings;

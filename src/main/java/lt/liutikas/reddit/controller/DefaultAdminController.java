@@ -1,8 +1,8 @@
 package lt.liutikas.reddit.controller;
 
-import lt.liutikas.reddit.ActiveUserRegistry;
 import lt.liutikas.reddit.api.controller.AdminController;
 import lt.liutikas.reddit.model.User;
+import lt.liutikas.reddit.registry.ActiveUserRegistry;
 import lt.liutikas.reddit.service.ScanService;
 import lt.liutikas.reddit.service.SentimentService;
 import org.springframework.web.bind.annotation.RestController;

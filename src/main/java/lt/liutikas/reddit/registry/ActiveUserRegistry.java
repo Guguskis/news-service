@@ -1,4 +1,4 @@
-package lt.liutikas.reddit;
+package lt.liutikas.reddit.registry;
 
 import lt.liutikas.reddit.model.User;
 import org.springframework.stereotype.Component;

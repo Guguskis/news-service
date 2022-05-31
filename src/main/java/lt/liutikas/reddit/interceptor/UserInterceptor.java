@@ -1,7 +1,7 @@
 package lt.liutikas.reddit.interceptor;
 
-import lt.liutikas.reddit.ActiveUserRegistry;
 import lt.liutikas.reddit.model.User;
+import lt.liutikas.reddit.registry.ActiveUserRegistry;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.messaging.Message;
