@@ -17,6 +17,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -51,21 +52,28 @@ public class SentimentService {
             return;
         }
 
+        List<News> savedNews = new ArrayList<>();
         List<SentimentResult> sentimentResults = enrichWithSentimentAnalysis(results);
         List<News> news = sentimentResults.stream()
                 .map(SentimentResult::getNews)
                 .collect(Collectors.toList());
 
         for (SentimentResult result : sentimentResults) {
-            result.setStatus(ProcessingStatus.FINISHED);
-            sentimentResultRepository.save(result);
-            newsRepository.save(result.getNews());
+            SentimentResult finished = savedAsFinished(result);
+            savedNews.add(finished.getNews());
         }
 
         LOG.info("Sentiments processing finished { \"count\": {} }", results.size());
 
         if (!news.isEmpty())
-            eventPublisher.publishUpdatedNewsEvent(news);
+            eventPublisher.publishUpdatedNewsEvent(savedNews);
+    }
+
+    private SentimentResult savedAsFinished(SentimentResult result) {
+        result.setStatus(ProcessingStatus.FINISHED);
+        sentimentResultRepository.save(result);
+        result.setNews(newsRepository.save(result.getNews()));
+        return result;
     }
 
     private List<SentimentResult> enrichWithSentimentAnalysis(List<SentimentResult> results) {
