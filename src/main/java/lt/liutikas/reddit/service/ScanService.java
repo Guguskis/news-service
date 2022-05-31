@@ -35,12 +35,12 @@ public class ScanService {
     private final ScanResultRepository scanResultRepository;
     private final EventPublisher eventPublisher;
     private final NewsAssembler newsAssembler;
-    private final NewsSubscriptionTracker subscriptionTracker;
+    private final NewsSubscriptionRegistry subscriptionTracker;
     private final ScanProperties scanProperties;
     private final ScanAssembler scanAssembler;
     private final NewsRepository newsRepository;
 
-    public ScanService(RedditClient redditClient, ScanResultRepository scanResultRepository, EventPublisher eventPublisher, NewsAssembler newsAssembler, NewsSubscriptionTracker subscriptionTracker, ScanProperties scanProperties, ScanAssembler scanAssembler, NewsRepository newsRepository) {
+    public ScanService(RedditClient redditClient, ScanResultRepository scanResultRepository, EventPublisher eventPublisher, NewsAssembler newsAssembler, NewsSubscriptionRegistry subscriptionTracker, ScanProperties scanProperties, ScanAssembler scanAssembler, NewsRepository newsRepository) {
         this.redditClient = redditClient;
         this.scanResultRepository = scanResultRepository;
         this.eventPublisher = eventPublisher;

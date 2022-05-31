@@ -10,13 +10,13 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-class NewsSubscriptionTrackerTest {
+class NewsSubscriptionRegistryTest {
 
-    private NewsSubscriptionTracker tracker;
+    private NewsSubscriptionRegistry tracker;
 
     @BeforeEach
     void setUp() {
-        tracker = new NewsSubscriptionTracker();
+        tracker = new NewsSubscriptionRegistry();
     }
 
     @Test

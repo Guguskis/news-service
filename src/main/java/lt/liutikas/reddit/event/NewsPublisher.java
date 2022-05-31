@@ -3,7 +3,7 @@ package lt.liutikas.reddit.event;
 import lt.liutikas.reddit.ActiveUserRegistry;
 import lt.liutikas.reddit.model.News;
 import lt.liutikas.reddit.model.User;
-import lt.liutikas.reddit.service.NewsSubscriptionTracker;
+import lt.liutikas.reddit.service.NewsSubscriptionRegistry;
 import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
 import org.springframework.messaging.simp.SimpMessageType;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
@@ -15,12 +15,12 @@ import java.util.List;
 public class NewsPublisher {
 
     private final ActiveUserRegistry userRegistry;
-    private final NewsSubscriptionTracker newsSubscriptionTracker;
+    private final NewsSubscriptionRegistry newsSubscriptionRegistry;
     private final SimpMessagingTemplate simpMessagingTemplate;
 
-    public NewsPublisher(ActiveUserRegistry userRegistry, NewsSubscriptionTracker newsSubscriptionTracker, SimpMessagingTemplate simpMessagingTemplate) {
+    public NewsPublisher(ActiveUserRegistry userRegistry, NewsSubscriptionRegistry newsSubscriptionRegistry, SimpMessagingTemplate simpMessagingTemplate) {
         this.userRegistry = userRegistry;
-        this.newsSubscriptionTracker = newsSubscriptionTracker;
+        this.newsSubscriptionRegistry = newsSubscriptionRegistry;
         this.simpMessagingTemplate = simpMessagingTemplate;
     }
 
@@ -36,7 +36,7 @@ public class NewsPublisher {
         news.sort(this::compareCreatedDesc);
         for (User user : userRegistry.getActiveUsers()) {
             for (News newsItem : news) {
-                if (newsSubscriptionTracker.isSubscribed(user, newsItem)) {
+                if (newsSubscriptionRegistry.isSubscribed(user, newsItem)) {
                     publishNews(user.getSessionId(), newsItem);
                 }
             }

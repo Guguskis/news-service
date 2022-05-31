@@ -10,7 +10,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 @Component
-public class NewsSubscriptionTracker {
+public class NewsSubscriptionRegistry {
 
     // one subreddit -> many sessionId
     private final Map<String, Set<String>> subChannels = new HashMap<>();

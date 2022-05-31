@@ -4,7 +4,7 @@ import lt.liutikas.reddit.api.model.NewsSubscription;
 import lt.liutikas.reddit.model.Channel;
 import lt.liutikas.reddit.model.SubscriptionAction;
 import lt.liutikas.reddit.model.event.NewsSubscriptionEvent;
-import lt.liutikas.reddit.service.NewsSubscriptionTracker;
+import lt.liutikas.reddit.service.NewsSubscriptionRegistry;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.event.EventListener;
@@ -17,10 +17,10 @@ public class NewsSubscriptionEventProcessor {
 
     private static final Logger LOG = LoggerFactory.getLogger(NewsSubscriptionEventProcessor.class);
 
-    private final NewsSubscriptionTracker newsSubscriptionTracker;
+    private final NewsSubscriptionRegistry newsSubscriptionRegistry;
 
-    public NewsSubscriptionEventProcessor(NewsSubscriptionTracker newsSubscriptionTracker) {
-        this.newsSubscriptionTracker = newsSubscriptionTracker;
+    public NewsSubscriptionEventProcessor(NewsSubscriptionRegistry newsSubscriptionRegistry) {
+        this.newsSubscriptionRegistry = newsSubscriptionRegistry;
     }
 
     @EventListener
@@ -34,14 +34,14 @@ public class NewsSubscriptionEventProcessor {
 
         switch (action) {
             case SUBSCRIBE:
-                newsSubscriptionTracker.subscribe(sessionId, subscription);
+                newsSubscriptionRegistry.subscribe(sessionId, subscription);
                 break;
             case UNSUBSCRIBE:
-                newsSubscriptionTracker.unsubscribe(sessionId, subscription);
+                newsSubscriptionRegistry.unsubscribe(sessionId, subscription);
                 break;
             case SET:
-                newsSubscriptionTracker.unsubscribe(sessionId, channel);
-                newsSubscriptionTracker.subscribe(sessionId, subscription);
+                newsSubscriptionRegistry.unsubscribe(sessionId, channel);
+                newsSubscriptionRegistry.subscribe(sessionId, subscription);
                 break;
             default:
                 throw new IllegalArgumentException("Action not implemented: " + action);
