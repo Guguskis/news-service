@@ -1,6 +1,5 @@
 package lt.liutikas.reddit.api.model;
 
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 public class PaginationResponse {
@@ -15,12 +14,8 @@ public class PaginationResponse {
         this.nextPageToken = nextPageToken;
     }
 
-    public void setNextToken(Page page) {
-        Pageable pageable = page.nextPageable();
-
-        if (pageable.isPaged()) {
+    public void setNextToken(Pageable pageable) {
+        if (pageable.isPaged())
             this.nextPageToken = pageable.getPageNumber();
-        }
-
     }
 }

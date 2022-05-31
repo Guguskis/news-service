@@ -55,7 +55,7 @@ public class NewsService {
 
         NewsPage newsPage = new NewsPage();
         newsPage.setNews(page.getContent());
-        newsPage.setNextToken(page);
+        newsPage.setNextToken(page.nextPageable());
 
         LOG.info("Returning news { 'pageToken': {}, 'pageSize': {} }", pageRequest.getPageNumber(), request.getPageSize());
 
@@ -69,7 +69,7 @@ public class NewsService {
 
         NewsPage newsPage = new NewsPage();
         newsPage.setNews(page.getContent());
-        newsPage.setNextToken(page);
+        newsPage.setNextToken(page.nextPageable());
 
         LOG.info("Returning news { 'channel': '{}''pageToken': {}, 'pageSize': {} }", channel, pageRequest.getPageNumber(), request.getPageSize());
 
