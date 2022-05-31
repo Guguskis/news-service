@@ -5,7 +5,7 @@ import java.util.List;
 
 public class GetNewsRequest extends PaginationQuery {
 
-    public List<String> subChannels = new ArrayList<>();
+    private List<String> subChannels = new ArrayList<>();
 
     public List<String> getSubChannels() {
         return subChannels;

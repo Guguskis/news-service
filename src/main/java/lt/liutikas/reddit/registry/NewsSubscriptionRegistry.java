@@ -17,8 +17,8 @@ public class NewsSubscriptionRegistry {
 
     // todo cover with tests
     public boolean isSubscribed(User user, News news) {
-        List<String> subChannels = getSubChannels(user.getSessionId(), news.getChannel());
-        return subChannels.contains(news.getSubChannel());
+        List<String> userSubChannels = getSubChannels(user.getSessionId(), news.getChannel());
+        return userSubChannels.contains(news.getSubChannel());
     }
 
     public void subscribe(String sessionId, NewsSubscription subscription) {
