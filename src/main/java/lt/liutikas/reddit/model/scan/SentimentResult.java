@@ -1,4 +1,6 @@
-package lt.liutikas.reddit.model;
+package lt.liutikas.reddit.model.scan;
+
+import lt.liutikas.reddit.model.core.News;
 
 import javax.persistence.*;
 

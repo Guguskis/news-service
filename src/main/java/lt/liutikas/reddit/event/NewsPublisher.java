@@ -1,7 +1,7 @@
 package lt.liutikas.reddit.event;
 
-import lt.liutikas.reddit.model.News;
-import lt.liutikas.reddit.model.User;
+import lt.liutikas.reddit.model.core.News;
+import lt.liutikas.reddit.model.core.User;
 import lt.liutikas.reddit.registry.ActiveUserRegistry;
 import lt.liutikas.reddit.registry.NewsSubscriptionRegistry;
 import org.springframework.messaging.simp.SimpMessageHeaderAccessor;

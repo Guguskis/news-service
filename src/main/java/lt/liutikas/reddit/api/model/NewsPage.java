@@ -1,6 +1,6 @@
 package lt.liutikas.reddit.api.model;
 
-import lt.liutikas.reddit.model.News;
+import lt.liutikas.reddit.model.core.News;
 
 import java.util.List;
 

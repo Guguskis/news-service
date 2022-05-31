@@ -1,7 +1,7 @@
 package lt.liutikas.reddit.api.model;
 
-import lt.liutikas.reddit.model.Channel;
-import lt.liutikas.reddit.model.SubscriptionAction;
+import lt.liutikas.reddit.model.core.Channel;
+import lt.liutikas.reddit.model.core.SubscriptionAction;
 
 import javax.validation.constraints.NotNull;
 import java.util.ArrayList;

@@ -1,6 +1,6 @@
 package lt.liutikas.reddit.api.controller;
 
-import lt.liutikas.reddit.model.User;
+import lt.liutikas.reddit.model.core.User;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 

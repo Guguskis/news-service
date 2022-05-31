@@ -2,9 +2,9 @@ package lt.liutikas.reddit.assembler;
 
 import com.azure.ai.textanalytics.models.AnalyzeSentimentResult;
 import com.azure.ai.textanalytics.models.DocumentSentiment;
-import lt.liutikas.reddit.model.News;
-import lt.liutikas.reddit.model.Sentiment;
-import lt.liutikas.reddit.model.SentimentType;
+import lt.liutikas.reddit.model.core.News;
+import lt.liutikas.reddit.model.core.Sentiment;
+import lt.liutikas.reddit.model.core.SentimentType;
 import org.springframework.stereotype.Component;
 
 @Component

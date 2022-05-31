@@ -1,4 +1,4 @@
-package lt.liutikas.reddit.model;
+package lt.liutikas.reddit.model.core;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 

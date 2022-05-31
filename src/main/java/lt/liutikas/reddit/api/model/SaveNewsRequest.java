@@ -1,6 +1,6 @@
 package lt.liutikas.reddit.api.model;
 
-import lt.liutikas.reddit.model.Channel;
+import lt.liutikas.reddit.model.core.Channel;
 
 import java.net.URL;
 

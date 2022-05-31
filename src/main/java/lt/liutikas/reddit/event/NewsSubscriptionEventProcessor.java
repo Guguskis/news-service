@@ -1,8 +1,8 @@
 package lt.liutikas.reddit.event;
 
 import lt.liutikas.reddit.api.model.NewsSubscription;
-import lt.liutikas.reddit.model.Channel;
-import lt.liutikas.reddit.model.SubscriptionAction;
+import lt.liutikas.reddit.model.core.Channel;
+import lt.liutikas.reddit.model.core.SubscriptionAction;
 import lt.liutikas.reddit.model.event.NewsSubscriptionEvent;
 import lt.liutikas.reddit.registry.NewsSubscriptionRegistry;
 import org.slf4j.Logger;

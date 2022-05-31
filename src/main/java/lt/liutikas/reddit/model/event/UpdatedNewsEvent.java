@@ -1,6 +1,6 @@
 package lt.liutikas.reddit.model.event;
 
-import lt.liutikas.reddit.model.News;
+import lt.liutikas.reddit.model.core.News;
 import org.springframework.context.ApplicationEvent;
 
 import java.util.List;

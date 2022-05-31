@@ -2,8 +2,8 @@ package lt.liutikas.reddit.service;
 
 import lt.liutikas.reddit.assembler.ScanAssembler;
 import lt.liutikas.reddit.event.EventPublisher;
-import lt.liutikas.reddit.model.News;
-import lt.liutikas.reddit.model.ScanResult;
+import lt.liutikas.reddit.model.core.News;
+import lt.liutikas.reddit.model.scan.ScanResult;
 import lt.liutikas.reddit.repository.NewsRepository;
 import lt.liutikas.reddit.repository.ScanResultRepository;
 import lt.liutikas.reddit.source.NewsSource;

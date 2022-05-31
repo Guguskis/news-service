@@ -1,8 +1,8 @@
 package lt.liutikas.reddit.repository;
 
-import lt.liutikas.reddit.model.News;
-import lt.liutikas.reddit.model.ProcessingStatus;
-import lt.liutikas.reddit.model.SentimentResult;
+import lt.liutikas.reddit.model.core.News;
+import lt.liutikas.reddit.model.scan.ProcessingStatus;
+import lt.liutikas.reddit.model.scan.SentimentResult;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

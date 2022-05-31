@@ -3,8 +3,8 @@ package lt.liutikas.reddit.api.controller;
 import lt.liutikas.reddit.api.model.GetNewsRequest;
 import lt.liutikas.reddit.api.model.NewsPage;
 import lt.liutikas.reddit.api.model.SaveNewsRequest;
-import lt.liutikas.reddit.model.Channel;
-import lt.liutikas.reddit.model.News;
+import lt.liutikas.reddit.model.core.Channel;
+import lt.liutikas.reddit.model.core.News;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;

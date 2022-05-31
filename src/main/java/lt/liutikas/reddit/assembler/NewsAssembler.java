@@ -1,8 +1,8 @@
 package lt.liutikas.reddit.assembler;
 
 import lt.liutikas.reddit.api.model.SaveNewsRequest;
-import lt.liutikas.reddit.model.Channel;
-import lt.liutikas.reddit.model.News;
+import lt.liutikas.reddit.model.core.Channel;
+import lt.liutikas.reddit.model.core.News;
 import org.springframework.stereotype.Component;
 import some.developer.reddit.client.model.Submission;
 

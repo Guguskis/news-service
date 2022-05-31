@@ -4,8 +4,8 @@ import lt.liutikas.reddit.api.controller.NewsController;
 import lt.liutikas.reddit.api.model.GetNewsRequest;
 import lt.liutikas.reddit.api.model.NewsPage;
 import lt.liutikas.reddit.api.model.SaveNewsRequest;
-import lt.liutikas.reddit.model.Channel;
-import lt.liutikas.reddit.model.News;
+import lt.liutikas.reddit.model.core.Channel;
+import lt.liutikas.reddit.model.core.News;
 import lt.liutikas.reddit.service.NewsService;
 import org.springframework.web.bind.annotation.RestController;
 

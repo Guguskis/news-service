@@ -1,4 +1,6 @@
-package lt.liutikas.reddit.model;
+package lt.liutikas.reddit.model.scan;
+
+import lt.liutikas.reddit.model.core.Channel;
 
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
