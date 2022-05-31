@@ -1,3 +1,12 @@
+[![Reliability Rating](https://sonarcloud.io/api/project_badges/measure?project=Guguskis_TodoApp&metric=reliability_rating)](https://sonarcloud.io/summary/new_code?id=Guguskis_TodoApp)
+[![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=Guguskis_TodoApp&metric=sqale_rating)](https://sonarcloud.io/summary/new_code?id=Guguskis_TodoApp)
+[![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=Guguskis_TodoApp&metric=security_rating)](https://sonarcloud.io/summary/new_code?id=Guguskis_TodoApp)
+
+[![Vulnerabilities](https://sonarcloud.io/api/project_badges/measure?project=Guguskis_TodoApp&metric=vulnerabilities)](https://sonarcloud.io/summary/new_code?id=Guguskis_TodoApp)
+[![Bugs](https://sonarcloud.io/api/project_badges/measure?project=Guguskis_TodoApp&metric=bugs)](https://sonarcloud.io/summary/new_code?id=Guguskis_TodoApp)
+[![Technical Debt](https://sonarcloud.io/api/project_badges/measure?project=Guguskis_TodoApp&metric=sqale_index)](https://sonarcloud.io/summary/new_code?id=Guguskis_TodoApp)
+[![Lines of Code](https://sonarcloud.io/api/project_badges/measure?project=Guguskis_TodoApp&metric=ncloc)](https://sonarcloud.io/summary/new_code?id=Guguskis_TodoApp)
+
 # news-service
 
 REST API aggregating news data
