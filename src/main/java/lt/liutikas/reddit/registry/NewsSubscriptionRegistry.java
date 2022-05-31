@@ -55,7 +55,7 @@ public class NewsSubscriptionRegistry {
 
     public List<String> getSubChannels(Channel channel) {
         return subChannels.entrySet().stream()
-                .filter(e -> e.getValue().size() > 0)
+                .filter(e -> !e.getValue().isEmpty())
                 .map(Map.Entry::getKey)
                 .collect(Collectors.toList());
     }
