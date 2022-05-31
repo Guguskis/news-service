@@ -27,6 +27,11 @@ public class UserInterceptor implements ChannelInterceptor {
     public Message<?> preSend(Message<?> message, MessageChannel channel) {
         StompHeaderAccessor accessor = MessageHeaderAccessor.getAccessor(message, StompHeaderAccessor.class);
 
+        if (accessor == null) {
+            LOG.warn("Message header accessor is null");
+            return message;
+        }
+
         if (connectCommand(accessor)) {
             String sessionId = getSessionId(message);
             User user = new User();
