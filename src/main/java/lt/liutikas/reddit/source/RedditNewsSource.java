@@ -25,13 +25,13 @@ public class RedditNewsSource implements NewsSource {
 
     private final RedditClient redditClient;
     private final NewsAssembler newsAssembler;
-    private final NewsSubscriptionRegistry subscriptionTracker;
+    private final NewsSubscriptionRegistry newsSubscriptionRegistry;
     private final ScanProperties scanProperties;
 
-    public RedditNewsSource(RedditClient redditClient, NewsAssembler newsAssembler, NewsSubscriptionRegistry subscriptionTracker, ScanProperties scanProperties) {
+    public RedditNewsSource(RedditClient redditClient, NewsAssembler newsAssembler, NewsSubscriptionRegistry newsSubscriptionRegistry, ScanProperties scanProperties) {
         this.redditClient = redditClient;
         this.newsAssembler = newsAssembler;
-        this.subscriptionTracker = subscriptionTracker;
+        this.newsSubscriptionRegistry = newsSubscriptionRegistry;
         this.scanProperties = scanProperties;
     }
 
@@ -50,7 +50,7 @@ public class RedditNewsSource implements NewsSource {
     private List<String> getSubredditsToScan() {
         return Stream.concat(
                         scanProperties.getSubreddits().stream(),
-                        subscriptionTracker.getSubChannels(Channel.REDDIT).stream())
+                        newsSubscriptionRegistry.getSubChannels(Channel.REDDIT).stream())
                 .map(String::toLowerCase)
                 .distinct()
                 .collect(Collectors.toList());

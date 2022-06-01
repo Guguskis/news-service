@@ -12,16 +12,16 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class NewsSubscriptionRegistryTest {
 
-    private NewsSubscriptionRegistry tracker;
+    private NewsSubscriptionRegistry registry;
 
     @BeforeEach
     void setUp() {
-        tracker = new NewsSubscriptionRegistry();
+        registry = new NewsSubscriptionRegistry();
     }
 
     @Test
     void getSubreddits_noSessions_noSubreddits() {
-        List<String> subreddits = tracker.getSubChannels("user1", Channel.REDDIT);
+        List<String> subreddits = registry.getSubChannels("user1", Channel.REDDIT);
 
         assertTrue(subreddits.isEmpty());
     }
@@ -31,9 +31,9 @@ class NewsSubscriptionRegistryTest {
         NewsSubscription subscription = new NewsSubscription();
         subscription.setChannel(Channel.REDDIT);
 
-        tracker.subscribe("user1", subscription);
+        registry.subscribe("user1", subscription);
 
-        List<String> subreddits = tracker.getSubChannels(Channel.REDDIT);
+        List<String> subreddits = registry.getSubChannels(Channel.REDDIT);
 
         assertTrue(subreddits.isEmpty());
     }
@@ -43,9 +43,9 @@ class NewsSubscriptionRegistryTest {
         NewsSubscription subscription = new NewsSubscription();
         subscription.setChannel(Channel.REDDIT);
         subscription.setSubChannels(List.of("combatFootage"));
-        tracker.subscribe("user1", subscription);
+        registry.subscribe("user1", subscription);
 
-        List<String> subreddits = tracker.getSubChannels(Channel.REDDIT);
+        List<String> subreddits = registry.getSubChannels(Channel.REDDIT);
 
         assertEquals(1, subreddits.size());
         assertTrue(subreddits.contains("combatfootage"));
@@ -56,9 +56,9 @@ class NewsSubscriptionRegistryTest {
         NewsSubscription subscription = new NewsSubscription();
         subscription.setChannel(Channel.REDDIT);
         subscription.setSubChannels(List.of("combatFootage", "gaming"));
-        tracker.subscribe("user1", subscription);
+        registry.subscribe("user1", subscription);
 
-        List<String> subreddits = tracker.getSubChannels(Channel.REDDIT);
+        List<String> subreddits = registry.getSubChannels(Channel.REDDIT);
 
         assertEquals(2, subreddits.size());
         assertTrue(subreddits.contains("combatfootage"));
@@ -75,10 +75,10 @@ class NewsSubscriptionRegistryTest {
         subscription2.setChannel(Channel.REDDIT);
         subscription2.setSubChannels(List.of("ukraine"));
 
-        tracker.subscribe("user1", subscription1);
-        tracker.subscribe("user1", subscription2);
+        registry.subscribe("user1", subscription1);
+        registry.subscribe("user1", subscription2);
 
-        List<String> subreddits = tracker.getSubChannels(Channel.REDDIT);
+        List<String> subreddits = registry.getSubChannels(Channel.REDDIT);
 
         assertEquals(2, subreddits.size());
         assertTrue(subreddits.contains("combatfootage"));
@@ -95,10 +95,10 @@ class NewsSubscriptionRegistryTest {
         unsubscription.setChannel(Channel.REDDIT);
         unsubscription.setSubChannels(List.of("combatFootage"));
 
-        tracker.subscribe("user1", subscription);
-        tracker.unsubscribe("user1", unsubscription);
+        registry.subscribe("user1", subscription);
+        registry.unsubscribe("user1", unsubscription);
 
-        List<String> subreddits = tracker.getSubChannels(Channel.REDDIT);
+        List<String> subreddits = registry.getSubChannels(Channel.REDDIT);
 
         assertTrue(subreddits.isEmpty());
     }
@@ -113,10 +113,10 @@ class NewsSubscriptionRegistryTest {
         unsubscription.setChannel(Channel.REDDIT);
         unsubscription.setSubChannels(List.of("combatFootage"));
 
-        tracker.subscribe("user1", subscription);
-        tracker.unsubscribe("user1", unsubscription);
+        registry.subscribe("user1", subscription);
+        registry.unsubscribe("user1", unsubscription);
 
-        List<String> subreddits = tracker.getSubChannels(Channel.REDDIT);
+        List<String> subreddits = registry.getSubChannels(Channel.REDDIT);
 
         assertEquals(1, subreddits.size());
         assertTrue(subreddits.contains("ukraine"));
@@ -132,10 +132,10 @@ class NewsSubscriptionRegistryTest {
         unsubscription.setChannel(Channel.REDDIT);
         unsubscription.setSubChannels(List.of("combatfootage"));
 
-        tracker.subscribe("user1", subscription);
-        tracker.subscribe("user2", unsubscription);
+        registry.subscribe("user1", subscription);
+        registry.subscribe("user2", unsubscription);
 
-        List<String> subreddits = tracker.getSubChannels(Channel.REDDIT);
+        List<String> subreddits = registry.getSubChannels(Channel.REDDIT);
 
         assertEquals(1, subreddits.size());
         assertTrue(subreddits.contains("combatfootage"));
@@ -156,11 +156,11 @@ class NewsSubscriptionRegistryTest {
         unsubscription.setSubChannels(List.of("combatFootage"));
 
 
-        tracker.subscribe("user1", subscription1);
-        tracker.subscribe("user2", subscription2);
-        tracker.unsubscribe("user1", unsubscription);
+        registry.subscribe("user1", subscription1);
+        registry.subscribe("user2", subscription2);
+        registry.unsubscribe("user1", unsubscription);
 
-        List<String> subreddits = tracker.getSubChannels(Channel.REDDIT);
+        List<String> subreddits = registry.getSubChannels(Channel.REDDIT);
 
         assertEquals(1, subreddits.size());
         assertTrue(subreddits.contains("combatfootage"));
@@ -180,11 +180,11 @@ class NewsSubscriptionRegistryTest {
         unsubscription.setChannel(Channel.REDDIT);
         unsubscription.setSubChannels(List.of("combatFootage", "ukraine"));
 
-        tracker.subscribe("user1", subscription1);
-        tracker.subscribe("user2", subscription2);
-        tracker.unsubscribe("user1", unsubscription);
+        registry.subscribe("user1", subscription1);
+        registry.subscribe("user2", subscription2);
+        registry.unsubscribe("user1", unsubscription);
 
-        List<String> subreddits = tracker.getSubChannels("user2", Channel.REDDIT);
+        List<String> subreddits = registry.getSubChannels("user2", Channel.REDDIT);
 
         assertEquals(3, subreddits.size());
         assertTrue(subreddits.contains("sunflowers"));
@@ -197,7 +197,7 @@ class NewsSubscriptionRegistryTest {
         NewsSubscription unsubscription = new NewsSubscription();
         unsubscription.setChannel(Channel.REDDIT);
         unsubscription.setSubChannels(List.of("combatFootage"));
-        tracker.unsubscribe("user1", unsubscription);
+        registry.unsubscribe("user1", unsubscription);
 
         assertTrue(true);
     }
