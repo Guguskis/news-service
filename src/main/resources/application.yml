@@ -30,7 +30,8 @@ scan:
     - "cryptocurrency"
     - "xrp"
     - "ripple"
-# logback log level WARN com.azure.ai.textanalytics
+sentiment:
+  enabled: false
 logging:
   level:
     com.azure.ai.textanalytics: WARN

@@ -5,6 +5,7 @@ import com.azure.ai.textanalytics.models.AnalyzeSentimentOptions;
 import com.azure.ai.textanalytics.models.AnalyzeSentimentResult;
 import com.azure.ai.textanalytics.models.SentenceSentiment;
 import lt.liutikas.reddit.assembler.SentimentAssembler;
+import lt.liutikas.reddit.config.properties.SentimentProperties;
 import lt.liutikas.reddit.event.EventPublisher;
 import lt.liutikas.reddit.model.core.News;
 import lt.liutikas.reddit.model.core.Sentiment;
@@ -34,23 +35,27 @@ public class SentimentService {
     private final SentimentResultRepository sentimentResultRepository;
     private final NewsRepository newsRepository;
     private final EventPublisher eventPublisher;
+    private final SentimentProperties sentimentProperties;
 
-    public SentimentService(TextAnalyticsClient textAnalyticsClient, SentimentAssembler sentimentAssembler, SentimentResultRepository sentimentResultRepository, NewsRepository newsRepository, EventPublisher eventPublisher) {
+    public SentimentService(TextAnalyticsClient textAnalyticsClient, SentimentAssembler sentimentAssembler, SentimentResultRepository sentimentResultRepository, NewsRepository newsRepository, EventPublisher eventPublisher, SentimentProperties sentimentProperties) {
         this.textAnalyticsClient = textAnalyticsClient;
         this.sentimentAssembler = sentimentAssembler;
         this.sentimentResultRepository = sentimentResultRepository;
         this.newsRepository = newsRepository;
         this.eventPublisher = eventPublisher;
+        this.sentimentProperties = sentimentProperties;
     }
 
 
     @Scheduled(cron = "10 0/1 * * * *")
     public void processSentiments() {
+        if (!sentimentProperties.isEnabled())
+            return;
+
         List<SentimentResult> results = sentimentResultRepository.findTop5ByStatus(ProcessingStatus.NOT_STARTED);
 
-        if (results.isEmpty()) {
+        if (results.isEmpty())
             return;
-        }
 
         List<News> savedNews = new ArrayList<>();
         List<SentimentResult> sentimentResults = enrichWithSentimentAnalysis(results);
