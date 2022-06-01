@@ -2,6 +2,7 @@
 [![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=Guguskis_TodoApp&metric=sqale_rating)](https://sonarcloud.io/summary/new_code?id=Guguskis_TodoApp)
 [![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=Guguskis_TodoApp&metric=security_rating)](https://sonarcloud.io/summary/new_code?id=Guguskis_TodoApp)
 
+[![Code Smells](https://sonarcloud.io/api/project_badges/measure?project=Guguskis_TodoApp&metric=code_smells)](https://sonarcloud.io/summary/new_code?id=Guguskis_TodoApp)
 [![Vulnerabilities](https://sonarcloud.io/api/project_badges/measure?project=Guguskis_TodoApp&metric=vulnerabilities)](https://sonarcloud.io/summary/new_code?id=Guguskis_TodoApp)
 [![Bugs](https://sonarcloud.io/api/project_badges/measure?project=Guguskis_TodoApp&metric=bugs)](https://sonarcloud.io/summary/new_code?id=Guguskis_TodoApp)
 [![Technical Debt](https://sonarcloud.io/api/project_badges/measure?project=Guguskis_TodoApp&metric=sqale_index)](https://sonarcloud.io/summary/new_code?id=Guguskis_TodoApp)
