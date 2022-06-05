@@ -12,7 +12,7 @@ public interface AdminController {
     @GetMapping("/users")
     List<User> getUsers();
 
-    @PostMapping("/news/reddit/scan")
+    @PostMapping("/news/scan")
     void scanNews();
 
     @PostMapping("/news/sentiments/process")
