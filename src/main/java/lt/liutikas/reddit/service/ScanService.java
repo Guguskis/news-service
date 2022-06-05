@@ -37,28 +37,33 @@ public class ScanService {
 
     @Scheduled(cron = "0 0/1 * * * *")
     public void scan() {
-        List<News> notScannedNews = getNewsFromAllSources().stream()
-                .filter(this::checkNotScanned)
-                .collect(Collectors.toList());
+        LOG.info("Scanning news... { \"sources\": {} }", newsSources.size());
 
+        List<News> notScannedNews = getNotScannedNews();
         List<News> news = saveNews(notScannedNews);
         List<ScanResult> scanResults = saveScanResults(news);
 
-        LOG.info("Scanning done. { \"scanResults\": \"{}\" }", scanResults.size());
+        LOG.info("Scanning news done { \"scanResults\": {} }", scanResults.size());
 
         if (!news.isEmpty())
             eventPublisher.publishSavedNewsEvent(news);
     }
 
-    private List<News> getNewsFromAllSources() {
-        return newsSources.stream()
+    private List<News> getNotScannedNews() {
+        return getNews(newsSources).stream()
+                .filter(this::notScanned)
+                .collect(Collectors.toList());
+    }
+
+    private List<News> getNews(List<NewsSource> sources) {
+        return sources.stream()
                 .parallel()
                 .map(NewsSource::getNews)
                 .flatMap(List::stream)
                 .collect(Collectors.toList());
     }
 
-    private boolean checkNotScanned(News news) {
+    private boolean notScanned(News news) {
         return scanResultRepository.findById(news.getUrl()).stream()
                 .findFirst()
                 .isEmpty();
