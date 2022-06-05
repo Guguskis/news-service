@@ -27,7 +27,7 @@ public class TwitterNewsSource implements NewsSource {
 
     @Override
     public List<News> getNews() {
-        List<String> keywords = List.of("xrp", "ripple", "bitcoin");
+        List<String> keywords = List.of("xrp", "ripple", "bitcoin"); // todo implement in front-end
         LOG.info("Scanning tweets... { \"keywords\": {} }", keywords.size());
 
         List<Tweet> tweets = new ArrayList<>();
@@ -40,7 +40,7 @@ public class TwitterNewsSource implements NewsSource {
                 .map(newsAssembler::assembleNews)
                 .collect(Collectors.toList());
 
-        LOG.info("Scanning tweets done { \"news\": {} }", news.size());
+        LOG.info("Scanning tweets done { \"tweets\": {} }", news.size());
 
         return news;
     }

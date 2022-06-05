@@ -45,7 +45,7 @@ public class RedditNewsSource implements NewsSource {
                 .map(newsAssembler::assembleNews)
                 .collect(Collectors.toList());
 
-        LOG.info("Scanning subreddits done { \"news\": {} }", news.size());
+        LOG.info("Scanning subreddits done { \"submissions\": {} }", news.size());
 
         return news;
     }
