@@ -37,19 +37,12 @@ public class ScanService {
 
     @Scheduled(cron = "0 0/1 * * * *")
     public void scan() {
-        List<News> news = newsSources.stream()
-                .parallel()
-                .map(NewsSource::getNews)
-                .flatMap(List::stream)
-                .filter(this::notScanned)
-                .sorted(Comparator.comparing(News::getCreated))
-                .map(newsRepository::save)
+        List<News> notScannedNews = getNewsFromAllSources().stream()
+                .filter(this::checkNotScanned)
                 .collect(Collectors.toList());
 
-        List<ScanResult> scanResults = news.stream()
-                .map(scanAssembler::assembleScanResult)
-                .map(scanResultRepository::save)
-                .collect(Collectors.toList());
+        List<News> news = saveNews(notScannedNews);
+        List<ScanResult> scanResults = saveScanResults(news);
 
         LOG.info("Scanning done. { \"scanResults\": \"{}\" }", scanResults.size());
 
@@ -57,11 +50,32 @@ public class ScanService {
             eventPublisher.publishSavedNewsEvent(news);
     }
 
+    private List<News> getNewsFromAllSources() {
+        return newsSources.stream()
+                .parallel()
+                .map(NewsSource::getNews)
+                .flatMap(List::stream)
+                .collect(Collectors.toList());
+    }
 
-    private boolean notScanned(News news) {
+    private boolean checkNotScanned(News news) {
         return scanResultRepository.findById(news.getUrl()).stream()
                 .findFirst()
                 .isEmpty();
+    }
+
+    private List<News> saveNews(List<News> notScannedNews) {
+        return notScannedNews.stream()
+                .sorted(Comparator.comparing(News::getCreated))
+                .map(newsRepository::save)
+                .collect(Collectors.toList());
+    }
+
+    private List<ScanResult> saveScanResults(List<News> news) {
+        return news.stream()
+                .map(scanAssembler::assembleScanResult)
+                .map(scanResultRepository::save)
+                .collect(Collectors.toList());
     }
 
 }
