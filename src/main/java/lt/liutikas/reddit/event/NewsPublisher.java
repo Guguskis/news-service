@@ -36,9 +36,9 @@ public class NewsPublisher {
         news.sort(this::compareCreatedDesc);
         for (User user : userRegistry.getActiveUsers()) {
             for (News newsItem : news) {
-//                if (newsSubscriptionRegistry.isSubscribed(user, newsItem)) {
+                if (newsSubscriptionRegistry.isSubscribed(user, newsItem)) {
                     publishNews(user.getSessionId(), newsItem);
-//                }
+                }
             }
         }
     }
