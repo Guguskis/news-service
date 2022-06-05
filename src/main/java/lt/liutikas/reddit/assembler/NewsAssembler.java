@@ -55,7 +55,7 @@ public class NewsAssembler {
 
         switch (tweet.subChannelType()) {
             case USER:
-                news.setSubChannel(tweet.getUser());
+                news.setSubChannel("@" + tweet.getUser());
                 break;
             case KEYWORD:
                 news.setSubChannel("#" + tweet.getKeyword());
