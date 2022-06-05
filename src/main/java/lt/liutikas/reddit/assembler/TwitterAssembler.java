@@ -18,7 +18,7 @@ public class TwitterAssembler {
         tweet.setText(status.getText());
         tweet.setCreatedAt(getCreatedAt(status));
         tweet.setUser(status.getUser().getName());
-        tweet.setUrl(getUrl(status)); // todo fix
+        tweet.setUrl(getUrl(status));
 
         return tweet;
     }
@@ -28,14 +28,14 @@ public class TwitterAssembler {
     }
 
     private URL getUrl(Status status) {
-        URL url;
+        long tweetId = status.getId();
+        String username = status.getUser().getName();
+        String url = String.format("https://twitter.com/%s/status/%d", username, tweetId);
+
         try {
-            String source = status.getSource();
-//            <a href="http://twitter.com/download/android" rel="nofollow">Twitter for Android</a>
-            url = new URL(source.substring(source.indexOf("http"), source.indexOf("\" rel")));
+            return new URL(url);
         } catch (MalformedURLException e) {
-            throw new RuntimeException(e);
+            throw new IllegalArgumentException(String.format("This is not URL { \"url\": \"%s\" }", url), e);
         }
-        return url;
     }
 }
