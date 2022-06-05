@@ -36,6 +36,11 @@ scan:
     - "cryptocurrency"
     - "xrp"
     - "ripple"
+  twitter-keywords:
+    - "xrp"
+    - "ripple"
+  twitter-users:
+    - "attorneyjeremy1"
 sentiment:
   enabled: false
 logging:

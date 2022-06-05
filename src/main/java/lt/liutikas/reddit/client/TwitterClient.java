@@ -6,6 +6,8 @@ import java.util.List;
 
 public interface TwitterClient {
 
-    List<Tweet> getTweets(String keyword);
+    List<Tweet> getTweetsByKeyword(String keyword);
+
+    List<Tweet> getTweetsByUser(String user);
 
 }
