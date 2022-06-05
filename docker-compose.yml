@@ -1,0 +1,14 @@
+services:
+  t-news-service-db:
+    image: mysql:latest
+    container_name: t-news-service-db
+    ports:
+      - "3306:3306"
+    security_opt:
+      - seccomp:unconfined
+    volumes:
+      - t-news-service-db:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: my-secret-pw
+volumes:
+  t-news-service-db:
