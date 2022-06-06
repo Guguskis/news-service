@@ -16,7 +16,7 @@ import java.util.stream.Collectors;
 @Component
 public class TwitterNewsSource implements NewsSource {
 
-    private static final Logger LOG = LoggerFactory.getLogger(TwitterClient.class);
+    private static final Logger LOG = LoggerFactory.getLogger(TwitterNewsSource.class);
 
     private final TwitterClient twitterClient;
     private final NewsAssembler newsAssembler;
