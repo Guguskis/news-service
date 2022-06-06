@@ -29,7 +29,7 @@ public class TwitterAssembler {
 
     private URL getUrl(Status status) {
         long tweetId = status.getId();
-        String username = status.getUser().getName();
+        String username = status.getUser().getName().replace(" ", "");
         String url = String.format("https://twitter.com/%s/status/%d", username, tweetId);
 
         try {
