@@ -1,6 +1,6 @@
 package lt.liutikas.reddit.assembler;
 
-import lt.liutikas.reddit.api.model.NewsSubscription;
+import lt.liutikas.reddit.api.model.SubscriptionAction;
 import lt.liutikas.reddit.model.core.News;
 import lt.liutikas.reddit.model.event.NewsSubscriptionEvent;
 import lt.liutikas.reddit.model.event.SavedNewsEvent;
@@ -28,10 +28,10 @@ public class EventAssembler {
         return event;
     }
 
-    public NewsSubscriptionEvent assembleNewsSubscriptionEvent(NewsSubscription message, String sessionId) {
+    public NewsSubscriptionEvent assembleNewsSubscriptionEvent(SubscriptionAction action, String sessionId) {
         NewsSubscriptionEvent event = new NewsSubscriptionEvent();
 
-        event.setNewsSubscription(message);
+        event.setSubscriptionAction(action);
         event.setSessionId(sessionId);
 
         return event;

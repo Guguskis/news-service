@@ -1,18 +1,18 @@
 package lt.liutikas.reddit.model.event;
 
-import lt.liutikas.reddit.api.model.NewsSubscription;
+import lt.liutikas.reddit.api.model.SubscriptionAction;
 
 public class NewsSubscriptionEvent {
 
-    private NewsSubscription newsSubscription;
+    private SubscriptionAction subscriptionAction;
     private String sessionId;
 
-    public NewsSubscription getNewsSubscription() {
-        return newsSubscription;
+    public SubscriptionAction getSubscriptionAction() {
+        return subscriptionAction;
     }
 
-    public void setNewsSubscription(NewsSubscription newsSubscription) {
-        this.newsSubscription = newsSubscription;
+    public void setSubscriptionAction(SubscriptionAction subscriptionAction) {
+        this.subscriptionAction = subscriptionAction;
     }
 
     public String getSessionId() {

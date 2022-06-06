@@ -1,6 +1,6 @@
 package lt.liutikas.reddit.registry;
 
-import lt.liutikas.reddit.api.model.NewsSubscription;
+import lt.liutikas.reddit.api.model.SubscriptionAction;
 import lt.liutikas.reddit.model.core.Channel;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -10,7 +10,7 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-class NewsSubscriptionRegistryTest {
+class SubscriptionActionTypeRegistryTest {
 
     private NewsSubscriptionRegistry registry;
 
@@ -28,7 +28,7 @@ class NewsSubscriptionRegistryTest {
 
     @Test
     void getSubreddits_oneSession_noSubreddits() {
-        NewsSubscription subscription = new NewsSubscription();
+        SubscriptionAction subscription = new SubscriptionAction();
         subscription.setChannel(Channel.REDDIT);
 
         registry.subscribe("user1", subscription);
@@ -40,7 +40,7 @@ class NewsSubscriptionRegistryTest {
 
     @Test
     void getSubreddits_oneSession_oneSubreddit() {
-        NewsSubscription subscription = new NewsSubscription();
+        SubscriptionAction subscription = new SubscriptionAction();
         subscription.setChannel(Channel.REDDIT);
         subscription.setSubChannels(List.of("combatFootage"));
         registry.subscribe("user1", subscription);
@@ -53,7 +53,7 @@ class NewsSubscriptionRegistryTest {
 
     @Test
     void getSubreddits_oneSession_twoSubreddits() {
-        NewsSubscription subscription = new NewsSubscription();
+        SubscriptionAction subscription = new SubscriptionAction();
         subscription.setChannel(Channel.REDDIT);
         subscription.setSubChannels(List.of("combatFootage", "gaming"));
         registry.subscribe("user1", subscription);
@@ -67,11 +67,11 @@ class NewsSubscriptionRegistryTest {
 
     @Test
     void getSubreddits_oneSessionMultipleSubscribes_twoSubreddits() {
-        NewsSubscription subscription1 = new NewsSubscription();
+        SubscriptionAction subscription1 = new SubscriptionAction();
         subscription1.setChannel(Channel.REDDIT);
         subscription1.setSubChannels(List.of("combatFootage"));
 
-        NewsSubscription subscription2 = new NewsSubscription();
+        SubscriptionAction subscription2 = new SubscriptionAction();
         subscription2.setChannel(Channel.REDDIT);
         subscription2.setSubChannels(List.of("ukraine"));
 
@@ -87,11 +87,11 @@ class NewsSubscriptionRegistryTest {
 
     @Test
     void getSubreddits_oneSessionUnsubscribed_noSubreddits() {
-        NewsSubscription subscription = new NewsSubscription();
+        SubscriptionAction subscription = new SubscriptionAction();
         subscription.setChannel(Channel.REDDIT);
         subscription.setSubChannels(List.of("combatFootage"));
 
-        NewsSubscription unsubscription = new NewsSubscription();
+        SubscriptionAction unsubscription = new SubscriptionAction();
         unsubscription.setChannel(Channel.REDDIT);
         unsubscription.setSubChannels(List.of("combatFootage"));
 
@@ -105,11 +105,11 @@ class NewsSubscriptionRegistryTest {
 
     @Test
     void getSubreddits_oneSessionUnsubscribedHalf_oneSubreddit() {
-        NewsSubscription subscription = new NewsSubscription();
+        SubscriptionAction subscription = new SubscriptionAction();
         subscription.setChannel(Channel.REDDIT);
         subscription.setSubChannels(List.of("combatFootage", "ukraine"));
 
-        NewsSubscription unsubscription = new NewsSubscription();
+        SubscriptionAction unsubscription = new SubscriptionAction();
         unsubscription.setChannel(Channel.REDDIT);
         unsubscription.setSubChannels(List.of("combatFootage"));
 
@@ -124,11 +124,11 @@ class NewsSubscriptionRegistryTest {
 
     @Test
     void getSubredditsBySession_sameSubredditDifferentLetterCase_oneSubreddit() {
-        NewsSubscription subscriptionUpperCase = new NewsSubscription();
+        SubscriptionAction subscriptionUpperCase = new SubscriptionAction();
         subscriptionUpperCase.setChannel(Channel.REDDIT);
         subscriptionUpperCase.setSubChannels(List.of("CombatFootage"));
 
-        NewsSubscription subscriptionLowerCase = new NewsSubscription();
+        SubscriptionAction subscriptionLowerCase = new SubscriptionAction();
         subscriptionLowerCase.setChannel(Channel.REDDIT);
         subscriptionLowerCase.setSubChannels(List.of("combatfootage"));
 
@@ -143,15 +143,15 @@ class NewsSubscriptionRegistryTest {
 
     @Test
     void getSubreddits_twoSessionsOneUserUnsubscribedAll_oneSubreddit() {
-        NewsSubscription subscription1 = new NewsSubscription();
+        SubscriptionAction subscription1 = new SubscriptionAction();
         subscription1.setChannel(Channel.REDDIT);
         subscription1.setSubChannels(List.of("combatFootage"));
 
-        NewsSubscription subscription2 = new NewsSubscription();
+        SubscriptionAction subscription2 = new SubscriptionAction();
         subscription2.setChannel(Channel.REDDIT);
         subscription2.setSubChannels(List.of("combatFootage"));
 
-        NewsSubscription unsubscription = new NewsSubscription();
+        SubscriptionAction unsubscription = new SubscriptionAction();
         unsubscription.setChannel(Channel.REDDIT);
         unsubscription.setSubChannels(List.of("combatFootage"));
 
@@ -168,15 +168,15 @@ class NewsSubscriptionRegistryTest {
 
     @Test
     void getSubredditsBySession_multipleSessions_correctSessionSubredditsReturned() {
-        NewsSubscription subscription1 = new NewsSubscription();
+        SubscriptionAction subscription1 = new SubscriptionAction();
         subscription1.setChannel(Channel.REDDIT);
         subscription1.setSubChannels(List.of("combatFootage", "ukraine"));
 
-        NewsSubscription subscription2 = new NewsSubscription();
+        SubscriptionAction subscription2 = new SubscriptionAction();
         subscription2.setChannel(Channel.REDDIT);
         subscription2.setSubChannels(List.of("sunflowers", "war", "ukraine"));
 
-        NewsSubscription unsubscription = new NewsSubscription();
+        SubscriptionAction unsubscription = new SubscriptionAction();
         unsubscription.setChannel(Channel.REDDIT);
         unsubscription.setSubChannels(List.of("combatFootage", "ukraine"));
 
@@ -194,7 +194,7 @@ class NewsSubscriptionRegistryTest {
 
     @Test
     void unsubscribeSubreddits_noSubreddits_noException() {
-        NewsSubscription unsubscription = new NewsSubscription();
+        SubscriptionAction unsubscription = new SubscriptionAction();
         unsubscription.setChannel(Channel.REDDIT);
         unsubscription.setSubChannels(List.of("combatFootage"));
         registry.unsubscribe("user1", unsubscription);
