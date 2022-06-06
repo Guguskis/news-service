@@ -124,16 +124,16 @@ class NewsSubscriptionRegistryTest {
 
     @Test
     void getSubredditsBySession_sameSubredditDifferentLetterCase_oneSubreddit() {
-        NewsSubscription subscription = new NewsSubscription();
-        subscription.setChannel(Channel.REDDIT);
-        subscription.setSubChannels(List.of("CombatFootage"));
+        NewsSubscription subscriptionUpperCase = new NewsSubscription();
+        subscriptionUpperCase.setChannel(Channel.REDDIT);
+        subscriptionUpperCase.setSubChannels(List.of("CombatFootage"));
 
-        NewsSubscription unsubscription = new NewsSubscription();
-        unsubscription.setChannel(Channel.REDDIT);
-        unsubscription.setSubChannels(List.of("combatfootage"));
+        NewsSubscription subscriptionLowerCase = new NewsSubscription();
+        subscriptionLowerCase.setChannel(Channel.REDDIT);
+        subscriptionLowerCase.setSubChannels(List.of("combatfootage"));
 
-        registry.subscribe("user1", subscription);
-        registry.subscribe("user2", unsubscription);
+        registry.subscribe("user1", subscriptionUpperCase);
+        registry.subscribe("user2", subscriptionLowerCase);
 
         List<String> subreddits = registry.getSubChannels(Channel.REDDIT);
 
