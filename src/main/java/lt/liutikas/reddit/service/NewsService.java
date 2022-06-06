@@ -35,9 +35,6 @@ public class NewsService {
         this.newsAssembler = newsAssembler;
     }
 
-    // todo try @SubscribeMapping
-    // https://stackoverflow.com/questions/24890450/spring-stomp-subscribemapping-for-user-destination
-
     public News getNews(Long id) {
         Optional<News> optional = newsRepository.findById(id);
 
