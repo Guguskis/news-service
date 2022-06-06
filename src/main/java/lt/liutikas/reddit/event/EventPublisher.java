@@ -32,8 +32,8 @@ public class EventPublisher {
         publisher.publishEvent(event);
     }
 
-    public void publishNewsSubscriptionEvent(SubscriptionAction action, String sessionId) {
-        NewsSubscriptionEvent event = eventAssembler.assembleNewsSubscriptionEvent(action, sessionId);
+    public void publishNewsSubscriptionEvent(String sessionId, SubscriptionAction action) {
+        NewsSubscriptionEvent event = eventAssembler.assembleNewsSubscriptionEvent(sessionId, action);
         publisher.publishEvent(event);
     }
 }

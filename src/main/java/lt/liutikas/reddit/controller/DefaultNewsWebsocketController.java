@@ -17,7 +17,7 @@ public class DefaultNewsWebsocketController implements NewsWebsocketController {
 
     @Override
     @MessageMapping("/queue/news")
-    public void handleNewsSubscription(SubscriptionAction message, @Header("simpSessionId") String sessionId) {
-        eventPublisher.publishNewsSubscriptionEvent(message, sessionId);
+    public void handleNewsSubscription(@Header("simpSessionId") String sessionId, SubscriptionAction action) {
+        eventPublisher.publishNewsSubscriptionEvent(sessionId, action);
     }
 }

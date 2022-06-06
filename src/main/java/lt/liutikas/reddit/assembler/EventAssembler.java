@@ -28,7 +28,7 @@ public class EventAssembler {
         return event;
     }
 
-    public NewsSubscriptionEvent assembleNewsSubscriptionEvent(SubscriptionAction action, String sessionId) {
+    public NewsSubscriptionEvent assembleNewsSubscriptionEvent(String sessionId, SubscriptionAction action) {
         NewsSubscriptionEvent event = new NewsSubscriptionEvent();
 
         event.setSubscriptionAction(action);
