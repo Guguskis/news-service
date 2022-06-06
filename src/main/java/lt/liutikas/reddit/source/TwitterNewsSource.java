@@ -33,7 +33,7 @@ public class TwitterNewsSource implements NewsSource {
         List<String> keywords = scanProperties.getTwitterKeywords();
         List<String> users = scanProperties.getTwitterUsers();
 
-        LOG.info("Scanning Twitter... { \"keywords\": {} } { \"users\": {} }", keywords.size(), users.size());
+        LOG.info("Scanning Twitter... { \"keywords\": {}, \"users\": {} }", keywords.size(), users.size());
 
         List<Tweet> tweets = new ArrayList<>();
 
