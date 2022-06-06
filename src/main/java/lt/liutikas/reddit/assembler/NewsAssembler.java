@@ -3,6 +3,8 @@ package lt.liutikas.reddit.assembler;
 import lt.liutikas.reddit.api.model.SaveNewsRequest;
 import lt.liutikas.reddit.model.core.Channel;
 import lt.liutikas.reddit.model.core.News;
+import lt.liutikas.reddit.model.twitter.Tweet;
+import org.apache.commons.lang3.NotImplementedException;
 import org.springframework.stereotype.Component;
 import some.developer.reddit.client.model.Submission;
 
@@ -38,6 +40,29 @@ public class NewsAssembler {
         news.setCreated(LocalDateTime.now(clock));
         news.setChannel(request.getChannel());
         news.setSubChannel(request.getSubChannel());
+
+        return news;
+    }
+
+
+    public News assembleNews(Tweet tweet) {
+        News news = new News();
+
+        news.setTitle(tweet.getText());
+        news.setUrl(tweet.getUrl());
+        news.setCreated(tweet.getCreatedAt());
+        news.setChannel(Channel.TWITTER);
+
+        switch (tweet.subChannelType()) {
+            case USER:
+                news.setSubChannel("@" + tweet.getUser());
+                break;
+            case KEYWORD:
+                news.setSubChannel("#" + tweet.getKeyword());
+                break;
+            default:
+                throw new NotImplementedException("Not implemented sub channel type: " + tweet.subChannelType());
+        }
 
         return news;
     }

@@ -1,7 +1,7 @@
 package lt.liutikas.reddit.api.controller;
 
-import lt.liutikas.reddit.api.model.NewsSubscription;
+import lt.liutikas.reddit.api.model.SubscriptionAction;
 
 public interface NewsWebsocketController {
-    void handleNewsSubscription(NewsSubscription message, String sessionId);
+    void handleNewsSubscription(String sessionId, SubscriptionAction message);
 }

@@ -1,16 +1,16 @@
 package lt.liutikas.reddit.api.model;
 
 import lt.liutikas.reddit.model.core.Channel;
-import lt.liutikas.reddit.model.core.SubscriptionAction;
+import lt.liutikas.reddit.model.core.SubscriptionActionType;
 
 import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 
-public class NewsSubscription {
+public class SubscriptionAction {
 
     @NotNull
-    private SubscriptionAction action;
+    private SubscriptionActionType actionType;
     @NotNull
     private Channel channel;
     @NotNull
@@ -24,12 +24,12 @@ public class NewsSubscription {
         this.subChannels = subChannels;
     }
 
-    public SubscriptionAction getAction() {
-        return action;
+    public SubscriptionActionType getActionType() {
+        return actionType;
     }
 
-    public void setAction(SubscriptionAction action) {
-        this.action = action;
+    public void setActionType(SubscriptionActionType actionType) {
+        this.actionType = actionType;
     }
 
     public Channel getChannel() {

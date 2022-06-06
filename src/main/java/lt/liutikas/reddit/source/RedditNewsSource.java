@@ -38,14 +38,14 @@ public class RedditNewsSource implements NewsSource {
     @Override
     public List<News> getNews() {
         List<String> subreddits = getSubredditsToScan();
-        LOG.info("Scanning subreddits... { \"subreddits\": {} }", subreddits.size());
+        LOG.info("Scanning Reddit... { \"subreddits\": {} }", subreddits.size());
 
         List<News> news = subreddits.stream()
                 .flatMap(this::tryGetNewSubmissionsStream)
                 .map(newsAssembler::assembleNews)
                 .collect(Collectors.toList());
 
-        LOG.info("Scanning subreddits done { \"news\": {} }", news.size());
+        LOG.info("Scanning Reddit done { \"submissions\": {} }", news.size());
 
         return news;
     }

@@ -23,6 +23,12 @@ web:
 reddit:
   host: https://old.reddit.com
   user-agent: "Reddit-Bot (by /u/guguskis)"
+twitter:
+  consumer-key: "YOUR_CONSUMER_KEY"
+  consumer-secret: "YOUR_CONSUMER_SECRET"
+  access-token: "YOUR_ACCESS_TOKEN"
+  access-token-secret: "YOUR_ACCESS_TOKEN_SECRET"
+
 scan:
   subreddits:
     - "ukraine"
@@ -30,6 +36,11 @@ scan:
     - "cryptocurrency"
     - "xrp"
     - "ripple"
+  twitter-keywords:
+    - "xrp"
+    - "ripple"
+  twitter-users:
+    - "attorneyjeremy1"
 sentiment:
   enabled: false
 logging:

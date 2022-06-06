@@ -1,7 +1,7 @@
 package lt.liutikas.reddit.controller;
 
 import lt.liutikas.reddit.api.controller.NewsWebsocketController;
-import lt.liutikas.reddit.api.model.NewsSubscription;
+import lt.liutikas.reddit.api.model.SubscriptionAction;
 import lt.liutikas.reddit.event.EventPublisher;
 import org.springframework.messaging.handler.annotation.Header;
 import org.springframework.messaging.handler.annotation.MessageMapping;
@@ -17,7 +17,7 @@ public class DefaultNewsWebsocketController implements NewsWebsocketController {
 
     @Override
     @MessageMapping("/queue/news")
-    public void handleNewsSubscription(NewsSubscription message, @Header("simpSessionId") String sessionId) {
-        eventPublisher.publishNewsSubscriptionEvent(message, sessionId);
+    public void handleNewsSubscription(@Header("simpSessionId") String sessionId, SubscriptionAction action) {
+        eventPublisher.publishNewsSubscriptionEvent(sessionId, action);
     }
 }
