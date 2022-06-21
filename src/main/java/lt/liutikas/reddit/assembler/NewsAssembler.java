@@ -10,6 +10,8 @@ import some.developer.reddit.client.model.Submission;
 
 import java.time.Clock;
 import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
+import java.time.ZoneOffset;
 
 @Component
 public class NewsAssembler {
@@ -18,6 +20,19 @@ public class NewsAssembler {
 
     public NewsAssembler(Clock clock) {
         this.clock = clock;
+    }
+
+    public lt.liutikas.reddit.openapi.model.News assembleNews(News news) {
+        lt.liutikas.reddit.openapi.model.News openapiNews = new lt.liutikas.reddit.openapi.model.News();
+
+        openapiNews.setId(news.getId());
+        openapiNews.setTitle(news.getTitle());
+        openapiNews.setSubChannel(news.getSubChannel());
+        openapiNews.setUrl(news.getUrl().toString());
+        openapiNews.setCreated(OffsetDateTime.of(news.getCreated(), ZoneOffset.UTC));
+        openapiNews.setChannel(news.getChannel().toString());
+
+        return openapiNews;
     }
 
     public News assembleNews(Submission submission) {

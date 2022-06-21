@@ -11,6 +11,14 @@ public class PaginationQuery {
     @Min(1)
     private Integer pageSize = 10;
 
+    public PaginationQuery() {
+    }
+
+    public PaginationQuery(Integer pageToken, Integer pageSize) {
+        this.pageToken = pageToken;
+        this.pageSize = pageSize;
+    }
+
     public PageRequest pageRequest() {
         return PageRequest.of(pageToken, pageSize);
     }
