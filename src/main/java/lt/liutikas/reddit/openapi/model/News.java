@@ -13,7 +13,7 @@ import java.util.Objects;
  * News
  */
 
-@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2022-06-22T00:47:59.053065100+03:00[Europe/Vilnius]")
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2022-06-22T01:07:54.033581300+03:00[Europe/Vilnius]")
 public class News {
 
   @JsonProperty("id")
@@ -193,7 +193,7 @@ public class News {
             Objects.equals(this.created, news.created) &&
             Objects.equals(this.subChannel, news.subChannel) &&
             Objects.equals(this.channel, news.channel) &&
-            Objects.equals(this.sentiment, news.sentiment);
+        Objects.equals(this.sentiment, news.sentiment);
   }
 
   @Override

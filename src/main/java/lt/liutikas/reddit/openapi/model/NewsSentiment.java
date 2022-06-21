@@ -12,7 +12,7 @@ import java.util.Objects;
  */
 
 @JsonTypeName("News_sentiment")
-@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2022-06-22T00:47:59.053065100+03:00[Europe/Vilnius]")
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2022-06-22T01:07:54.033581300+03:00[Europe/Vilnius]")
 public class NewsSentiment {
 
   @JsonProperty("id")

@@ -4,7 +4,6 @@ import lt.liutikas.reddit.api.model.GetNewsRequest;
 import lt.liutikas.reddit.api.model.NewsPage;
 import lt.liutikas.reddit.assembler.NewsAssembler;
 import lt.liutikas.reddit.openapi.api.NewsApiDelegate;
-import lt.liutikas.reddit.openapi.model.ListNews200Response;
 import lt.liutikas.reddit.openapi.model.News;
 import lt.liutikas.reddit.service.NewsService;
 import org.springframework.http.HttpStatus;
@@ -26,17 +25,17 @@ public class DefaultNewsApiDelegate implements NewsApiDelegate {
     }
 
     @Override
-    public ResponseEntity<ListNews200Response> listNews(List<String> subChannels, Integer pageToken, Integer pageSize) {
+    public ResponseEntity<lt.liutikas.reddit.openapi.model.NewsPage> listNews(List<String> subChannels, Integer pageToken, Integer pageSize) {
         GetNewsRequest request = new GetNewsRequest(subChannels, pageToken, pageSize);
 
         NewsPage newsPage = newsService.getNews(request);
 
-        ListNews200Response response = new ListNews200Response();
+        lt.liutikas.reddit.openapi.model.NewsPage openapiNewsPage = new lt.liutikas.reddit.openapi.model.NewsPage();
 
-        response.setNews(assembleNews(newsPage.getNews()));
-        response.setNextPageToken(newsPage.getNextPageToken());
+        openapiNewsPage.setNews(assembleNews(newsPage.getNews()));
+        openapiNewsPage.setNextPageToken(newsPage.getNextPageToken());
 
-        return new ResponseEntity<>(response, HttpStatus.OK);
+        return new ResponseEntity<>(openapiNewsPage, HttpStatus.OK);
     }
 
     private List<News> assembleNews(List<lt.liutikas.reddit.model.core.News> news) {

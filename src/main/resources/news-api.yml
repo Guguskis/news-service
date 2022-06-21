@@ -45,14 +45,7 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  nextPageToken:
-                    type: integer
-                  news:
-                    type: array
-                    items:
-                      $ref: '#/components/schemas/News'
+                $ref: '#/components/schemas/NewsPage'
 components:
   schemas:
     News:
@@ -94,3 +87,11 @@ components:
             scoreNeutral:
               type: number
               format: double
+    NewsPage:
+      properties:
+        nextPageToken:
+          type: integer
+        news:
+          type: array
+          items:
+            $ref: '#/components/schemas/News'

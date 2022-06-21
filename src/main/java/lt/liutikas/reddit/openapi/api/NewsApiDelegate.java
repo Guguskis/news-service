@@ -1,6 +1,6 @@
 package lt.liutikas.reddit.openapi.api;
 
-import lt.liutikas.reddit.openapi.model.ListNews200Response;
+import lt.liutikas.reddit.openapi.model.NewsPage;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -14,7 +14,7 @@ import java.util.Optional;
  * A delegate to be called by the {@link NewsApiController}}.
  * Implement this interface with a {@link org.springframework.stereotype.Service} annotated class.
  */
-@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2022-06-22T00:47:59.053065100+03:00[Europe/Vilnius]")
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2022-06-22T01:07:54.033581300+03:00[Europe/Vilnius]")
 public interface NewsApiDelegate {
 
     default Optional<NativeWebRequest> getRequest() {
@@ -30,9 +30,9 @@ public interface NewsApiDelegate {
      * @return A list of news (status code 200)
      * @see NewsApi#listNews
      */
-    default ResponseEntity<ListNews200Response> listNews(List<String> subChannels,
-                                                         Integer pageToken,
-                                                         Integer pageSize) {
+    default ResponseEntity<NewsPage> listNews(List<String> subChannels,
+                                              Integer pageToken,
+                                              Integer pageSize) {
         getRequest().ifPresent(request -> {
             for (MediaType mediaType : MediaType.parseMediaTypes(request.getHeader("Accept"))) {
                 if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {

@@ -11,7 +11,7 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import lt.liutikas.reddit.openapi.model.ListNews200Response;
+import lt.liutikas.reddit.openapi.model.NewsPage;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -23,7 +23,7 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.util.List;
 
-@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2022-06-22T00:47:59.053065100+03:00[Europe/Vilnius]")
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2022-06-22T01:07:54.033581300+03:00[Europe/Vilnius]")
 @Validated
 @Tag(name = "news", description = "the news API")
 public interface NewsApi {
@@ -47,7 +47,7 @@ public interface NewsApi {
             tags = {"news"},
             responses = {
                     @ApiResponse(responseCode = "200", description = "A list of news", content = {
-                            @Content(mediaType = "application/json", schema = @Schema(implementation = ListNews200Response.class))
+                            @Content(mediaType = "application/json", schema = @Schema(implementation = NewsPage.class))
                     })
             }
     )
@@ -56,7 +56,7 @@ public interface NewsApi {
             value = "/news",
             produces = {"application/json"}
     )
-    default ResponseEntity<ListNews200Response> listNews(
+    default ResponseEntity<NewsPage> listNews(
             @NotNull @Parameter(name = "subChannels", description = "Sub channels", required = true) @Valid @RequestParam(value = "subChannels", required = true, defaultValue = "ukraine,lithuania") List<String> subChannels,
             @Parameter(name = "pageToken", description = "Page token") @Valid @RequestParam(value = "pageToken", required = false, defaultValue = "0") Integer pageToken,
             @Parameter(name = "pageSize", description = "Page size") @Valid @RequestParam(value = "pageSize", required = false, defaultValue = "10") Integer pageSize
