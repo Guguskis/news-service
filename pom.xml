@@ -87,17 +87,6 @@
         </dependency>
 
         <dependency>
-            <groupId>com.fasterxml.jackson.core</groupId>
-            <artifactId>jackson-core</artifactId>
-            <version>2.13.1</version>
-        </dependency>
-
-        <dependency>
-            <groupId>com.fasterxml.jackson.core</groupId>
-            <artifactId>jackson-databind</artifactId>
-            <version>2.13.2.1</version>
-        </dependency>
-        <dependency>
             <groupId>releases.some.developer.client</groupId>
             <artifactId>reddit-client</artifactId>
             <version>1.0.1</version>
@@ -119,6 +108,11 @@
             <artifactId>twitter4j-stream</artifactId>
             <version>4.0.7</version>
         </dependency>
+        <dependency>
+            <groupId>org.openapitools</groupId>
+            <artifactId>jackson-databind-nullable</artifactId>
+            <version>0.2.2</version>
+        </dependency>
     </dependencies>
 
     <dependencyManagement>
@@ -139,16 +133,11 @@
             </dependency>
 
             <!--            OPENAPI-->
-            <dependency>
-                <groupId>org.openapitools</groupId>
-                <artifactId>jackson-databind-nullable</artifactId>
-                <version>0.2.2</version>
-            </dependency>
-            <dependency>
-                <groupId>io.springfox</groupId>
-                <artifactId>springfox-swagger2</artifactId>
-                <version>3.0.0</version>
-            </dependency>
+<!--            <dependency>-->
+<!--                <groupId>io.springfox</groupId>-->
+<!--                <artifactId>springfox-swagger2</artifactId>-->
+<!--                <version>3.0.0</version>-->
+<!--            </dependency>-->
         </dependencies>
     </dependencyManagement>
 
