@@ -65,6 +65,25 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
+  /news/channel/{channel}:
+    get:
+      summary: List news by channel
+      operationId: listNewsByChannel
+      tags:
+        - news
+      parameters:
+        - $ref: '#/components/parameters/channel'
+        - $ref: '#/components/parameters/subChannels'
+        - $ref: '#/components/parameters/pageToken'
+        - $ref: '#/components/parameters/pageSize'
+      responses:
+        200:
+          description: A list of news
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NewsPage'
+
 components:
   schemas:
     News:
@@ -172,6 +191,13 @@ components:
         type: integer
         format: int32
         default: 20
+    channel:
+      name: channel
+      in: query
+      description: Channel
+      required: false
+      schema:
+        $ref: '#/components/schemas/Channel'
     subChannels:
       name: subChannels
       in: query
@@ -182,8 +208,7 @@ components:
         items:
           type: string
         default:
-          - ukraine
-          - lithuania
+          - europe
   examples:
     CreateRedditNewsRequest:
       summary: Create reddit news for europe subreddit

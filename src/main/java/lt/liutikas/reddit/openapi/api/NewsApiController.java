@@ -1,5 +1,6 @@
 package lt.liutikas.reddit.openapi.api;
 
+import lt.liutikas.reddit.openapi.model.Channel;
 import lt.liutikas.reddit.openapi.model.CreateNewsRequest;
 import lt.liutikas.reddit.openapi.model.Error;
 import lt.liutikas.reddit.openapi.model.News;
@@ -28,7 +29,7 @@ import java.util.Map;
 import java.util.Optional;
 import javax.annotation.Generated;
 
-@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2022-06-22T18:48:18.912558600+03:00[Europe/Vilnius]")
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2022-06-22T18:52:21.870437300+03:00[Europe/Vilnius]")
 @Controller
 @RequestMapping("${openapi.news.base-path:/api/v1}")
 public class NewsApiController implements NewsApi {

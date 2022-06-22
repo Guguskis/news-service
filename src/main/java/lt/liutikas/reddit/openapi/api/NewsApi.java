@@ -5,6 +5,7 @@
  */
 package lt.liutikas.reddit.openapi.api;
 
+import lt.liutikas.reddit.openapi.model.Channel;
 import lt.liutikas.reddit.openapi.model.CreateNewsRequest;
 import lt.liutikas.reddit.openapi.model.Error;
 import lt.liutikas.reddit.openapi.model.News;
@@ -28,7 +29,7 @@ import java.util.List;
 import java.util.Map;
 import javax.annotation.Generated;
 
-@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2022-06-22T18:48:18.912558600+03:00[Europe/Vilnius]")
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2022-06-22T18:52:21.870437300+03:00[Europe/Vilnius]")
 @Validated
 @Tag(name = "news", description = "the news API")
 public interface NewsApi {
@@ -127,6 +128,40 @@ public interface NewsApi {
         @Parameter(name = "pageSize", description = "Page size") @Valid @RequestParam(value = "pageSize", required = false, defaultValue = "20") Integer pageSize
     ) {
         return getDelegate().listNews(subChannels, pageToken, pageSize);
+    }
+
+
+    /**
+     * GET /news/channel/{channel} : List news by channel
+     *
+     * @param subChannels Sub channels (required)
+     * @param channel Channel (optional)
+     * @param pageToken Page token (optional, default to 0)
+     * @param pageSize Page size (optional, default to 20)
+     * @return A list of news (status code 200)
+     */
+    @Operation(
+        operationId = "listNewsByChannel",
+        summary = "List news by channel",
+        tags = { "news" },
+        responses = {
+            @ApiResponse(responseCode = "200", description = "A list of news", content = {
+                @Content(mediaType = "application/json", schema = @Schema(implementation = NewsPage.class))
+            })
+        }
+    )
+    @RequestMapping(
+        method = RequestMethod.GET,
+        value = "/news/channel/{channel}",
+        produces = { "application/json" }
+    )
+    default ResponseEntity<NewsPage> listNewsByChannel(
+        @NotNull @Parameter(name = "subChannels", description = "Sub channels", required = true) @Valid @RequestParam(value = "subChannels", required = true, defaultValue = "ukraine,lithuania") List<String> subChannels,
+        @Parameter(name = "channel", description = "Channel") @Valid @RequestParam(value = "channel", required = false) Channel channel,
+        @Parameter(name = "pageToken", description = "Page token") @Valid @RequestParam(value = "pageToken", required = false, defaultValue = "0") Integer pageToken,
+        @Parameter(name = "pageSize", description = "Page size") @Valid @RequestParam(value = "pageSize", required = false, defaultValue = "20") Integer pageSize
+    ) {
+        return getDelegate().listNewsByChannel(subChannels, channel, pageToken, pageSize);
     }
 
 }

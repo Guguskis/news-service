@@ -36,13 +36,7 @@ public class DefaultNewsApiDelegate implements NewsApiDelegate {
         GetNewsRequest request = new GetNewsRequest(subChannels, pageToken, pageSize);
         NewsPage newsPage = newsService.getNews(request);
 
-        lt.liutikas.reddit.openapi.model.NewsPage openApiNewsPage = new lt.liutikas.reddit.openapi.model.NewsPage();
-        List<News> openApiNews = newsPage.getNews().stream()
-                .map(newsAssembler::assembleNews)
-                .collect(Collectors.toList());
-
-        openApiNewsPage.setNextPageToken(newsPage.getNextPageToken());
-        openApiNewsPage.setNews(openApiNews);
+        lt.liutikas.reddit.openapi.model.NewsPage openApiNewsPage = getOpenApiNewsPage(newsPage);
 
         return new ResponseEntity<>(openApiNewsPage, HttpStatus.OK);
     }
@@ -69,6 +63,21 @@ public class DefaultNewsApiDelegate implements NewsApiDelegate {
         return new ResponseEntity<>(openApiNews, HttpStatus.OK);
     }
 
+    @Override
+    public ResponseEntity<lt.liutikas.reddit.openapi.model.NewsPage> listNewsByChannel(List<String> subChannels,
+                                                                                       lt.liutikas.reddit.openapi.model.Channel channel,
+                                                                                       Integer pageToken,
+                                                                                       Integer pageSize) {
+        GetNewsRequest request = new GetNewsRequest(subChannels, pageToken, pageSize);
+        Channel coreChannel = Channel.valueOf(channel.getValue());
+
+        NewsPage newsPage = newsService.getNews(coreChannel, request);
+
+        lt.liutikas.reddit.openapi.model.NewsPage openApiNewsPage = getOpenApiNewsPage(newsPage);
+
+        return new ResponseEntity<>(openApiNewsPage, HttpStatus.OK);
+    }
+
     private URL parseUrl(CreateNewsRequest createNewsRequest) {
         try {
             return new URL(createNewsRequest.getUrl());
@@ -76,4 +85,18 @@ public class DefaultNewsApiDelegate implements NewsApiDelegate {
             throw new IllegalArgumentException(String.format("\"%s\" is not a valid url", createNewsRequest.getUrl()), e);
         }
     }
+
+    private lt.liutikas.reddit.openapi.model.NewsPage getOpenApiNewsPage(NewsPage newsPage) {
+        lt.liutikas.reddit.openapi.model.NewsPage openApiNewsPage = new lt.liutikas.reddit.openapi.model.NewsPage();
+
+        List<News> openApiNews = newsPage.getNews().stream()
+                .map(newsAssembler::assembleNews)
+                .collect(Collectors.toList());
+
+        openApiNewsPage.setNextPageToken(newsPage.getNextPageToken());
+        openApiNewsPage.setNews(openApiNews);
+
+        return openApiNewsPage;
+    }
+
 }
