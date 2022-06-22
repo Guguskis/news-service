@@ -67,10 +67,14 @@ components:
           type: string
           format: string
         channel:
-          type: string
-          format: string # todo enum
+          $ref: '#/components/schemas/Channel'
         sentiment:
           $ref: '#/components/schemas/Sentiment'
+    Channel:
+      type: string
+      enum:
+        - REDDIT
+        - TWITTER
     Sentiment:
       type: object
       properties:
@@ -90,7 +94,6 @@ components:
           format: double
     SentimentType:
       type: string
-      format: string
       enum:
         - POSITIVE
         - NEGATIVE

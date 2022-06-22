@@ -14,7 +14,7 @@ import java.util.Optional;
  * A delegate to be called by the {@link NewsApiController}}.
  * Implement this interface with a {@link org.springframework.stereotype.Service} annotated class.
  */
-@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2022-06-22T09:05:48.683327200+03:00[Europe/Vilnius]")
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2022-06-22T09:12:23.505559700+03:00[Europe/Vilnius]")
 public interface NewsApiDelegate {
 
     default Optional<NativeWebRequest> getRequest() {
@@ -36,7 +36,7 @@ public interface NewsApiDelegate {
         getRequest().ifPresent(request -> {
             for (MediaType mediaType : MediaType.parseMediaTypes(request.getHeader("Accept"))) {
                 if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {
-                    String exampleString = "{ \"news\" : [ { \"sentiment\" : { \"sentiment\" : \"POSITIVE\", \"scorePositive\" : 5.637376656633329, \"scoreNeutral\" : 2.3021358869347655, \"scoreNegative\" : 5.962133916683182, \"id\" : 1 }, \"created\" : \"2000-01-23T04:56:07.000+00:00\", \"subChannel\" : \"subChannel\", \"channel\" : \"channel\", \"id\" : 6, \"title\" : \"title\", \"url\" : \"url\" }, { \"sentiment\" : { \"sentiment\" : \"POSITIVE\", \"scorePositive\" : 5.637376656633329, \"scoreNeutral\" : 2.3021358869347655, \"scoreNegative\" : 5.962133916683182, \"id\" : 1 }, \"created\" : \"2000-01-23T04:56:07.000+00:00\", \"subChannel\" : \"subChannel\", \"channel\" : \"channel\", \"id\" : 6, \"title\" : \"title\", \"url\" : \"url\" } ], \"nextPageToken\" : 0 }";
+                    String exampleString = "{ \"news\" : [ { \"sentiment\" : { \"scorePositive\" : 5.637376656633329, \"scoreNeutral\" : 2.3021358869347655, \"scoreNegative\" : 5.962133916683182, \"id\" : 1 }, \"created\" : \"2000-01-23T04:56:07.000+00:00\", \"subChannel\" : \"subChannel\", \"id\" : 6, \"title\" : \"title\", \"url\" : \"url\" }, { \"sentiment\" : { \"scorePositive\" : 5.637376656633329, \"scoreNeutral\" : 2.3021358869347655, \"scoreNegative\" : 5.962133916683182, \"id\" : 1 }, \"created\" : \"2000-01-23T04:56:07.000+00:00\", \"subChannel\" : \"subChannel\", \"id\" : 6, \"title\" : \"title\", \"url\" : \"url\" } ], \"nextPageToken\" : 0 }";
                     ApiUtil.setExampleResponse(request, "application/json", exampleString);
                     break;
                 }

@@ -13,7 +13,7 @@ import java.util.Objects;
  * News
  */
 
-@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2022-06-22T09:05:48.683327200+03:00[Europe/Vilnius]")
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2022-06-22T09:12:23.505559700+03:00[Europe/Vilnius]")
 public class News {
 
   @JsonProperty("id")
@@ -33,7 +33,7 @@ public class News {
   private String subChannel;
 
   @JsonProperty("channel")
-  private String channel;
+  private Channel channel;
 
   @JsonProperty("sentiment")
   private Sentiment sentiment;
@@ -138,7 +138,7 @@ public class News {
     this.subChannel = subChannel;
   }
 
-  public News channel(String channel) {
+  public News channel(Channel channel) {
     this.channel = channel;
     return this;
   }
@@ -148,13 +148,13 @@ public class News {
    *
    * @return channel
    */
-
+  @Valid
   @Schema(name = "channel", required = false)
-  public String getChannel() {
+  public Channel getChannel() {
     return channel;
   }
 
-  public void setChannel(String channel) {
+  public void setChannel(Channel channel) {
     this.channel = channel;
   }
 
@@ -193,7 +193,7 @@ public class News {
             Objects.equals(this.created, news.created) &&
             Objects.equals(this.subChannel, news.subChannel) &&
             Objects.equals(this.channel, news.channel) &&
-            Objects.equals(this.sentiment, news.sentiment);
+        Objects.equals(this.sentiment, news.sentiment);
   }
 
   @Override

@@ -1,28 +1,31 @@
 package lt.liutikas.reddit.openapi.model;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonValue;
 import io.swagger.v3.oas.annotations.media.Schema;
 
 import javax.annotation.Generated;
+import javax.validation.Valid;
 import java.util.Objects;
 
 /**
  * Sentiment
  */
 
-@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2022-06-22T09:05:48.683327200+03:00[Europe/Vilnius]")
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2022-06-22T09:12:23.505559700+03:00[Europe/Vilnius]")
 public class Sentiment {
 
   @JsonProperty("id")
   private Long id;
+
   @JsonProperty("sentiment")
-  private SentimentEnum sentiment;
+  private SentimentType sentiment;
+
   @JsonProperty("scoreNegative")
   private Double scoreNegative;
+
   @JsonProperty("scorePositive")
   private Double scorePositive;
+
   @JsonProperty("scoreNeutral")
   private Double scoreNeutral;
 
@@ -46,7 +49,7 @@ public class Sentiment {
     this.id = id;
   }
 
-  public Sentiment sentiment(SentimentEnum sentiment) {
+  public Sentiment sentiment(SentimentType sentiment) {
     this.sentiment = sentiment;
     return this;
   }
@@ -56,13 +59,13 @@ public class Sentiment {
    *
    * @return sentiment
    */
-
+  @Valid
   @Schema(name = "sentiment", required = false)
-  public SentimentEnum getSentiment() {
+  public SentimentType getSentiment() {
     return sentiment;
   }
 
-  public void setSentiment(SentimentEnum sentiment) {
+  public void setSentiment(SentimentType sentiment) {
     this.sentiment = sentiment;
   }
 
@@ -139,7 +142,7 @@ public class Sentiment {
             Objects.equals(this.sentiment, sentiment.sentiment) &&
             Objects.equals(this.scoreNegative, sentiment.scoreNegative) &&
             Objects.equals(this.scorePositive, sentiment.scorePositive) &&
-            Objects.equals(this.scoreNeutral, sentiment.scoreNeutral);
+        Objects.equals(this.scoreNeutral, sentiment.scoreNeutral);
   }
 
   @Override
@@ -169,45 +172,6 @@ public class Sentiment {
       return "null";
     }
     return o.toString().replace("\n", "\n    ");
-  }
-
-  /**
-   * Gets or Sets sentiment
-   */
-  public enum SentimentEnum {
-    POSITIVE("POSITIVE"),
-
-    NEGATIVE("NEGATIVE"),
-
-    NEUTRAL("NEUTRAL"),
-
-    MIXED("MIXED");
-
-    private String value;
-
-    SentimentEnum(String value) {
-      this.value = value;
-    }
-
-    @JsonCreator
-    public static SentimentEnum fromValue(String value) {
-      for (SentimentEnum b : SentimentEnum.values()) {
-        if (b.value.equals(value)) {
-          return b;
-        }
-      }
-      throw new IllegalArgumentException("Unexpected value '" + value + "'");
-    }
-
-    @JsonValue
-    public String getValue() {
-      return value;
-    }
-
-    @Override
-    public String toString() {
-      return String.valueOf(value);
-    }
   }
 }
 

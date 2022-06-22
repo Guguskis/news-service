@@ -30,7 +30,7 @@ public class NewsAssembler {
         openapiNews.setSubChannel(news.getSubChannel());
         openapiNews.setUrl(news.getUrl().toString());
         openapiNews.setCreated(OffsetDateTime.of(news.getCreated(), ZoneOffset.UTC));
-        openapiNews.setChannel(news.getChannel().toString());
+        openapiNews.setChannel(lt.liutikas.reddit.openapi.model.Channel.valueOf(news.getChannel().name()));
 
         return openapiNews;
     }
