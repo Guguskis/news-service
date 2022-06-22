@@ -31,6 +31,7 @@ public class NewsAssembler {
         openapiNews.setUrl(news.getUrl().toString());
         openapiNews.setCreated(OffsetDateTime.of(news.getCreated(), ZoneOffset.UTC));
         openapiNews.setChannel(lt.liutikas.reddit.openapi.model.Channel.valueOf(news.getChannel().name()));
+        // todo set sentiment
 
         return openapiNews;
     }
