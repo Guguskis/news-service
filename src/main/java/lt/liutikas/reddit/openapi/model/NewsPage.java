@@ -1,19 +1,26 @@
 package lt.liutikas.reddit.openapi.model;
 
+import java.net.URI;
+import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import io.swagger.v3.oas.annotations.media.Schema;
-
-import javax.annotation.Generated;
-import javax.validation.Valid;
+import com.fasterxml.jackson.annotation.JsonCreator;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
+import lt.liutikas.reddit.openapi.model.News;
+import java.time.OffsetDateTime;
+import javax.validation.Valid;
+import javax.validation.constraints.*;
+import io.swagger.v3.oas.annotations.media.Schema;
+
+
+import java.util.*;
+import javax.annotation.Generated;
 
 /**
  * NewsPage
  */
 
-@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2022-06-22T09:28:58.061353200+03:00[Europe/Vilnius]")
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2022-06-22T17:31:34.079492+03:00[Europe/Vilnius]")
 public class NewsPage {
 
   @JsonProperty("nextPageToken")
@@ -30,10 +37,9 @@ public class NewsPage {
 
   /**
    * Get nextPageToken
-   *
    * @return nextPageToken
-   */
-
+  */
+  
   @Schema(name = "nextPageToken", required = false)
   public Integer getNextPageToken() {
     return nextPageToken;
@@ -58,10 +64,9 @@ public class NewsPage {
 
   /**
    * Get news
-   *
    * @return news
-   */
-  @Valid
+  */
+  @Valid 
   @Schema(name = "news", required = false)
   public List<News> getNews() {
     return news;
@@ -81,7 +86,7 @@ public class NewsPage {
     }
     NewsPage newsPage = (NewsPage) o;
     return Objects.equals(this.nextPageToken, newsPage.nextPageToken) &&
-            Objects.equals(this.news, newsPage.news);
+        Objects.equals(this.news, newsPage.news);
   }
 
   @Override

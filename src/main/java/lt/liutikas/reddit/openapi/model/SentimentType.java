@@ -1,23 +1,33 @@
 package lt.liutikas.reddit.openapi.model;
 
+import java.net.URI;
+import java.util.Objects;
+import com.fasterxml.jackson.annotation.JsonValue;
+import java.time.OffsetDateTime;
+import javax.validation.Valid;
+import javax.validation.constraints.*;
+import io.swagger.v3.oas.annotations.media.Schema;
+
+
+import java.util.*;
+import javax.annotation.Generated;
+
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
-
-import javax.annotation.Generated;
 
 /**
  * Gets or Sets SentimentType
  */
 
-@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2022-06-22T09:28:58.061353200+03:00[Europe/Vilnius]")
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2022-06-22T17:31:34.079492+03:00[Europe/Vilnius]")
 public enum SentimentType {
-
+  
   POSITIVE("POSITIVE"),
-
+  
   NEGATIVE("NEGATIVE"),
-
+  
   NEUTRAL("NEUTRAL"),
-
+  
   MIXED("MIXED");
 
   private String value;

@@ -4,6 +4,7 @@ import lt.liutikas.reddit.api.model.SaveNewsRequest;
 import lt.liutikas.reddit.model.core.Channel;
 import lt.liutikas.reddit.model.core.News;
 import lt.liutikas.reddit.model.twitter.Tweet;
+import lt.liutikas.reddit.openapi.model.Sentiment;
 import org.apache.commons.lang3.NotImplementedException;
 import org.springframework.stereotype.Component;
 import some.developer.reddit.client.model.Submission;
@@ -23,17 +24,29 @@ public class NewsAssembler {
     }
 
     public lt.liutikas.reddit.openapi.model.News assembleNews(News news) {
-        lt.liutikas.reddit.openapi.model.News openapiNews = new lt.liutikas.reddit.openapi.model.News();
+        lt.liutikas.reddit.openapi.model.News openApiNews = new lt.liutikas.reddit.openapi.model.News();
 
-        openapiNews.setId(news.getId());
-        openapiNews.setTitle(news.getTitle());
-        openapiNews.setSubChannel(news.getSubChannel());
-        openapiNews.setUrl(news.getUrl().toString());
-        openapiNews.setCreated(OffsetDateTime.of(news.getCreated(), ZoneOffset.UTC));
-        openapiNews.setChannel(lt.liutikas.reddit.openapi.model.Channel.valueOf(news.getChannel().name()));
-        // todo set sentiment
+        openApiNews.setId(news.getId());
+        openApiNews.setTitle(news.getTitle());
+        openApiNews.setSubChannel(news.getSubChannel());
+        openApiNews.setUrl(news.getUrl().toString());
+        openApiNews.setCreated(OffsetDateTime.of(news.getCreated(), ZoneOffset.UTC));
+        openApiNews.setChannel(lt.liutikas.reddit.openapi.model.Channel.fromValue(news.getChannel().name()));
+        openApiNews.setSentiment(assembleSentiment(news.getSentiment()));
 
-        return openapiNews;
+        return openApiNews;
+    }
+
+    private Sentiment assembleSentiment(lt.liutikas.reddit.model.core.Sentiment sentiment) {
+        Sentiment openApiSentiment = new Sentiment();
+
+        openApiSentiment.setId(sentiment.getId());
+        openApiSentiment.setSentiment(lt.liutikas.reddit.openapi.model.SentimentType.valueOf(sentiment.getSentiment().name()));
+        openApiSentiment.setScorePositive(sentiment.getScorePositive());
+        openApiSentiment.setScoreNegative(sentiment.getScoreNegative());
+        openApiSentiment.setScoreNeutral(sentiment.getScoreNeutral());
+
+        return openApiSentiment;
     }
 
     public News assembleNews(Submission submission) {

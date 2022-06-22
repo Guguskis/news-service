@@ -25,23 +25,21 @@ public class DefaultNewsApiDelegate implements NewsApiDelegate {
     }
 
     @Override
-    public ResponseEntity<lt.liutikas.reddit.openapi.model.NewsPage> listNews(List<String> subChannels, Integer pageToken, Integer pageSize) {
+    public ResponseEntity<lt.liutikas.reddit.openapi.model.NewsPage> listNews(List<String> subChannels,
+                                                                              Integer pageToken,
+                                                                              Integer pageSize) {
         GetNewsRequest request = new GetNewsRequest(subChannels, pageToken, pageSize);
-
         NewsPage newsPage = newsService.getNews(request);
 
-        lt.liutikas.reddit.openapi.model.NewsPage openapiNewsPage = new lt.liutikas.reddit.openapi.model.NewsPage();
-
-        openapiNewsPage.setNews(assembleNews(newsPage.getNews()));
-        openapiNewsPage.setNextPageToken(newsPage.getNextPageToken());
-
-        return new ResponseEntity<>(openapiNewsPage, HttpStatus.OK);
-    }
-
-    private List<News> assembleNews(List<lt.liutikas.reddit.model.core.News> news) {
-        return news.stream()
+        lt.liutikas.reddit.openapi.model.NewsPage openApiNewsPage = new lt.liutikas.reddit.openapi.model.NewsPage();
+        List<News> openApiNews = newsPage.getNews().stream()
                 .map(newsAssembler::assembleNews)
                 .collect(Collectors.toList());
+
+        openApiNewsPage.setNextPageToken(newsPage.getNextPageToken());
+        openApiNewsPage.setNews(openApiNews);
+
+        return new ResponseEntity<>(openApiNewsPage, HttpStatus.OK);
     }
 
 }

@@ -1,19 +1,27 @@
 package lt.liutikas.reddit.openapi.model;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-import io.swagger.v3.oas.annotations.media.Schema;
-import org.springframework.format.annotation.DateTimeFormat;
-
-import javax.annotation.Generated;
-import javax.validation.Valid;
-import java.time.OffsetDateTime;
+import java.net.URI;
 import java.util.Objects;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import java.time.OffsetDateTime;
+import lt.liutikas.reddit.openapi.model.Channel;
+import lt.liutikas.reddit.openapi.model.Sentiment;
+import org.springframework.format.annotation.DateTimeFormat;
+import java.time.OffsetDateTime;
+import javax.validation.Valid;
+import javax.validation.constraints.*;
+import io.swagger.v3.oas.annotations.media.Schema;
+
+
+import java.util.*;
+import javax.annotation.Generated;
 
 /**
  * News
  */
 
-@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2022-06-22T09:28:58.061353200+03:00[Europe/Vilnius]")
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2022-06-22T17:31:34.079492+03:00[Europe/Vilnius]")
 public class News {
 
   @JsonProperty("id")
@@ -45,10 +53,9 @@ public class News {
 
   /**
    * Get id
-   *
    * @return id
-   */
-
+  */
+  
   @Schema(name = "id", required = false)
   public Long getId() {
     return id;
@@ -65,10 +72,9 @@ public class News {
 
   /**
    * Get title
-   *
    * @return title
-   */
-
+  */
+  
   @Schema(name = "title", required = false)
   public String getTitle() {
     return title;
@@ -85,10 +91,9 @@ public class News {
 
   /**
    * Get url
-   *
    * @return url
-   */
-
+  */
+  
   @Schema(name = "url", required = false)
   public String getUrl() {
     return url;
@@ -105,10 +110,9 @@ public class News {
 
   /**
    * Get created
-   *
    * @return created
-   */
-  @Valid
+  */
+  @Valid 
   @Schema(name = "created", required = false)
   public OffsetDateTime getCreated() {
     return created;
@@ -125,10 +129,9 @@ public class News {
 
   /**
    * Get subChannel
-   *
    * @return subChannel
-   */
-
+  */
+  
   @Schema(name = "subChannel", required = false)
   public String getSubChannel() {
     return subChannel;
@@ -145,10 +148,9 @@ public class News {
 
   /**
    * Get channel
-   *
    * @return channel
-   */
-  @Valid
+  */
+  @Valid 
   @Schema(name = "channel", required = false)
   public Channel getChannel() {
     return channel;
@@ -165,10 +167,9 @@ public class News {
 
   /**
    * Get sentiment
-   *
    * @return sentiment
-   */
-  @Valid
+  */
+  @Valid 
   @Schema(name = "sentiment", required = false)
   public Sentiment getSentiment() {
     return sentiment;
@@ -188,11 +189,11 @@ public class News {
     }
     News news = (News) o;
     return Objects.equals(this.id, news.id) &&
-            Objects.equals(this.title, news.title) &&
-            Objects.equals(this.url, news.url) &&
-            Objects.equals(this.created, news.created) &&
-            Objects.equals(this.subChannel, news.subChannel) &&
-            Objects.equals(this.channel, news.channel) &&
+        Objects.equals(this.title, news.title) &&
+        Objects.equals(this.url, news.url) &&
+        Objects.equals(this.created, news.created) &&
+        Objects.equals(this.subChannel, news.subChannel) &&
+        Objects.equals(this.channel, news.channel) &&
         Objects.equals(this.sentiment, news.sentiment);
   }
 

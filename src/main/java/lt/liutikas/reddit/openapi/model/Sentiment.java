@@ -1,17 +1,24 @@
 package lt.liutikas.reddit.openapi.model;
 
+import java.net.URI;
+import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import lt.liutikas.reddit.openapi.model.SentimentType;
+import java.time.OffsetDateTime;
+import javax.validation.Valid;
+import javax.validation.constraints.*;
 import io.swagger.v3.oas.annotations.media.Schema;
 
+
+import java.util.*;
 import javax.annotation.Generated;
-import javax.validation.Valid;
-import java.util.Objects;
 
 /**
  * Sentiment
  */
 
-@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2022-06-22T09:28:58.061353200+03:00[Europe/Vilnius]")
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2022-06-22T17:31:34.079492+03:00[Europe/Vilnius]")
 public class Sentiment {
 
   @JsonProperty("id")
@@ -36,10 +43,9 @@ public class Sentiment {
 
   /**
    * Get id
-   *
    * @return id
-   */
-
+  */
+  
   @Schema(name = "id", required = false)
   public Long getId() {
     return id;
@@ -56,10 +62,9 @@ public class Sentiment {
 
   /**
    * Get sentiment
-   *
    * @return sentiment
-   */
-  @Valid
+  */
+  @Valid 
   @Schema(name = "sentiment", required = false)
   public SentimentType getSentiment() {
     return sentiment;
@@ -76,10 +81,9 @@ public class Sentiment {
 
   /**
    * Get scoreNegative
-   *
    * @return scoreNegative
-   */
-
+  */
+  
   @Schema(name = "scoreNegative", required = false)
   public Double getScoreNegative() {
     return scoreNegative;
@@ -96,10 +100,9 @@ public class Sentiment {
 
   /**
    * Get scorePositive
-   *
    * @return scorePositive
-   */
-
+  */
+  
   @Schema(name = "scorePositive", required = false)
   public Double getScorePositive() {
     return scorePositive;
@@ -116,10 +119,9 @@ public class Sentiment {
 
   /**
    * Get scoreNeutral
-   *
    * @return scoreNeutral
-   */
-
+  */
+  
   @Schema(name = "scoreNeutral", required = false)
   public Double getScoreNeutral() {
     return scoreNeutral;
@@ -139,9 +141,9 @@ public class Sentiment {
     }
     Sentiment sentiment = (Sentiment) o;
     return Objects.equals(this.id, sentiment.id) &&
-            Objects.equals(this.sentiment, sentiment.sentiment) &&
-            Objects.equals(this.scoreNegative, sentiment.scoreNegative) &&
-            Objects.equals(this.scorePositive, sentiment.scorePositive) &&
+        Objects.equals(this.sentiment, sentiment.sentiment) &&
+        Objects.equals(this.scoreNegative, sentiment.scoreNegative) &&
+        Objects.equals(this.scorePositive, sentiment.scorePositive) &&
         Objects.equals(this.scoreNeutral, sentiment.scoreNeutral);
   }
 
