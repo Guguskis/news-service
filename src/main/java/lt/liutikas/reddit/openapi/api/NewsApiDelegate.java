@@ -38,7 +38,7 @@ public interface NewsApiDelegate {
         getRequest().ifPresent(request -> {
             for (MediaType mediaType: MediaType.parseMediaTypes(request.getHeader("Accept"))) {
                 if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {
-                    String exampleString = "{ \"sentiment\" : { \"scorePositive\" : 5.637376656633329, \"scoreNeutral\" : 2.3021358869347655, \"scoreNegative\" : 5.962133916683182, \"id\" : 1 }, \"created\" : \"2000-01-23T04:56:07.000+00:00\", \"subChannel\" : \"subChannel\", \"id\" : 6, \"title\" : \"title\", \"url\" : \"url\" }";
+                    String exampleString = "{ \"sentiment\" : { \"scorePositive\" : 5.637376656633329, \"scoreNeutral\" : 2.3021358869347655, \"scoreNegative\" : 5.962133916683182, \"id\" : 1 }, \"created\" : \"2022-06-22T16:19:35Z\", \"subChannel\" : \"subChannel\", \"id\" : 6, \"title\" : \"title\", \"url\" : \"url\" }";
                     ApiUtil.setExampleResponse(request, "application/json", exampleString);
                     break;
                 }
@@ -60,7 +60,7 @@ public interface NewsApiDelegate {
         getRequest().ifPresent(request -> {
             for (MediaType mediaType: MediaType.parseMediaTypes(request.getHeader("Accept"))) {
                 if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {
-                    String exampleString = "{ \"sentiment\" : { \"scorePositive\" : 5.637376656633329, \"scoreNeutral\" : 2.3021358869347655, \"scoreNegative\" : 5.962133916683182, \"id\" : 1 }, \"created\" : \"2000-01-23T04:56:07.000+00:00\", \"subChannel\" : \"subChannel\", \"id\" : 6, \"title\" : \"title\", \"url\" : \"url\" }";
+                    String exampleString = "{ \"sentiment\" : { \"scorePositive\" : 5.637376656633329, \"scoreNeutral\" : 2.3021358869347655, \"scoreNegative\" : 5.962133916683182, \"id\" : 1 }, \"created\" : \"2022-06-22T16:19:35Z\", \"subChannel\" : \"subChannel\", \"id\" : 6, \"title\" : \"title\", \"url\" : \"url\" }";
                     ApiUtil.setExampleResponse(request, "application/json", exampleString);
                     break;
                 }
@@ -85,7 +85,7 @@ public interface NewsApiDelegate {
         getRequest().ifPresent(request -> {
             for (MediaType mediaType: MediaType.parseMediaTypes(request.getHeader("Accept"))) {
                 if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {
-                    String exampleString = "{ \"news\" : [ { \"sentiment\" : { \"scorePositive\" : 5.637376656633329, \"scoreNeutral\" : 2.3021358869347655, \"scoreNegative\" : 5.962133916683182, \"id\" : 1 }, \"created\" : \"2000-01-23T04:56:07.000+00:00\", \"subChannel\" : \"subChannel\", \"id\" : 6, \"title\" : \"title\", \"url\" : \"url\" }, { \"sentiment\" : { \"scorePositive\" : 5.637376656633329, \"scoreNeutral\" : 2.3021358869347655, \"scoreNegative\" : 5.962133916683182, \"id\" : 1 }, \"created\" : \"2000-01-23T04:56:07.000+00:00\", \"subChannel\" : \"subChannel\", \"id\" : 6, \"title\" : \"title\", \"url\" : \"url\" } ], \"nextPageToken\" : 0 }";
+                    String exampleString = "{ \"news\" : [ { \"sentiment\" : { \"scorePositive\" : 5.637376656633329, \"scoreNeutral\" : 2.3021358869347655, \"scoreNegative\" : 5.962133916683182, \"id\" : 1 }, \"created\" : \"2022-06-22T16:19:35Z\", \"subChannel\" : \"subChannel\", \"id\" : 6, \"title\" : \"title\", \"url\" : \"url\" }, { \"sentiment\" : { \"scorePositive\" : 5.637376656633329, \"scoreNeutral\" : 2.3021358869347655, \"scoreNegative\" : 5.962133916683182, \"id\" : 1 }, \"created\" : \"2022-06-22T16:19:35Z\", \"subChannel\" : \"subChannel\", \"id\" : 6, \"title\" : \"title\", \"url\" : \"url\" } ], \"nextPageToken\" : 0 }";
                     ApiUtil.setExampleResponse(request, "application/json", exampleString);
                     break;
                 }
@@ -112,7 +112,7 @@ public interface NewsApiDelegate {
         getRequest().ifPresent(request -> {
             for (MediaType mediaType: MediaType.parseMediaTypes(request.getHeader("Accept"))) {
                 if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {
-                    String exampleString = "{ \"news\" : [ { \"sentiment\" : { \"scorePositive\" : 5.637376656633329, \"scoreNeutral\" : 2.3021358869347655, \"scoreNegative\" : 5.962133916683182, \"id\" : 1 }, \"created\" : \"2000-01-23T04:56:07.000+00:00\", \"subChannel\" : \"subChannel\", \"id\" : 6, \"title\" : \"title\", \"url\" : \"url\" }, { \"sentiment\" : { \"scorePositive\" : 5.637376656633329, \"scoreNeutral\" : 2.3021358869347655, \"scoreNegative\" : 5.962133916683182, \"id\" : 1 }, \"created\" : \"2000-01-23T04:56:07.000+00:00\", \"subChannel\" : \"subChannel\", \"id\" : 6, \"title\" : \"title\", \"url\" : \"url\" } ], \"nextPageToken\" : 0 }";
+                    String exampleString = "{ \"news\" : [ { \"sentiment\" : { \"scorePositive\" : 5.637376656633329, \"scoreNeutral\" : 2.3021358869347655, \"scoreNegative\" : 5.962133916683182, \"id\" : 1 }, \"created\" : \"2022-06-22T16:19:35Z\", \"subChannel\" : \"subChannel\", \"id\" : 6, \"title\" : \"title\", \"url\" : \"url\" }, { \"sentiment\" : { \"scorePositive\" : 5.637376656633329, \"scoreNeutral\" : 2.3021358869347655, \"scoreNegative\" : 5.962133916683182, \"id\" : 1 }, \"created\" : \"2022-06-22T16:19:35Z\", \"subChannel\" : \"subChannel\", \"id\" : 6, \"title\" : \"title\", \"url\" : \"url\" } ], \"nextPageToken\" : 0 }";
                     ApiUtil.setExampleResponse(request, "application/json", exampleString);
                     break;
                 }

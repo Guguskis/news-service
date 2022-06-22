@@ -112,8 +112,8 @@ public class News {
    * Get created
    * @return created
   */
-  @Valid 
-  @Schema(name = "created", required = false)
+  @Valid @Pattern(regexp = "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}Z$") 
+  @Schema(name = "created", example = "2022-06-22T16:19:35Z", required = false)
   public OffsetDateTime getCreated() {
     return created;
   }
