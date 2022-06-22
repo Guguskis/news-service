@@ -77,9 +77,8 @@ components:
         id:
           type: integer
           format: int64
-        sentiment:
-          type: string
-          format: string # todo enum, rename to value
+        sentiment: # todo rename to value
+          $ref: '#/components/schemas/SentimentType'
         scoreNegative:
           type: number
           format: double
@@ -89,6 +88,14 @@ components:
         scoreNeutral:
           type: number
           format: double
+    SentimentType:
+      type: string
+      format: string
+      enum:
+        - POSITIVE
+        - NEGATIVE
+        - NEUTRAL
+        - MIXED
     NewsPage:
       properties:
         nextPageToken:

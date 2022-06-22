@@ -1,6 +1,8 @@
 package lt.liutikas.reddit.openapi.model;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonValue;
 import io.swagger.v3.oas.annotations.media.Schema;
 
 import javax.annotation.Generated;
@@ -10,21 +12,17 @@ import java.util.Objects;
  * Sentiment
  */
 
-@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2022-06-22T08:59:13.878442500+03:00[Europe/Vilnius]")
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2022-06-22T09:05:48.683327200+03:00[Europe/Vilnius]")
 public class Sentiment {
 
   @JsonProperty("id")
   private Long id;
-
   @JsonProperty("sentiment")
-  private String sentiment;
-
+  private SentimentEnum sentiment;
   @JsonProperty("scoreNegative")
   private Double scoreNegative;
-
   @JsonProperty("scorePositive")
   private Double scorePositive;
-
   @JsonProperty("scoreNeutral")
   private Double scoreNeutral;
 
@@ -48,7 +46,7 @@ public class Sentiment {
     this.id = id;
   }
 
-  public Sentiment sentiment(String sentiment) {
+  public Sentiment sentiment(SentimentEnum sentiment) {
     this.sentiment = sentiment;
     return this;
   }
@@ -60,11 +58,11 @@ public class Sentiment {
    */
 
   @Schema(name = "sentiment", required = false)
-  public String getSentiment() {
+  public SentimentEnum getSentiment() {
     return sentiment;
   }
 
-  public void setSentiment(String sentiment) {
+  public void setSentiment(SentimentEnum sentiment) {
     this.sentiment = sentiment;
   }
 
@@ -171,6 +169,45 @@ public class Sentiment {
       return "null";
     }
     return o.toString().replace("\n", "\n    ");
+  }
+
+  /**
+   * Gets or Sets sentiment
+   */
+  public enum SentimentEnum {
+    POSITIVE("POSITIVE"),
+
+    NEGATIVE("NEGATIVE"),
+
+    NEUTRAL("NEUTRAL"),
+
+    MIXED("MIXED");
+
+    private String value;
+
+    SentimentEnum(String value) {
+      this.value = value;
+    }
+
+    @JsonCreator
+    public static SentimentEnum fromValue(String value) {
+      for (SentimentEnum b : SentimentEnum.values()) {
+        if (b.value.equals(value)) {
+          return b;
+        }
+      }
+      throw new IllegalArgumentException("Unexpected value '" + value + "'");
+    }
+
+    @JsonValue
+    public String getValue() {
+      return value;
+    }
+
+    @Override
+    public String toString() {
+      return String.valueOf(value);
+    }
   }
 }
 
