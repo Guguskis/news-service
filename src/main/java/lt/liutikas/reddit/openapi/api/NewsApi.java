@@ -5,6 +5,8 @@
  */
 package lt.liutikas.reddit.openapi.api;
 
+import lt.liutikas.reddit.openapi.model.CreateNewsRequest;
+import lt.liutikas.reddit.openapi.model.News;
 import lt.liutikas.reddit.openapi.model.NewsPage;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -25,7 +27,7 @@ import java.util.List;
 import java.util.Map;
 import javax.annotation.Generated;
 
-@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2022-06-22T17:31:34.079492+03:00[Europe/Vilnius]")
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2022-06-22T18:39:11.618267800+03:00[Europe/Vilnius]")
 @Validated
 @Tag(name = "news", description = "the news API")
 public interface NewsApi {
@@ -33,6 +35,35 @@ public interface NewsApi {
     default NewsApiDelegate getDelegate() {
         return new NewsApiDelegate() {};
     }
+
+    /**
+     * POST /news : Create news
+     *
+     * @param createNewsRequest  (optional)
+     * @return News created (status code 201)
+     */
+    @Operation(
+        operationId = "createNews",
+        summary = "Create news",
+        tags = { "news" },
+        responses = {
+            @ApiResponse(responseCode = "201", description = "News created", content = {
+                @Content(mediaType = "application/json", schema = @Schema(implementation = News.class))
+            })
+        }
+    )
+    @RequestMapping(
+        method = RequestMethod.POST,
+        value = "/news",
+        produces = { "application/json" },
+        consumes = { "application/json" }
+    )
+    default ResponseEntity<News> createNews(
+        @Parameter(name = "CreateNewsRequest", description = "") @Valid @RequestBody(required = false) CreateNewsRequest createNewsRequest
+    ) {
+        return getDelegate().createNews(createNewsRequest);
+    }
+
 
     /**
      * GET /news : List all news

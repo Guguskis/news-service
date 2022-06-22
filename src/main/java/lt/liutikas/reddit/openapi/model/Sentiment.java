@@ -18,7 +18,7 @@ import javax.annotation.Generated;
  * Sentiment
  */
 
-@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2022-06-22T17:31:34.079492+03:00[Europe/Vilnius]")
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2022-06-22T18:39:11.618267800+03:00[Europe/Vilnius]")
 public class Sentiment {
 
   @JsonProperty("id")

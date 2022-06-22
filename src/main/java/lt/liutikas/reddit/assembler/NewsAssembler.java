@@ -32,7 +32,9 @@ public class NewsAssembler {
         openApiNews.setUrl(news.getUrl().toString());
         openApiNews.setCreated(OffsetDateTime.of(news.getCreated(), ZoneOffset.UTC));
         openApiNews.setChannel(lt.liutikas.reddit.openapi.model.Channel.fromValue(news.getChannel().name()));
-        openApiNews.setSentiment(assembleSentiment(news.getSentiment()));
+        if (news.getSentiment() != null) {
+            openApiNews.setSentiment(assembleSentiment(news.getSentiment()));
+        }
 
         return openApiNews;
     }

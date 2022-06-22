@@ -22,6 +22,28 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/NewsPage'
+    post:
+      summary: Create news
+      operationId: createNews
+      tags:
+        - news
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateNewsRequest'
+            examples:
+              createRedditNewsRequest:
+                $ref: '#/components/examples/CreateRedditNewsRequest'
+            # fixme - openapi-generator-maven-plugin results in [WARNING] Ignoring complex example on request body
+            # or springdoc-openapi-ui is faulty
+      responses:
+        201:
+          description: News created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/News'
 components:
   schemas:
     News:
@@ -83,6 +105,19 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/News'
+    CreateNewsRequest:
+      properties:
+        title:
+          type: string
+          format: string
+        url:
+          type: string
+          format: string
+        channel:
+          $ref: '#/components/schemas/Channel'
+        subChannel:
+          type: string
+          format: string
   parameters:
     pageToken:
       name: pageToken
@@ -114,3 +149,11 @@ components:
         default:
           - ukraine
           - lithuania
+  examples:
+    CreateRedditNewsRequest:
+      summary: Create reddit news for europe subreddit
+      value:
+        title: 'Lithuania hopes to boost cooperation with Taiwan: visiting vice minister'
+        url: 'https://www.reddit.com/r/europe/comments/gxzqjb/lithuania_hopes_to_boost_cooperation_with_taiwan/'
+        channel: 'REDDIT'
+        subChannel: 'europe'
