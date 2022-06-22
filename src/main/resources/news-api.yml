@@ -12,33 +12,9 @@ paths:
       tags:
         - news
       parameters:
-        - name: pageToken
-          in: query
-          description: Page token
-          required: false
-          schema:
-            type: integer
-            format: int32
-            default: 0
-        - name: pageSize
-          in: query
-          description: Page size
-          required: false
-          schema:
-            type: integer
-            format: int32
-            default: 10
-        - name: subChannels
-          in: query
-          description: Sub channels
-          required: true
-          schema:
-            type: array
-            items:
-              type: string
-            default:
-              - ukraine
-              - lithuania
+        - $ref: '#/components/parameters/pageToken'
+        - $ref: '#/components/parameters/pageSize'
+        - $ref: '#/components/parameters/subChannels'
       responses:
         200:
           description: A list of news
@@ -107,3 +83,34 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/News'
+  parameters:
+    pageToken:
+      name: pageToken
+      in: query
+      description: Page token
+      required: false
+      schema:
+        type: integer
+        format: int32
+        default: 0
+    pageSize:
+      name: pageSize
+      in: query
+      description: Page size
+      required: false
+      schema:
+        type: integer
+        format: int32
+        default: 20
+    subChannels:
+      name: subChannels
+      in: query
+      description: Sub channels
+      required: true
+      schema:
+        type: array
+        items:
+          type: string
+        default:
+          - ukraine
+          - lithuania
