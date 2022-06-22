@@ -27,7 +27,7 @@ import java.util.List;
 import java.util.Map;
 import javax.annotation.Generated;
 
-@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2022-06-22T18:39:11.618267800+03:00[Europe/Vilnius]")
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2022-06-22T18:45:20.919060700+03:00[Europe/Vilnius]")
 @Validated
 @Tag(name = "news", description = "the news API")
 public interface NewsApi {
@@ -62,6 +62,34 @@ public interface NewsApi {
         @Parameter(name = "CreateNewsRequest", description = "") @Valid @RequestBody(required = false) CreateNewsRequest createNewsRequest
     ) {
         return getDelegate().createNews(createNewsRequest);
+    }
+
+
+    /**
+     * GET /news/{id} : Get news by id
+     *
+     * @param id News id (required)
+     * @return News found (status code 200)
+     */
+    @Operation(
+        operationId = "getNewsById",
+        summary = "Get news by id",
+        tags = { "news" },
+        responses = {
+            @ApiResponse(responseCode = "200", description = "News found", content = {
+                @Content(mediaType = "application/json", schema = @Schema(implementation = News.class))
+            })
+        }
+    )
+    @RequestMapping(
+        method = RequestMethod.GET,
+        value = "/news/{id}",
+        produces = { "application/json" }
+    )
+    default ResponseEntity<News> getNewsById(
+        @Parameter(name = "id", description = "News id", required = true) @PathVariable("id") Long id
+    ) {
+        return getDelegate().getNewsById(id);
     }
 
 

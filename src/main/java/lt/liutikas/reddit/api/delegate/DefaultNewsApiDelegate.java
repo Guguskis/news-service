@@ -61,6 +61,14 @@ public class DefaultNewsApiDelegate implements NewsApiDelegate {
         return new ResponseEntity<>(openApiNews, HttpStatus.CREATED);
     }
 
+    @Override
+    public ResponseEntity<News> getNewsById(Long id) {
+        lt.liutikas.reddit.model.core.News news = newsService.getNews(id);
+        News openApiNews = newsAssembler.assembleNews(news);
+
+        return new ResponseEntity<>(openApiNews, HttpStatus.OK);
+    }
+
     private URL parseUrl(CreateNewsRequest createNewsRequest) {
         try {
             return new URL(createNewsRequest.getUrl());

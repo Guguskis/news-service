@@ -20,7 +20,7 @@ import javax.annotation.Generated;
  * NewsPage
  */
 
-@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2022-06-22T18:39:11.618267800+03:00[Europe/Vilnius]")
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2022-06-22T18:45:20.919060700+03:00[Europe/Vilnius]")
 public class NewsPage {
 
   @JsonProperty("nextPageToken")

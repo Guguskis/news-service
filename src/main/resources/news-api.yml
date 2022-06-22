@@ -44,6 +44,21 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/News'
+  /news/{id}:
+    get:
+      summary: Get news by id
+      operationId: getNewsById
+      tags:
+        - news
+      parameters:
+        - $ref: '#/components/parameters/id'
+      responses:
+        200:
+          description: News found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/News'
 components:
   schemas:
     News:
@@ -119,6 +134,14 @@ components:
           type: string
           format: string
   parameters:
+    id:
+      name: id
+      in: path
+      description: News id
+      required: true
+      schema:
+        type: integer
+        format: int64
     pageToken:
       name: pageToken
       in: query
