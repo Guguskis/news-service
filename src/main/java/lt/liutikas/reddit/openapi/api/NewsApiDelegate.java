@@ -20,7 +20,7 @@ import javax.annotation.Generated;
  * A delegate to be called by the {@link NewsApiController}}.
  * Implement this interface with a {@link org.springframework.stereotype.Service} annotated class.
  */
-@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2022-06-22T19:00:29.953433400+03:00[Europe/Vilnius]")
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen")
 public interface NewsApiDelegate {
 
     default Optional<NativeWebRequest> getRequest() {

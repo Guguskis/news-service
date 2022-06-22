@@ -18,7 +18,7 @@ import javax.annotation.Generated;
  * CreateNewsRequest
  */
 
-@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2022-06-22T19:00:29.953433400+03:00[Europe/Vilnius]")
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen")
 public class CreateNewsRequest {
 
   @JsonProperty("title")

@@ -188,6 +188,7 @@
                             <configOptions>
                                 <delegatePattern>true</delegatePattern>
                                 <openApiNullable>false</openApiNullable>
+                                <hideGenerationTimestamp>true</hideGenerationTimestamp>
                             </configOptions>
                         </configuration>
                     </execution>
