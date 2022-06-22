@@ -59,6 +59,12 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/News'
+        404:
+          description: News not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
 components:
   schemas:
     News:
@@ -131,6 +137,12 @@ components:
         channel:
           $ref: '#/components/schemas/Channel'
         subChannel:
+          type: string
+          format: string
+    Error:
+      type: object
+      properties:
+        message:
           type: string
           format: string
   parameters:

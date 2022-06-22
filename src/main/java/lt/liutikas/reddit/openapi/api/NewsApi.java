@@ -6,6 +6,7 @@
 package lt.liutikas.reddit.openapi.api;
 
 import lt.liutikas.reddit.openapi.model.CreateNewsRequest;
+import lt.liutikas.reddit.openapi.model.Error;
 import lt.liutikas.reddit.openapi.model.News;
 import lt.liutikas.reddit.openapi.model.NewsPage;
 import io.swagger.v3.oas.annotations.Operation;
@@ -27,7 +28,7 @@ import java.util.List;
 import java.util.Map;
 import javax.annotation.Generated;
 
-@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2022-06-22T18:45:20.919060700+03:00[Europe/Vilnius]")
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2022-06-22T18:48:18.912558600+03:00[Europe/Vilnius]")
 @Validated
 @Tag(name = "news", description = "the news API")
 public interface NewsApi {
@@ -70,6 +71,7 @@ public interface NewsApi {
      *
      * @param id News id (required)
      * @return News found (status code 200)
+     *         or News not found (status code 404)
      */
     @Operation(
         operationId = "getNewsById",
@@ -78,6 +80,9 @@ public interface NewsApi {
         responses = {
             @ApiResponse(responseCode = "200", description = "News found", content = {
                 @Content(mediaType = "application/json", schema = @Schema(implementation = News.class))
+            }),
+            @ApiResponse(responseCode = "404", description = "News not found", content = {
+                @Content(mediaType = "application/json", schema = @Schema(implementation = Error.class))
             })
         }
     )

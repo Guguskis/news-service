@@ -1,6 +1,7 @@
 package lt.liutikas.reddit.openapi.api;
 
 import lt.liutikas.reddit.openapi.model.CreateNewsRequest;
+import lt.liutikas.reddit.openapi.model.Error;
 import lt.liutikas.reddit.openapi.model.News;
 import lt.liutikas.reddit.openapi.model.NewsPage;
 import org.springframework.http.HttpStatus;
@@ -18,7 +19,7 @@ import javax.annotation.Generated;
  * A delegate to be called by the {@link NewsApiController}}.
  * Implement this interface with a {@link org.springframework.stereotype.Service} annotated class.
  */
-@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2022-06-22T18:45:20.919060700+03:00[Europe/Vilnius]")
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2022-06-22T18:48:18.912558600+03:00[Europe/Vilnius]")
 public interface NewsApiDelegate {
 
     default Optional<NativeWebRequest> getRequest() {
@@ -51,6 +52,7 @@ public interface NewsApiDelegate {
      *
      * @param id News id (required)
      * @return News found (status code 200)
+     *         or News not found (status code 404)
      * @see NewsApi#getNewsById
      */
     default ResponseEntity<News> getNewsById(Long id) {
