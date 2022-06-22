@@ -70,23 +70,25 @@ components:
           type: string
           format: string # todo enum
         sentiment:
-          type: object
-          properties:
-            id:
-              type: integer
-              format: int64
-            sentiment:
-              type: string
-              format: string # todo enum, rename to value
-            scoreNegative:
-              type: number
-              format: double
-            scorePositive:
-              type: number
-              format: double
-            scoreNeutral:
-              type: number
-              format: double
+          $ref: '#/components/schemas/Sentiment'
+    Sentiment:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        sentiment:
+          type: string
+          format: string # todo enum, rename to value
+        scoreNegative:
+          type: number
+          format: double
+        scorePositive:
+          type: number
+          format: double
+        scoreNeutral:
+          type: number
+          format: double
     NewsPage:
       properties:
         nextPageToken:

@@ -14,7 +14,7 @@ import java.util.Optional;
  * A delegate to be called by the {@link NewsApiController}}.
  * Implement this interface with a {@link org.springframework.stereotype.Service} annotated class.
  */
-@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2022-06-22T01:07:54.033581300+03:00[Europe/Vilnius]")
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2022-06-22T08:59:13.878442500+03:00[Europe/Vilnius]")
 public interface NewsApiDelegate {
 
     default Optional<NativeWebRequest> getRequest() {

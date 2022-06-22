@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import javax.annotation.Generated;
 import java.util.Optional;
 
-@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2022-06-22T01:07:54.033581300+03:00[Europe/Vilnius]")
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2022-06-22T08:59:13.878442500+03:00[Europe/Vilnius]")
 @Controller
 @RequestMapping("${openapi.news.base-path:/api/v1}")
 public class NewsApiController implements NewsApi {

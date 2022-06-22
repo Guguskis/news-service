@@ -13,7 +13,7 @@ import java.util.Objects;
  * News
  */
 
-@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2022-06-22T01:07:54.033581300+03:00[Europe/Vilnius]")
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2022-06-22T08:59:13.878442500+03:00[Europe/Vilnius]")
 public class News {
 
   @JsonProperty("id")
@@ -36,7 +36,7 @@ public class News {
   private String channel;
 
   @JsonProperty("sentiment")
-  private NewsSentiment sentiment;
+  private Sentiment sentiment;
 
   public News id(Long id) {
     this.id = id;
@@ -158,7 +158,7 @@ public class News {
     this.channel = channel;
   }
 
-  public News sentiment(NewsSentiment sentiment) {
+  public News sentiment(Sentiment sentiment) {
     this.sentiment = sentiment;
     return this;
   }
@@ -170,11 +170,11 @@ public class News {
    */
   @Valid
   @Schema(name = "sentiment", required = false)
-  public NewsSentiment getSentiment() {
+  public Sentiment getSentiment() {
     return sentiment;
   }
 
-  public void setSentiment(NewsSentiment sentiment) {
+  public void setSentiment(Sentiment sentiment) {
     this.sentiment = sentiment;
   }
 

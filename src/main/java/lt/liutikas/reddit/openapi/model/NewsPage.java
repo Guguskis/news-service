@@ -13,101 +13,101 @@ import java.util.Objects;
  * NewsPage
  */
 
-@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2022-06-22T01:07:54.033581300+03:00[Europe/Vilnius]")
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2022-06-22T08:59:13.878442500+03:00[Europe/Vilnius]")
 public class NewsPage {
 
-    @JsonProperty("nextPageToken")
-    private Integer nextPageToken;
+  @JsonProperty("nextPageToken")
+  private Integer nextPageToken;
 
-    @JsonProperty("news")
-    @Valid
-    private List<News> news = null;
+  @JsonProperty("news")
+  @Valid
+  private List<News> news = null;
 
-    public NewsPage nextPageToken(Integer nextPageToken) {
-        this.nextPageToken = nextPageToken;
-        return this;
+  public NewsPage nextPageToken(Integer nextPageToken) {
+    this.nextPageToken = nextPageToken;
+    return this;
+  }
+
+  /**
+   * Get nextPageToken
+   *
+   * @return nextPageToken
+   */
+
+  @Schema(name = "nextPageToken", required = false)
+  public Integer getNextPageToken() {
+    return nextPageToken;
+  }
+
+  public void setNextPageToken(Integer nextPageToken) {
+    this.nextPageToken = nextPageToken;
+  }
+
+  public NewsPage news(List<News> news) {
+    this.news = news;
+    return this;
+  }
+
+  public NewsPage addNewsItem(News newsItem) {
+    if (this.news == null) {
+      this.news = new ArrayList<>();
     }
+    this.news.add(newsItem);
+    return this;
+  }
 
-    /**
-     * Get nextPageToken
-     *
-     * @return nextPageToken
-     */
+  /**
+   * Get news
+   *
+   * @return news
+   */
+  @Valid
+  @Schema(name = "news", required = false)
+  public List<News> getNews() {
+    return news;
+  }
 
-    @Schema(name = "nextPageToken", required = false)
-    public Integer getNextPageToken() {
-        return nextPageToken;
+  public void setNews(List<News> news) {
+    this.news = news;
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) {
+      return true;
     }
-
-    public void setNextPageToken(Integer nextPageToken) {
-        this.nextPageToken = nextPageToken;
+    if (o == null || getClass() != o.getClass()) {
+      return false;
     }
+    NewsPage newsPage = (NewsPage) o;
+    return Objects.equals(this.nextPageToken, newsPage.nextPageToken) &&
+            Objects.equals(this.news, newsPage.news);
+  }
 
-    public NewsPage news(List<News> news) {
-        this.news = news;
-        return this;
-    }
+  @Override
+  public int hashCode() {
+    return Objects.hash(nextPageToken, news);
+  }
 
-    public NewsPage addNewsItem(News newsItem) {
-        if (this.news == null) {
-            this.news = new ArrayList<>();
-        }
-        this.news.add(newsItem);
-        return this;
-    }
+  @Override
+  public String toString() {
+    StringBuilder sb = new StringBuilder();
+    sb.append("class NewsPage {\n");
+    sb.append("    nextPageToken: ").append(toIndentedString(nextPageToken)).append("\n");
+    sb.append("    news: ").append(toIndentedString(news)).append("\n");
+    sb.append("}");
+    return sb.toString();
+  }
 
-    /**
-     * Get news
-     *
-     * @return news
-     */
-    @Valid
-    @Schema(name = "news", required = false)
-    public List<News> getNews() {
-        return news;
+  /**
+   * Convert the given object to string with each line indented by 4 spaces
+   * (except the first line).
+   */
+  private String toIndentedString(Object o) {
+    if (o == null) {
+      return "null";
     }
-
-    public void setNews(List<News> news) {
-        this.news = news;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (o == null || getClass() != o.getClass()) {
-            return false;
-        }
-        NewsPage newsPage = (NewsPage) o;
-        return Objects.equals(this.nextPageToken, newsPage.nextPageToken) &&
-                Objects.equals(this.news, newsPage.news);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(nextPageToken, news);
-    }
-
-    @Override
-    public String toString() {
-        StringBuilder sb = new StringBuilder();
-        sb.append("class NewsPage {\n");
-        sb.append("    nextPageToken: ").append(toIndentedString(nextPageToken)).append("\n");
-        sb.append("    news: ").append(toIndentedString(news)).append("\n");
-        sb.append("}");
-        return sb.toString();
-    }
-
-    /**
-     * Convert the given object to string with each line indented by 4 spaces
-     * (except the first line).
-     */
-    private String toIndentedString(Object o) {
-        if (o == null) {
-            return "null";
-        }
-        return o.toString().replace("\n", "\n    ");
-    }
+    return o.toString().replace("\n", "\n    ");
+  }
 }
 
