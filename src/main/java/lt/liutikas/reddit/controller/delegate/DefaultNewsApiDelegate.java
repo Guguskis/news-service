@@ -1,4 +1,4 @@
-package lt.liutikas.reddit.api.delegate;
+package lt.liutikas.reddit.controller.delegate;
 
 import lt.liutikas.reddit.api.model.GetNewsRequest;
 import lt.liutikas.reddit.api.model.NewsPage;
