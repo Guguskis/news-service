@@ -6,6 +6,7 @@ import lt.liutikas.reddit.model.core.News;
 import lt.liutikas.reddit.model.twitter.Tweet;
 import lt.liutikas.reddit.openapi.model.Sentiment;
 import org.apache.commons.lang3.NotImplementedException;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
 import some.developer.reddit.client.model.Submission;
 
@@ -13,6 +14,7 @@ import java.time.Clock;
 import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
+import java.util.stream.Collectors;
 
 @Component
 public class NewsAssembler {
@@ -96,5 +98,13 @@ public class NewsAssembler {
         }
 
         return news;
+    }
+
+    public lt.liutikas.reddit.openapi.model.NewsPage assembleNewsPage(Page<News> page) {
+        lt.liutikas.reddit.openapi.model.NewsPage newsPage = new lt.liutikas.reddit.openapi.model.NewsPage();
+        newsPage.setNews(page.getContent().stream().map(this::assembleNews).collect(Collectors.toList()));
+        if (page.nextPageable().isPaged())
+            newsPage.setNextPageToken(page.nextPageable().getPageNumber());
+        return newsPage;
     }
 }

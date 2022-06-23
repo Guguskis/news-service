@@ -34,11 +34,8 @@ public class DefaultNewsApiDelegate implements NewsApiDelegate {
                                                                               Integer pageToken,
                                                                               Integer pageSize) {
         GetNewsRequest request = new GetNewsRequest(subChannels, pageToken, pageSize);
-        NewsPage newsPage = newsService.getNews(request);
-
-        lt.liutikas.reddit.openapi.model.NewsPage openApiNewsPage = getOpenApiNewsPage(newsPage);
-
-        return new ResponseEntity<>(openApiNewsPage, HttpStatus.OK);
+        lt.liutikas.reddit.openapi.model.NewsPage newsPage = newsService.listNews(request);
+        return new ResponseEntity<>(newsPage, HttpStatus.OK);
     }
 
     @Override
@@ -57,7 +54,7 @@ public class DefaultNewsApiDelegate implements NewsApiDelegate {
 
     @Override
     public ResponseEntity<News> getNewsById(Long id) {
-        lt.liutikas.reddit.model.core.News news = newsService.getNews(id);
+        lt.liutikas.reddit.model.core.News news = newsService.listNews(id);
         News openApiNews = newsAssembler.assembleNews(news);
 
         return new ResponseEntity<>(openApiNews, HttpStatus.OK);
@@ -71,7 +68,7 @@ public class DefaultNewsApiDelegate implements NewsApiDelegate {
         GetNewsRequest request = new GetNewsRequest(subChannels, pageToken, pageSize);
         Channel coreChannel = Channel.valueOf(channel.getValue());
 
-        NewsPage newsPage = newsService.getNews(coreChannel, request);
+        NewsPage newsPage = newsService.listNews(coreChannel, request);
 
         lt.liutikas.reddit.openapi.model.NewsPage openApiNewsPage = getOpenApiNewsPage(newsPage);
 

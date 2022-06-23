@@ -35,7 +35,7 @@ public class NewsService {
         this.newsAssembler = newsAssembler;
     }
 
-    public News getNews(Long id) {
+    public News listNews(Long id) {
         Optional<News> optional = newsRepository.findById(id);
 
         if (optional.isEmpty())
@@ -44,22 +44,18 @@ public class NewsService {
         return optional.get();
     }
 
-    public NewsPage getNews(GetNewsRequest request) {
+    public lt.liutikas.reddit.openapi.model.NewsPage listNews(GetNewsRequest request) {
         PageRequest pageRequest = getPageRequestByCreatedDesc(request);
         List<String> subChannels = request.getSubChannels();
 
         Page<News> page = findNews(pageRequest, subChannels);
 
-        NewsPage newsPage = new NewsPage();
-        newsPage.setNews(page.getContent());
-        newsPage.setNextToken(page.nextPageable());
-
         LOG.info("Returning news { 'pageToken': {}, 'pageSize': {} }", pageRequest.getPageNumber(), request.getPageSize());
 
-        return newsPage;
+        return newsAssembler.assembleNewsPage(page);
     }
 
-    public NewsPage getNews(Channel channel, GetNewsRequest request) {
+    public NewsPage listNews(Channel channel, GetNewsRequest request) {
         PageRequest pageRequest = getPageRequestByCreatedDesc(request);
         List<String> subChannels = request.getSubChannels();
         Page<News> page = findNews(channel, subChannels, pageRequest);
