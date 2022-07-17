@@ -113,6 +113,21 @@
             <artifactId>jackson-databind-nullable</artifactId>
             <version>0.2.2</version>
         </dependency>
+
+        <!-- ONE-PUNCH-MAN START -->
+        <dependency>
+            <groupId>org.javacord</groupId>
+            <artifactId>javacord</artifactId>
+            <version>3.4.0</version>
+            <type>pom</type>
+        </dependency>
+        <dependency>
+            <groupId>com.squareup.okio</groupId>
+            <artifactId>okio</artifactId>
+            <version>2.8.0</version>
+        </dependency>
+
+        <!-- ONE-PUNCH-MAN  END -->
     </dependencies>
 
     <dependencyManagement>

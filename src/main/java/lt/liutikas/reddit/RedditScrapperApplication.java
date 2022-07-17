@@ -7,7 +7,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 
 @SpringBootApplication
 @EnableScheduling
-@ComponentScan(basePackages = {"lt.liutikas.reddit", "some.developer.reddit"})
+@ComponentScan(basePackages = {"lt.liutikas", "some.developer"})
 public class RedditScrapperApplication {
 
     public static void main(String[] args) {
