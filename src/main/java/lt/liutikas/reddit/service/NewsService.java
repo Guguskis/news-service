@@ -2,12 +2,12 @@ package lt.liutikas.reddit.service;
 
 import lt.liutikas.reddit.api.model.GetNewsRequest;
 import lt.liutikas.reddit.api.model.NewsPage;
-import lt.liutikas.reddit.api.model.SaveNewsRequest;
 import lt.liutikas.reddit.assembler.NewsAssembler;
 import lt.liutikas.reddit.config.exception.NotFoundException;
 import lt.liutikas.reddit.event.EventPublisher;
 import lt.liutikas.reddit.model.core.Channel;
 import lt.liutikas.reddit.model.core.News;
+import lt.liutikas.reddit.openapi.model.CreateNewsRequest;
 import lt.liutikas.reddit.repository.NewsRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -91,14 +91,15 @@ public class NewsService {
         return pageRequest.withSort(sort);
     }
 
-    public News saveNews(SaveNewsRequest request) {
-        News news = newsAssembler.assembleNews(request);
+    public lt.liutikas.reddit.openapi.model.News createNews(CreateNewsRequest createNewsRequest) {
+        News news = newsAssembler.assembleNews(createNewsRequest);
         news = newsRepository.save(news);
 
         LOG.info("Saved news { \"id\": {} }", news.getId());
 
         eventPublisher.publishSavedNewsEvent(Arrays.asList(news));
 
-        return news;
+        return newsAssembler.assembleNews(news);
     }
+
 }

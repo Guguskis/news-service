@@ -4,12 +4,15 @@ import lt.liutikas.reddit.api.model.SaveNewsRequest;
 import lt.liutikas.reddit.model.core.Channel;
 import lt.liutikas.reddit.model.core.News;
 import lt.liutikas.reddit.model.twitter.Tweet;
+import lt.liutikas.reddit.openapi.model.CreateNewsRequest;
 import lt.liutikas.reddit.openapi.model.Sentiment;
 import org.apache.commons.lang3.NotImplementedException;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
 import some.developer.reddit.client.model.Submission;
 
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.time.Clock;
 import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
@@ -106,5 +109,25 @@ public class NewsAssembler {
         if (page.nextPageable().isPaged())
             newsPage.setNextPageToken(page.nextPageable().getPageNumber());
         return newsPage;
+    }
+
+    public News assembleNews(CreateNewsRequest request) {
+        News news = new News();
+
+        news.setSubChannel(request.getSubChannel());
+        news.setTitle(request.getTitle());
+        news.setCreated(LocalDateTime.now(clock));
+        news.setChannel(Channel.valueOf(request.getChannel().getValue()));
+        news.setUrl(parseUrl(request));
+
+        return news;
+    }
+
+    private URL parseUrl(CreateNewsRequest createNewsRequest) {
+        try {
+            return new URL(createNewsRequest.getUrl());
+        } catch (MalformedURLException e) {
+            throw new IllegalArgumentException(String.format("\"%s\" is not a valid url", createNewsRequest.getUrl()), e);
+        }
     }
 }
