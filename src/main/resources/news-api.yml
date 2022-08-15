@@ -211,6 +211,9 @@ components:
           type: string
         default:
           - europe
+          - ukraine
+          - combatFootage
+          - lithuania
   examples:
     CreateRedditNewsRequest:
       summary: Create reddit news for europe subreddit

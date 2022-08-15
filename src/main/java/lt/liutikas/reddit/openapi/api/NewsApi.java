@@ -123,7 +123,7 @@ public interface NewsApi {
         produces = { "application/json" }
     )
     default ResponseEntity<NewsPage> listNews(
-        @NotNull @Parameter(name = "subChannels", description = "Sub channels", required = true) @Valid @RequestParam(value = "subChannels", required = true, defaultValue = "europe") List<String> subChannels,
+        @NotNull @Parameter(name = "subChannels", description = "Sub channels", required = true) @Valid @RequestParam(value = "subChannels", required = true, defaultValue = "europe,ukraine,combatFootage,lithuania") List<String> subChannels,
         @Parameter(name = "pageToken", description = "Page token") @Valid @RequestParam(value = "pageToken", required = false, defaultValue = "0") Integer pageToken,
         @Parameter(name = "pageSize", description = "Page size") @Valid @RequestParam(value = "pageSize", required = false, defaultValue = "20") Integer pageSize
     ) {
@@ -156,7 +156,7 @@ public interface NewsApi {
         produces = { "application/json" }
     )
     default ResponseEntity<NewsPage> listNewsByChannel(
-        @NotNull @Parameter(name = "subChannels", description = "Sub channels", required = true) @Valid @RequestParam(value = "subChannels", required = true, defaultValue = "europe") List<String> subChannels,
+        @NotNull @Parameter(name = "subChannels", description = "Sub channels", required = true) @Valid @RequestParam(value = "subChannels", required = true, defaultValue = "europe,ukraine,combatFootage,lithuania") List<String> subChannels,
         @Parameter(name = "channel", description = "Channel") @Valid @RequestParam(value = "channel", required = false) Channel channel,
         @Parameter(name = "pageToken", description = "Page token") @Valid @RequestParam(value = "pageToken", required = false, defaultValue = "0") Integer pageToken,
         @Parameter(name = "pageSize", description = "Page size") @Valid @RequestParam(value = "pageSize", required = false, defaultValue = "20") Integer pageSize
