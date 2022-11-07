@@ -5,11 +5,11 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 @Service
-public class ScanNewsScheduler {
+public class ScanScheduler {
 
     private final ScanNewsUseCase scanNewsUseCase;
 
-    public ScanNewsScheduler(ScanNewsUseCase scanNewsUseCase) {
+    public ScanScheduler(ScanNewsUseCase scanNewsUseCase) {
         this.scanNewsUseCase = scanNewsUseCase;
     }
 

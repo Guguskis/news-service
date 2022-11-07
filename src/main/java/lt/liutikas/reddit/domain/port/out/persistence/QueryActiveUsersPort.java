@@ -1,4 +1,4 @@
-package lt.liutikas.reddit.domain.port.out.queryactiveusers;
+package lt.liutikas.reddit.domain.port.out.persistence;
 
 import lt.liutikas.reddit.domain.entity.core.User;
 

@@ -3,9 +3,10 @@ package lt.liutikas.reddit.domain.usecase.scannews;
 import lt.liutikas.reddit.assembler.ScanAssembler;
 import lt.liutikas.reddit.domain.entity.core.News;
 import lt.liutikas.reddit.domain.entity.scan.ScanResult;
-import lt.liutikas.reddit.event.EventPublisher;
-import lt.liutikas.reddit.repository.NewsRepository;
-import lt.liutikas.reddit.repository.ScanResultRepository;
+import lt.liutikas.reddit.domain.port.in.CreateScanResultPort;
+import lt.liutikas.reddit.domain.port.out.persistence.CreateNewsPort;
+import lt.liutikas.reddit.domain.port.out.persistence.QueryScanResultPort;
+import lt.liutikas.reddit.event.NewsPublisher;
 import lt.liutikas.reddit.source.NewsSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,18 +21,21 @@ public class ScanNewsUseCase {
 
     private static final Logger LOG = LoggerFactory.getLogger(ScanNewsUseCase.class);
 
-    private final ScanResultRepository scanResultRepository;
-    private final NewsRepository newsRepository;
-    private final EventPublisher eventPublisher;
+    private final QueryScanResultPort queryScanResultPort;
+    private final CreateScanResultPort createScanResultPort;
+    private final CreateNewsPort createNewsPort;
     private final ScanAssembler scanAssembler;
+
+    private final NewsPublisher newsPublisher;
     private final List<NewsSource> newsSources;
 
-    public ScanNewsUseCase(ScanResultRepository scanResultRepository, NewsRepository newsRepository, EventPublisher eventPublisher, ScanAssembler scanAssembler, List<NewsSource> newsSources) {
-        this.scanResultRepository = scanResultRepository;
-        this.newsRepository = newsRepository;
-        this.eventPublisher = eventPublisher;
+    public ScanNewsUseCase(QueryScanResultPort queryScanResultPort, CreateScanResultPort createScanResultPort, NewsPublisher newsPublisher, ScanAssembler scanAssembler, List<NewsSource> newsSources, CreateNewsPort createNewsPort) {
+        this.queryScanResultPort = queryScanResultPort;
+        this.createScanResultPort = createScanResultPort;
+        this.newsPublisher = newsPublisher;
         this.scanAssembler = scanAssembler;
         this.newsSources = newsSources;
+        this.createNewsPort = createNewsPort;
     }
 
     public void scanNews() {
@@ -44,7 +48,7 @@ public class ScanNewsUseCase {
         LOG.info("Scanning news done { \"scanResults\": {} }", scanResults.size());
 
         if (!news.isEmpty())
-            eventPublisher.publishSavedNewsEvent(news);
+            newsPublisher.publishNews(news);
     }
 
     private List<News> getNotScannedNews() {
@@ -62,7 +66,7 @@ public class ScanNewsUseCase {
     }
 
     private boolean notScanned(News news) {
-        return scanResultRepository.findById(news.getUrl()).stream()
+        return queryScanResultPort.findById(news.getUrl()).stream()
                 .findFirst()
                 .isEmpty();
     }
@@ -70,14 +74,14 @@ public class ScanNewsUseCase {
     private List<News> saveNews(List<News> notScannedNews) {
         return notScannedNews.stream()
                 .sorted(Comparator.comparing(News::getCreated))
-                .map(newsRepository::save)
+                .map(createNewsPort::create)
                 .collect(Collectors.toList());
     }
 
     private List<ScanResult> saveScanResults(List<News> news) {
         return news.stream()
                 .map(scanAssembler::assembleScanResult)
-                .map(scanResultRepository::save)
+                .map(createScanResultPort::create)
                 .collect(Collectors.toList());
     }
 

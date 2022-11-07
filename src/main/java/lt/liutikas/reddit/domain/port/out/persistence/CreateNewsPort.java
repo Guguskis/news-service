@@ -5,6 +5,8 @@ import lt.liutikas.reddit.domain.entity.core.News;
 
 public interface CreateNewsPort {
 
-    News createNews(SaveNewsRequest request);
+    News create(SaveNewsRequest request);
+
+    News create(News news);
 
 }
