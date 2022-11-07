@@ -4,7 +4,6 @@ import lt.liutikas.reddit.api.model.SubscriptionAction;
 import lt.liutikas.reddit.domain.entity.core.Channel;
 import lt.liutikas.reddit.domain.entity.core.News;
 import lt.liutikas.reddit.domain.entity.core.Subscription;
-import lt.liutikas.reddit.domain.entity.core.User;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -18,8 +17,8 @@ public class NewsSubscriptionRegistry {
 
     private final Map<String, List<Subscription>> subscriptions = new HashMap<>();
 
-    public boolean isSubscribed(User user, News news) {
-        List<String> userSubChannels = getSubChannels(user.getSessionId(), news.getChannel());
+    public boolean isSubscribed(String sessionId, News news) {
+        List<String> userSubChannels = getSubChannels(sessionId, news.getChannel());
         return userSubChannels.contains(news.getSubChannel());
     }
 

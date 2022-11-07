@@ -42,7 +42,7 @@ public class QueryNewsController {
     // TODO move to separate controller?
     @PostMapping
     public News saveNews(@RequestBody SaveNewsRequest news) {
-        return createNewsUseCase.create(news);
+        return createNewsUseCase.createNews(news);
     }
 
 }

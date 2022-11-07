@@ -5,6 +5,7 @@ import lt.liutikas.reddit.api.model.NewsPage;
 import lt.liutikas.reddit.config.exception.NotFoundException;
 import lt.liutikas.reddit.domain.entity.core.Channel;
 import lt.liutikas.reddit.domain.entity.core.News;
+import lt.liutikas.reddit.domain.port.in.CreateNewsPort;
 import lt.liutikas.reddit.domain.port.out.persistence.QueryNewsPort;
 import lt.liutikas.reddit.repository.NewsRepository;
 import org.slf4j.Logger;
@@ -18,7 +19,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class NewsPersistenceAdapter implements QueryNewsPort {
+public class NewsPersistenceAdapter implements QueryNewsPort, CreateNewsPort {
 
     private static final Logger LOG = LoggerFactory.getLogger(NewsPersistenceAdapter.class);
 
@@ -70,6 +71,10 @@ public class NewsPersistenceAdapter implements QueryNewsPort {
         return newsPage;
     }
 
+    @Override
+    public News create(News news) {
+        return newsRepository.save(news);
+    }
 
     Page<News> findNews(PageRequest pageRequest, List<String> subChannels) {
         if (subChannels.isEmpty()) {
@@ -93,5 +98,4 @@ public class NewsPersistenceAdapter implements QueryNewsPort {
         Sort sort = Sort.by("created").descending();
         return pageRequest.withSort(sort);
     }
-
 }
