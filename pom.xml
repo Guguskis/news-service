@@ -17,7 +17,6 @@
     <properties>
         <java.version>11</java.version>
         <spring-framework-bom.version>5.3.16</spring-framework-bom.version>
-        <azure-sdk-bom.version>1.2.1</azure-sdk-bom.version>
     </properties>
 
     <dependencies>
@@ -109,10 +108,6 @@
             <version>5.8.1</version>
             <scope>test</scope>
         </dependency>
-        <dependency>
-            <groupId>com.azure</groupId>
-            <artifactId>azure-ai-textanalytics</artifactId>
-        </dependency>
 
         <dependency>
             <groupId>org.twitter4j</groupId>
@@ -127,13 +122,6 @@
                 <groupId>org.springframework</groupId>
                 <artifactId>spring-framework-bom</artifactId>
                 <version>${spring-framework-bom.version}</version>
-                <type>pom</type>
-                <scope>import</scope>
-            </dependency>
-            <dependency>
-                <groupId>com.azure</groupId>
-                <artifactId>azure-sdk-bom</artifactId>
-                <version>${azure-sdk-bom.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>

@@ -21,10 +21,6 @@ public class News {
     private String subChannel;
     @Enumerated(EnumType.STRING)
     private Channel channel;
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(referencedColumnName = "id")
-    @JsonManagedReference
-    private Sentiment sentiment;
 
     public Long getId() {
         return id;
@@ -74,14 +70,6 @@ public class News {
         this.channel = channel;
     }
 
-    public Sentiment getSentiment() {
-        return sentiment;
-    }
-
-    public void setSentiment(Sentiment sentiment) {
-        this.sentiment = sentiment;
-    }
-
     @Override
     public String toString() {
         return "News{" +
@@ -91,7 +79,6 @@ public class News {
                 ", created=" + created +
                 ", subChannel='" + subChannel + '\'' +
                 ", channel=" + channel +
-                ", sentiment=" + sentiment +
                 '}';
     }
 }

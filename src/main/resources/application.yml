@@ -42,8 +42,6 @@ scan:
     - "ripple"
   twitter-users:
     - "attorneyjeremy1"
-sentiment:
-  enabled: false
 logging:
   level:
     com.azure.ai.textanalytics: WARN

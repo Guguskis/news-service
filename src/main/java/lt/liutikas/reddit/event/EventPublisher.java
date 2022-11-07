@@ -22,11 +22,6 @@ public class EventPublisher {
         this.eventAssembler = eventAssembler;
     }
 
-    public void publishUpdatedNewsEvent(List<News> news) {
-        UpdatedNewsEvent event = eventAssembler.assembleUpdatedNewsEvent(news);
-        publisher.publishEvent(event);
-    }
-
     public void publishSavedNewsEvent(List<News> news) {
         SavedNewsEvent event = eventAssembler.assembleSavedNewsEvent(news);
         publisher.publishEvent(event);

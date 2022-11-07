@@ -46,14 +46,7 @@ Subscribe to news feed:
   "url": "https://old.reddit.com/r/funny/comments/v06dct/she_is_gonna_take_away_jobs/",
   "created": "2022-05-29T17:22:18Z",
   "subChannel": "funny",
-  "channel": "REDDIT",
-  "sentiment": {
-    "id": 1,
-    "sentiment": "NEGATIVE",
-    "scoreNegative": 0.77,
-    "scorePositive": 0.02,
-    "scoreNeutral": 0.2
-  }
+  "channel": "REDDIT"
 }
 ```
 
