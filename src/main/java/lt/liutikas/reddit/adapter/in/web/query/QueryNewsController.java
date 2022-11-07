@@ -1,4 +1,4 @@
-package lt.liutikas.reddit.adapter.out.in.web.query;
+package lt.liutikas.reddit.adapter.in.web.query;
 
 import lt.liutikas.reddit.api.model.GetNewsRequest;
 import lt.liutikas.reddit.api.model.NewsPage;

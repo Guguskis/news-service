@@ -1,4 +1,4 @@
-package lt.liutikas.reddit.adapter.out;
+package lt.liutikas.reddit.adapter;
 
 import lt.liutikas.reddit.api.model.GetNewsRequest;
 import lt.liutikas.reddit.api.model.NewsPage;
@@ -49,7 +49,7 @@ public class NewsPersistenceAdapter implements QueryNewsPort {
         newsPage.setNews(page.getContent());
         newsPage.setNextToken(page.nextPageable());
 
-        LOG.info("Returning news { 'pageToken': {}, 'pageSize': {} }", pageRequest.getPageNumber(), request.getPageSize());
+        LOG.info("Returning news { 'pageToken': {}, 'pageSize': {} }", pageRequest.getPageNumber(), pageRequest.getPageSize());
 
         return newsPage;
     }

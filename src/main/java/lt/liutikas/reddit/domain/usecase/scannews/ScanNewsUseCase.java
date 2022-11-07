@@ -1,15 +1,14 @@
-package lt.liutikas.reddit.service;
+package lt.liutikas.reddit.domain.usecase.scannews;
 
 import lt.liutikas.reddit.assembler.ScanAssembler;
-import lt.liutikas.reddit.event.EventPublisher;
 import lt.liutikas.reddit.domain.entity.core.News;
 import lt.liutikas.reddit.domain.entity.scan.ScanResult;
+import lt.liutikas.reddit.event.EventPublisher;
 import lt.liutikas.reddit.repository.NewsRepository;
 import lt.liutikas.reddit.repository.ScanResultRepository;
 import lt.liutikas.reddit.source.NewsSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import java.util.Comparator;
@@ -17,9 +16,9 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-public class ScanService {
+public class ScanNewsUseCase {
 
-    private static final Logger LOG = LoggerFactory.getLogger(ScanService.class);
+    private static final Logger LOG = LoggerFactory.getLogger(ScanNewsUseCase.class);
 
     private final ScanResultRepository scanResultRepository;
     private final NewsRepository newsRepository;
@@ -27,16 +26,15 @@ public class ScanService {
     private final ScanAssembler scanAssembler;
     private final List<NewsSource> newsSources;
 
-    public ScanService(ScanResultRepository scanResultRepository, EventPublisher eventPublisher, ScanAssembler scanAssembler, List<NewsSource> newsSources, NewsRepository newsRepository) {
+    public ScanNewsUseCase(ScanResultRepository scanResultRepository, NewsRepository newsRepository, EventPublisher eventPublisher, ScanAssembler scanAssembler, List<NewsSource> newsSources) {
         this.scanResultRepository = scanResultRepository;
+        this.newsRepository = newsRepository;
         this.eventPublisher = eventPublisher;
         this.scanAssembler = scanAssembler;
         this.newsSources = newsSources;
-        this.newsRepository = newsRepository;
     }
 
-    @Scheduled(cron = "0 0/1 * * * *")
-    public void scan() {
+    public void scanNews() {
         LOG.info("Scanning news... { \"sources\": {} }", newsSources.size());
 
         List<News> notScannedNews = getNotScannedNews();
