@@ -1,4 +1,4 @@
-package lt.liutikas.reddit.model.event;
+package lt.liutikas.reddit.domain.entity.event;
 
 import lt.liutikas.reddit.api.model.SubscriptionAction;
 

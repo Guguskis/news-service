@@ -1,8 +1,8 @@
 package lt.liutikas.reddit.client;
 
 import lt.liutikas.reddit.assembler.TwitterAssembler;
-import lt.liutikas.reddit.model.twitter.Tweet;
-import lt.liutikas.reddit.model.twitter.TweetSubChannelType;
+import lt.liutikas.reddit.domain.entity.twitter.Tweet;
+import lt.liutikas.reddit.domain.entity.twitter.TweetSubChannelType;
 import org.springframework.stereotype.Component;
 import twitter4j.Query;
 import twitter4j.QueryResult;

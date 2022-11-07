@@ -1,9 +1,9 @@
 package lt.liutikas.reddit.event;
 
-import lt.liutikas.reddit.model.core.News;
-import lt.liutikas.reddit.model.event.SavedNewsEvent;
-import lt.liutikas.reddit.model.scan.ProcessingStatus;
-import lt.liutikas.reddit.model.scan.SentimentResult;
+import lt.liutikas.reddit.domain.entity.core.News;
+import lt.liutikas.reddit.domain.entity.event.SavedNewsEvent;
+import lt.liutikas.reddit.domain.entity.scan.ProcessingStatus;
+import lt.liutikas.reddit.domain.entity.scan.SentimentResult;
 import lt.liutikas.reddit.repository.SentimentResultRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

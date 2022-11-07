@@ -1,7 +1,7 @@
 package lt.liutikas.reddit.registry;
 
 import lt.liutikas.reddit.api.model.SubscriptionAction;
-import lt.liutikas.reddit.model.core.Channel;
+import lt.liutikas.reddit.domain.entity.core.Channel;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

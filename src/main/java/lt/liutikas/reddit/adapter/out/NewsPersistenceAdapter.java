@@ -1,13 +1,11 @@
-package lt.liutikas.reddit.service;
+package lt.liutikas.reddit.adapter.out;
 
 import lt.liutikas.reddit.api.model.GetNewsRequest;
 import lt.liutikas.reddit.api.model.NewsPage;
-import lt.liutikas.reddit.api.model.SaveNewsRequest;
-import lt.liutikas.reddit.assembler.NewsAssembler;
 import lt.liutikas.reddit.config.exception.NotFoundException;
-import lt.liutikas.reddit.event.EventPublisher;
-import lt.liutikas.reddit.model.core.Channel;
-import lt.liutikas.reddit.model.core.News;
+import lt.liutikas.reddit.domain.entity.core.Channel;
+import lt.liutikas.reddit.domain.entity.core.News;
+import lt.liutikas.reddit.domain.port.out.persistence.QueryNewsPort;
 import lt.liutikas.reddit.repository.NewsRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,26 +14,22 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
 @Service
-public class NewsService {
+public class NewsPersistenceAdapter implements QueryNewsPort {
 
-    private static final Logger LOG = LoggerFactory.getLogger(NewsService.class);
+    private static final Logger LOG = LoggerFactory.getLogger(NewsPersistenceAdapter.class);
 
-    private final NewsAssembler newsAssembler;
-    private final NewsRepository newsRepository;
-    private final EventPublisher eventPublisher;
+    final NewsRepository newsRepository;
 
-    public NewsService(NewsRepository newsRepository, EventPublisher eventPublisher, NewsAssembler newsAssembler) {
+    public NewsPersistenceAdapter(NewsRepository newsRepository) {
         this.newsRepository = newsRepository;
-        this.eventPublisher = eventPublisher;
-        this.newsAssembler = newsAssembler;
     }
 
-    public News getNews(Long id) {
+    @Override
+    public News findOne(Long id) {
         Optional<News> optional = newsRepository.findById(id);
 
         if (optional.isEmpty())
@@ -44,7 +38,8 @@ public class NewsService {
         return optional.get();
     }
 
-    public NewsPage getNews(GetNewsRequest request) {
+    @Override
+    public NewsPage findMany(GetNewsRequest request) {
         PageRequest pageRequest = getPageRequestByCreatedDesc(request);
         List<String> subChannels = request.getSubChannels();
 
@@ -59,7 +54,9 @@ public class NewsService {
         return newsPage;
     }
 
-    public NewsPage getNews(Channel channel, GetNewsRequest request) {
+
+    @Override
+    public NewsPage findMany(Channel channel, GetNewsRequest request) {
         PageRequest pageRequest = getPageRequestByCreatedDesc(request);
         List<String> subChannels = request.getSubChannels();
         Page<News> page = findNews(channel, subChannels, pageRequest);
@@ -73,7 +70,8 @@ public class NewsService {
         return newsPage;
     }
 
-    private Page<News> findNews(PageRequest pageRequest, List<String> subChannels) {
+
+    Page<News> findNews(PageRequest pageRequest, List<String> subChannels) {
         if (subChannels.isEmpty()) {
             return newsRepository.findAll(pageRequest);
         } else {
@@ -81,7 +79,7 @@ public class NewsService {
         }
     }
 
-    private Page<News> findNews(Channel channel, List<String> subChannels, PageRequest pageRequest) {
+    Page<News> findNews(Channel channel, List<String> subChannels, PageRequest pageRequest) {
         if (subChannels.isEmpty()) {
             return newsRepository.findByChannel(channel, pageRequest);
         } else {
@@ -89,20 +87,11 @@ public class NewsService {
         }
     }
 
-    private PageRequest getPageRequestByCreatedDesc(GetNewsRequest request) {
+
+    PageRequest getPageRequestByCreatedDesc(GetNewsRequest request) {
         PageRequest pageRequest = request.pageRequest();
         Sort sort = Sort.by("created").descending();
         return pageRequest.withSort(sort);
     }
 
-    public News saveNews(SaveNewsRequest request) {
-        News news = newsAssembler.assembleNews(request);
-        news = newsRepository.save(news);
-
-        LOG.info("Saved news { \"id\": {} }", news.getId());
-
-        eventPublisher.publishSavedNewsEvent(Arrays.asList(news));
-
-        return news;
-    }
 }

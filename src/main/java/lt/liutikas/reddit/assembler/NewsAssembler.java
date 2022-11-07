@@ -1,9 +1,9 @@
 package lt.liutikas.reddit.assembler;
 
 import lt.liutikas.reddit.api.model.SaveNewsRequest;
-import lt.liutikas.reddit.model.core.Channel;
-import lt.liutikas.reddit.model.core.News;
-import lt.liutikas.reddit.model.twitter.Tweet;
+import lt.liutikas.reddit.domain.entity.core.Channel;
+import lt.liutikas.reddit.domain.entity.core.News;
+import lt.liutikas.reddit.domain.entity.twitter.Tweet;
 import org.apache.commons.lang3.NotImplementedException;
 import org.springframework.stereotype.Component;
 import some.developer.reddit.client.model.Submission;

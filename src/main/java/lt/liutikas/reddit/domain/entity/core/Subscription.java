@@ -1,4 +1,4 @@
-package lt.liutikas.reddit.model.core;
+package lt.liutikas.reddit.domain.entity.core;
 
 public class Subscription {
 

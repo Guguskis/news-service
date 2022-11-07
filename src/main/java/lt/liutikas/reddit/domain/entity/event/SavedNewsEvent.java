@@ -1,15 +1,15 @@
-package lt.liutikas.reddit.model.event;
+package lt.liutikas.reddit.domain.entity.event;
 
-import lt.liutikas.reddit.model.core.News;
+import lt.liutikas.reddit.domain.entity.core.News;
 import org.springframework.context.ApplicationEvent;
 
 import java.util.List;
 
-public class UpdatedNewsEvent extends ApplicationEvent {
+public class SavedNewsEvent extends ApplicationEvent {
 
     private List<News> news;
 
-    public UpdatedNewsEvent(Object source) {
+    public SavedNewsEvent(Object source) {
         super(source);
     }
 

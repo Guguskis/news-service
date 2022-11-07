@@ -1,6 +1,6 @@
 package lt.liutikas.reddit.assembler;
 
-import lt.liutikas.reddit.model.twitter.Tweet;
+import lt.liutikas.reddit.domain.entity.twitter.Tweet;
 import org.springframework.stereotype.Component;
 import twitter4j.Status;
 

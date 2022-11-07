@@ -1,7 +1,7 @@
 package lt.liutikas.reddit.repository;
 
-import lt.liutikas.reddit.model.core.Channel;
-import lt.liutikas.reddit.model.core.News;
+import lt.liutikas.reddit.domain.entity.core.Channel;
+import lt.liutikas.reddit.domain.entity.core.News;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;

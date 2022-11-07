@@ -1,4 +1,4 @@
-package lt.liutikas.reddit.model.twitter;
+package lt.liutikas.reddit.domain.entity.twitter;
 
 import java.net.URL;
 import java.time.LocalDateTime;

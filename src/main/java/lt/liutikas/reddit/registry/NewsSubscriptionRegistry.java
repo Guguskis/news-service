@@ -1,10 +1,10 @@
 package lt.liutikas.reddit.registry;
 
 import lt.liutikas.reddit.api.model.SubscriptionAction;
-import lt.liutikas.reddit.model.core.Channel;
-import lt.liutikas.reddit.model.core.News;
-import lt.liutikas.reddit.model.core.Subscription;
-import lt.liutikas.reddit.model.core.User;
+import lt.liutikas.reddit.domain.entity.core.Channel;
+import lt.liutikas.reddit.domain.entity.core.News;
+import lt.liutikas.reddit.domain.entity.core.Subscription;
+import lt.liutikas.reddit.domain.entity.core.User;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;

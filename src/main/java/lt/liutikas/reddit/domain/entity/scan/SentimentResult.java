@@ -1,6 +1,6 @@
-package lt.liutikas.reddit.model.scan;
+package lt.liutikas.reddit.domain.entity.scan;
 
-import lt.liutikas.reddit.model.core.News;
+import lt.liutikas.reddit.domain.entity.core.News;
 
 import javax.persistence.*;
 

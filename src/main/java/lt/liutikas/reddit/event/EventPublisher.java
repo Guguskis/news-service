@@ -2,10 +2,10 @@ package lt.liutikas.reddit.event;
 
 import lt.liutikas.reddit.api.model.SubscriptionAction;
 import lt.liutikas.reddit.assembler.EventAssembler;
-import lt.liutikas.reddit.model.core.News;
-import lt.liutikas.reddit.model.event.NewsSubscriptionEvent;
-import lt.liutikas.reddit.model.event.SavedNewsEvent;
-import lt.liutikas.reddit.model.event.UpdatedNewsEvent;
+import lt.liutikas.reddit.domain.entity.core.News;
+import lt.liutikas.reddit.domain.entity.event.NewsSubscriptionEvent;
+import lt.liutikas.reddit.domain.entity.event.SavedNewsEvent;
+import lt.liutikas.reddit.domain.entity.event.UpdatedNewsEvent;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Component;
 

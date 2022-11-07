@@ -1,6 +1,6 @@
 package lt.liutikas.reddit.registry;
 
-import lt.liutikas.reddit.model.core.User;
+import lt.liutikas.reddit.domain.entity.core.User;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;

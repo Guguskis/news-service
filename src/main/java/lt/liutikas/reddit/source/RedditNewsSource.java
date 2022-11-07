@@ -2,8 +2,8 @@ package lt.liutikas.reddit.source;
 
 import lt.liutikas.reddit.assembler.NewsAssembler;
 import lt.liutikas.reddit.config.properties.ScanProperties;
-import lt.liutikas.reddit.model.core.Channel;
-import lt.liutikas.reddit.model.core.News;
+import lt.liutikas.reddit.domain.entity.core.Channel;
+import lt.liutikas.reddit.domain.entity.core.News;
 import lt.liutikas.reddit.registry.NewsSubscriptionRegistry;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

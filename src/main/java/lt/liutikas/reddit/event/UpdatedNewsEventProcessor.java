@@ -1,7 +1,7 @@
 package lt.liutikas.reddit.event;
 
-import lt.liutikas.reddit.model.core.News;
-import lt.liutikas.reddit.model.event.UpdatedNewsEvent;
+import lt.liutikas.reddit.domain.entity.core.News;
+import lt.liutikas.reddit.domain.entity.event.UpdatedNewsEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.event.EventListener;

@@ -1,6 +1,6 @@
 package lt.liutikas.reddit.interceptor;
 
-import lt.liutikas.reddit.model.core.User;
+import lt.liutikas.reddit.domain.entity.core.User;
 import lt.liutikas.reddit.registry.ActiveUserRegistry;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
