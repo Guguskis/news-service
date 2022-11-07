@@ -56,3 +56,9 @@ Subscribe to news feed:
   }
 }
 ```
+
+## Architecture
+
+![Hexagonal architecture](resources/architecture.png)
+
+Project's hexagonal architecture (see picture above) is based on domain driven design. At the core **UseCase** operate on **Entity** completely decoupling business logic from technical details, aka **Adapter**. 
