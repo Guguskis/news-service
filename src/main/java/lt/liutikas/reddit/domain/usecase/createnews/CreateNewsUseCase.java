@@ -6,7 +6,7 @@ import lt.liutikas.reddit.domain.entity.core.News;
 import lt.liutikas.reddit.domain.entity.core.User;
 import lt.liutikas.reddit.domain.port.in.CreateNewsPort;
 import lt.liutikas.reddit.domain.port.out.cache.QueryNewsSubscriptionPort;
-import lt.liutikas.reddit.domain.port.out.persistence.QueryActiveUsersPort;
+import lt.liutikas.reddit.domain.port.out.cache.QueryUsersPort;
 import lt.liutikas.reddit.domain.port.out.web.PublishNewsPort;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,14 +20,14 @@ public class CreateNewsUseCase {
     private final NewsAssembler newsAssembler;
 
     private final PublishNewsPort publishNewsPort;
-    private final QueryActiveUsersPort queryActiveUsersPort;
+    private final QueryUsersPort queryUsersPort;
     private final QueryNewsSubscriptionPort queryNewsSubscriptionPort;
     private final CreateNewsPort createNewsPort;
 
-    public CreateNewsUseCase(NewsAssembler newsAssembler, PublishNewsPort publishNewsPort, QueryActiveUsersPort queryActiveUsersPort, QueryNewsSubscriptionPort queryNewsSubscriptionPort, CreateNewsPort createNewsPort) {
+    public CreateNewsUseCase(NewsAssembler newsAssembler, PublishNewsPort publishNewsPort, QueryUsersPort queryUsersPort, QueryNewsSubscriptionPort queryNewsSubscriptionPort, CreateNewsPort createNewsPort) {
         this.newsAssembler = newsAssembler;
         this.publishNewsPort = publishNewsPort;
-        this.queryActiveUsersPort = queryActiveUsersPort;
+        this.queryUsersPort = queryUsersPort;
         this.queryNewsSubscriptionPort = queryNewsSubscriptionPort;
         this.createNewsPort = createNewsPort;
     }
@@ -38,7 +38,7 @@ public class CreateNewsUseCase {
 
         LOG.info("Saving news { \"title\": {} }", news.getTitle());
 
-        for (User user : queryActiveUsersPort.listActiveUsers()) {
+        for (User user : queryUsersPort.listActiveUsers()) {
             if (queryNewsSubscriptionPort.isSubscribed(user.getSessionId(), news)) {
                 publishNewsPort.publishNews(user.getSessionId(), news);
             }

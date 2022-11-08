@@ -7,7 +7,7 @@ import lt.liutikas.reddit.domain.entity.scan.ScanResult;
 import lt.liutikas.reddit.domain.port.in.CreateNewsPort;
 import lt.liutikas.reddit.domain.port.in.CreateScanResultPort;
 import lt.liutikas.reddit.domain.port.out.cache.QueryNewsSubscriptionPort;
-import lt.liutikas.reddit.domain.port.out.persistence.QueryActiveUsersPort;
+import lt.liutikas.reddit.domain.port.out.cache.QueryUsersPort;
 import lt.liutikas.reddit.domain.port.out.persistence.QueryScanResultPort;
 import lt.liutikas.reddit.domain.port.out.web.PublishNewsPort;
 import lt.liutikas.reddit.source.NewsSource;
@@ -28,18 +28,18 @@ public class ScanNewsUseCase {
     private final QueryScanResultPort queryScanResultPort;
     private final CreateScanResultPort createScanResultPort;
     private final CreateNewsPort createNewsPort;
-    private final QueryActiveUsersPort queryActiveUsersPort;
+    private final QueryUsersPort queryUsersPort;
     private final PublishNewsPort publishNewsPort;
-    private final ScanAssembler scanAssembler;
+    private final ScanAssembler scanResultAssembler;
 
     private final List<NewsSource> newsSources;
     private final QueryNewsSubscriptionPort queryNewsSubscriptionPort;
 
-    public ScanNewsUseCase(QueryScanResultPort queryScanResultPort, CreateScanResultPort createScanResultPort, QueryActiveUsersPort queryActiveUsersPort, ScanAssembler scanAssembler, List<NewsSource> newsSources, CreateNewsPort createNewsPort, PublishNewsPort publishNewsPort, QueryNewsSubscriptionPort queryNewsSubscriptionPort) {
+    public ScanNewsUseCase(QueryScanResultPort queryScanResultPort, CreateScanResultPort createScanResultPort, QueryUsersPort queryUsersPort, ScanAssembler scanResultAssembler, List<NewsSource> newsSources, CreateNewsPort createNewsPort, PublishNewsPort publishNewsPort, QueryNewsSubscriptionPort queryNewsSubscriptionPort) {
         this.queryScanResultPort = queryScanResultPort;
         this.createScanResultPort = createScanResultPort;
-        this.queryActiveUsersPort = queryActiveUsersPort;
-        this.scanAssembler = scanAssembler;
+        this.queryUsersPort = queryUsersPort;
+        this.scanResultAssembler = scanResultAssembler;
         this.newsSources = newsSources;
         this.createNewsPort = createNewsPort;
         this.publishNewsPort = publishNewsPort;
@@ -59,7 +59,7 @@ public class ScanNewsUseCase {
         if (news.isEmpty())
             return;
 
-        List<User> activeUsers = queryActiveUsersPort.listActiveUsers();
+        List<User> activeUsers = queryUsersPort.listActiveUsers();
 
         LOG.info("Publishing news { \"activeUsers\": {} }", activeUsers.size());
 
@@ -76,16 +76,12 @@ public class ScanNewsUseCase {
     }
 
     private List<News> getNotScannedNews() {
-        return getNews(newsSources).stream()
-                .filter(this::notScanned)
-                .collect(Collectors.toList());
-    }
-
-    private List<News> getNews(List<NewsSource> sources) {
-        return sources.stream()
+        return newsSources.stream()
                 .parallel()
                 .map(NewsSource::getNews)
                 .flatMap(List::stream)
+                .collect(Collectors.toList()).stream()
+                .filter(this::notScanned)
                 .collect(Collectors.toList());
     }
 
@@ -104,7 +100,7 @@ public class ScanNewsUseCase {
 
     private List<ScanResult> saveScanResults(List<News> news) {
         return news.stream()
-                .map(scanAssembler::assembleScanResult)
+                .map(scanResultAssembler::assembleScanResult)
                 .map(createScanResultPort::create)
                 .collect(Collectors.toList());
     }

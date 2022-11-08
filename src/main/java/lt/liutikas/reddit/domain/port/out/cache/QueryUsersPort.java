@@ -1,10 +1,10 @@
-package lt.liutikas.reddit.domain.port.out.persistence;
+package lt.liutikas.reddit.domain.port.out.cache;
 
 import lt.liutikas.reddit.domain.entity.core.User;
 
 import java.util.List;
 
-public interface QueryActiveUsersPort {
+public interface QueryUsersPort {
 
     List<User> listActiveUsers();
 

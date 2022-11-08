@@ -11,16 +11,6 @@ import java.time.LocalDateTime;
 @Component
 public class ScanAssembler {
 
-    public ScanResult assembleScanResult(Submission submission) {
-        ScanResult scanResult = new ScanResult();
-
-        scanResult.setUrl(submission.getUrl());
-        scanResult.setScannedAt(LocalDateTime.now());
-        scanResult.setSource(Channel.REDDIT);
-
-        return scanResult;
-    }
-
     public ScanResult assembleScanResult(News news) {
         ScanResult scanResult = new ScanResult();
 

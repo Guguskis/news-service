@@ -1,7 +1,8 @@
 package lt.liutikas.reddit.interceptor;
 
 import lt.liutikas.reddit.domain.entity.core.User;
-import lt.liutikas.reddit.registry.ActiveUserRegistry;
+import lt.liutikas.reddit.domain.port.out.cache.AddUserPort;
+import lt.liutikas.reddit.domain.port.out.cache.RemoveUserPort;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.messaging.Message;
@@ -17,10 +18,12 @@ public class UserInterceptor implements ChannelInterceptor {
 
     private static final Logger LOG = LoggerFactory.getLogger(UserInterceptor.class);
 
-    private final ActiveUserRegistry activeUserRegistry;
+    private final AddUserPort addUserPort;
+    private final RemoveUserPort removeUserPort;
 
-    public UserInterceptor(ActiveUserRegistry activeUserRegistry) {
-        this.activeUserRegistry = activeUserRegistry;
+    public UserInterceptor(AddUserPort addUserPort, RemoveUserPort removeUserPort) {
+        this.addUserPort = addUserPort;
+        this.removeUserPort = removeUserPort;
     }
 
     @Override
@@ -32,15 +35,15 @@ public class UserInterceptor implements ChannelInterceptor {
             return message;
         }
 
-        if (connectCommand(accessor)) {
+        if (isConnectCommand(accessor)) {
             String sessionId = getSessionId(message);
             User user = new User();
             user.setSessionId(sessionId);
-            activeUserRegistry.addUser(user);
+            addUserPort.addUser(user);
             LOG.info("User connected {\"sessionId\": \"{}\"}", sessionId);
-        } else if (disconnectCommand(accessor)) {
+        } else if (isDisconnectCommand(accessor)) {
             String sessionId = getSessionId(message);
-            activeUserRegistry.removeUserBySessionId(sessionId);
+            removeUserPort.removeUserBySessionId(sessionId);
             LOG.info("User disconnected {\"sessionId\": \"{}\"}", sessionId);
         }
 
@@ -51,11 +54,11 @@ public class UserInterceptor implements ChannelInterceptor {
         return message.getHeaders().get("simpSessionId", String.class);
     }
 
-    private boolean connectCommand(StompHeaderAccessor accessor) {
+    private boolean isConnectCommand(StompHeaderAccessor accessor) {
         return StompCommand.CONNECT.equals(accessor.getCommand());
     }
 
-    private boolean disconnectCommand(StompHeaderAccessor accessor) {
+    private boolean isDisconnectCommand(StompHeaderAccessor accessor) {
         return StompCommand.DISCONNECT.equals(accessor.getCommand());
     }
 }
