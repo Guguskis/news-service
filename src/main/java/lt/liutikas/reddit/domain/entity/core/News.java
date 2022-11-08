@@ -1,7 +1,6 @@
 package lt.liutikas.reddit.domain.entity.core;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import javax.persistence.*;
 import java.net.URL;

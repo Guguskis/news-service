@@ -1,6 +1,6 @@
 package lt.liutikas.reddit.config;
 
-import lt.liutikas.reddit.interceptor.UserInterceptor;
+import lt.liutikas.reddit.adapter.in.web.query.UsersWebsocketAdapter;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.messaging.simp.config.ChannelRegistration;
 import org.springframework.messaging.simp.config.MessageBrokerRegistry;
@@ -16,10 +16,10 @@ import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerCo
 @Controller
 public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
 
-    private final UserInterceptor userInterceptor;
+    private final UsersWebsocketAdapter usersWebsocketAdapter;
 
-    public WebSocketConfig(UserInterceptor userInterceptor) {
-        this.userInterceptor = userInterceptor;
+    public WebSocketConfig(UsersWebsocketAdapter usersWebsocketAdapter) {
+        this.usersWebsocketAdapter = usersWebsocketAdapter;
     }
 
     @Override
@@ -35,6 +35,6 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
 
     @Override
     public void configureClientInboundChannel(ChannelRegistration registration) {
-        registration.interceptors(userInterceptor);
+        registration.interceptors(usersWebsocketAdapter);
     }
 }

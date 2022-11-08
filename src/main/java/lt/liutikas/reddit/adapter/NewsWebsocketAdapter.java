@@ -29,8 +29,4 @@ public class NewsWebsocketAdapter implements PublishNewsPort {
         return headerAccessor.getMessageHeaders();
     }
 
-    private int compareCreatedDesc(News n1, News n2) {
-        return n1.getCreated().compareTo(n2.getCreated());
-    }
-
 }

@@ -1,10 +1,8 @@
 package lt.liutikas.reddit.assembler;
 
-import lt.liutikas.reddit.domain.entity.core.Channel;
 import lt.liutikas.reddit.domain.entity.core.News;
 import lt.liutikas.reddit.domain.entity.scan.ScanResult;
 import org.springframework.stereotype.Component;
-import some.developer.reddit.client.model.Submission;
 
 import java.time.LocalDateTime;
 

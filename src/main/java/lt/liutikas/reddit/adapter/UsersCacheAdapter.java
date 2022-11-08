@@ -2,8 +2,8 @@ package lt.liutikas.reddit.adapter;
 
 import lt.liutikas.reddit.domain.entity.core.User;
 import lt.liutikas.reddit.domain.port.in.cache.AddUserPort;
-import lt.liutikas.reddit.domain.port.out.cache.QueryUsersPort;
 import lt.liutikas.reddit.domain.port.in.cache.RemoveUserPort;
+import lt.liutikas.reddit.domain.port.out.cache.QueryUsersPort;
 import lt.liutikas.reddit.registry.ActiveUserRegistry;
 import org.springframework.stereotype.Service;
 

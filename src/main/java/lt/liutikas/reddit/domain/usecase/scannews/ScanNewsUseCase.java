@@ -3,7 +3,6 @@ package lt.liutikas.reddit.domain.usecase.scannews;
 import lt.liutikas.reddit.assembler.ScanAssembler;
 import lt.liutikas.reddit.domain.entity.core.News;
 import lt.liutikas.reddit.domain.entity.core.User;
-import lt.liutikas.reddit.domain.entity.scan.ScanResult;
 import lt.liutikas.reddit.domain.port.in.persistence.CreateNewsPort;
 import lt.liutikas.reddit.domain.port.in.persistence.CreateScanResultPort;
 import lt.liutikas.reddit.domain.port.out.cache.QueryNewsSubscriptionPort;
@@ -26,14 +25,14 @@ public class ScanNewsUseCase {
     private static final Logger LOG = LoggerFactory.getLogger(ScanNewsUseCase.class);
 
     private final QueryScanResultPort queryScanResultPort;
+    private final QueryNewsSubscriptionPort queryNewsSubscriptionPort;
+    private final QueryUsersPort queryUsersPort;
     private final CreateScanResultPort createScanResultPort;
     private final CreateNewsPort createNewsPort;
-    private final QueryUsersPort queryUsersPort;
     private final PublishNewsPort publishNewsPort;
     private final ScanAssembler scanResultAssembler;
 
     private final List<NewsSource> newsSources;
-    private final QueryNewsSubscriptionPort queryNewsSubscriptionPort;
 
     public ScanNewsUseCase(QueryScanResultPort queryScanResultPort, CreateScanResultPort createScanResultPort, QueryUsersPort queryUsersPort, ScanAssembler scanResultAssembler, List<NewsSource> newsSources, CreateNewsPort createNewsPort, PublishNewsPort publishNewsPort, QueryNewsSubscriptionPort queryNewsSubscriptionPort) {
         this.queryScanResultPort = queryScanResultPort;
@@ -98,11 +97,10 @@ public class ScanNewsUseCase {
                 .collect(Collectors.toList());
     }
 
-    private List<ScanResult> saveScanResults(List<News> news) {
-        return news.stream()
+    private void saveScanResults(List<News> news) {
+        news.stream()
                 .map(scanResultAssembler::assembleScanResult)
-                .map(createScanResultPort::create)
-                .collect(Collectors.toList());
+                .forEach(createScanResultPort::create);
     }
 
     private int compareCreatedDesc(News n1, News n2) {
