@@ -1,7 +1,7 @@
 package lt.liutikas.reddit.adapter;
 
 import lt.liutikas.reddit.domain.entity.scan.ScanResult;
-import lt.liutikas.reddit.domain.port.in.CreateScanResultPort;
+import lt.liutikas.reddit.domain.port.in.persistence.CreateScanResultPort;
 import lt.liutikas.reddit.domain.port.out.persistence.QueryScanResultPort;
 import lt.liutikas.reddit.repository.ScanResultRepository;
 import org.springframework.stereotype.Service;

@@ -1,4 +1,4 @@
-package lt.liutikas.reddit.domain.port.out.cache;
+package lt.liutikas.reddit.domain.port.in.cache;
 
 import lt.liutikas.reddit.domain.entity.core.User;
 

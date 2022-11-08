@@ -3,7 +3,7 @@ package lt.liutikas.reddit.domain.usecase.updatenewssubscription;
 import lt.liutikas.reddit.api.model.SubscriptionAction;
 import lt.liutikas.reddit.domain.entity.core.Channel;
 import lt.liutikas.reddit.domain.entity.core.SubscriptionActionType;
-import lt.liutikas.reddit.domain.port.in.UpdateNewsSubscriptionPort;
+import lt.liutikas.reddit.domain.port.in.cache.UpdateNewsSubscriptionPort;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;

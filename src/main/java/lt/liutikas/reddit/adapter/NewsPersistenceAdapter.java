@@ -5,7 +5,7 @@ import lt.liutikas.reddit.api.model.NewsPage;
 import lt.liutikas.reddit.config.exception.NotFoundException;
 import lt.liutikas.reddit.domain.entity.core.Channel;
 import lt.liutikas.reddit.domain.entity.core.News;
-import lt.liutikas.reddit.domain.port.in.CreateNewsPort;
+import lt.liutikas.reddit.domain.port.in.persistence.CreateNewsPort;
 import lt.liutikas.reddit.domain.port.out.persistence.QueryNewsPort;
 import lt.liutikas.reddit.repository.NewsRepository;
 import org.slf4j.Logger;

@@ -1,4 +1,4 @@
-package lt.liutikas.reddit.domain.port.in;
+package lt.liutikas.reddit.domain.port.in.persistence;
 
 import lt.liutikas.reddit.domain.entity.scan.ScanResult;
 

@@ -4,7 +4,7 @@ import lt.liutikas.reddit.api.model.SaveNewsRequest;
 import lt.liutikas.reddit.assembler.NewsAssembler;
 import lt.liutikas.reddit.domain.entity.core.News;
 import lt.liutikas.reddit.domain.entity.core.User;
-import lt.liutikas.reddit.domain.port.in.CreateNewsPort;
+import lt.liutikas.reddit.domain.port.in.persistence.CreateNewsPort;
 import lt.liutikas.reddit.domain.port.out.cache.QueryNewsSubscriptionPort;
 import lt.liutikas.reddit.domain.port.out.cache.QueryUsersPort;
 import lt.liutikas.reddit.domain.port.out.web.PublishNewsPort;

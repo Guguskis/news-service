@@ -1,8 +1,8 @@
 package lt.liutikas.reddit.interceptor;
 
 import lt.liutikas.reddit.domain.entity.core.User;
-import lt.liutikas.reddit.domain.port.out.cache.AddUserPort;
-import lt.liutikas.reddit.domain.port.out.cache.RemoveUserPort;
+import lt.liutikas.reddit.domain.port.in.cache.AddUserPort;
+import lt.liutikas.reddit.domain.port.in.cache.RemoveUserPort;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.messaging.Message;
@@ -35,19 +35,21 @@ public class UserInterceptor implements ChannelInterceptor {
             return message;
         }
 
+        registerUser(accessor, getSessionId(message));
+
+        return message;
+    }
+
+    private void registerUser(StompHeaderAccessor accessor, String sessionId) {
         if (isConnectCommand(accessor)) {
-            String sessionId = getSessionId(message);
             User user = new User();
             user.setSessionId(sessionId);
             addUserPort.addUser(user);
             LOG.info("User connected {\"sessionId\": \"{}\"}", sessionId);
         } else if (isDisconnectCommand(accessor)) {
-            String sessionId = getSessionId(message);
             removeUserPort.removeUserBySessionId(sessionId);
             LOG.info("User disconnected {\"sessionId\": \"{}\"}", sessionId);
         }
-
-        return message;
     }
 
     private String getSessionId(Message<?> message) {
