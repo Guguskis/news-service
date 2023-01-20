@@ -7,6 +7,14 @@ public class GetNewsRequest extends PaginationQuery {
 
     private List<String> subChannels = new ArrayList<>();
 
+    public GetNewsRequest() {
+    }
+
+    public GetNewsRequest(List<String> subChannels, Integer pageToken, Integer pageSize) {
+        super(pageToken, pageSize);
+        this.subChannels = subChannels;
+    }
+
     public List<String> getSubChannels() {
         return subChannels;
     }

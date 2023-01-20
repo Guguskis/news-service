@@ -87,17 +87,6 @@
         </dependency>
 
         <dependency>
-            <groupId>com.fasterxml.jackson.core</groupId>
-            <artifactId>jackson-core</artifactId>
-            <version>2.13.1</version>
-        </dependency>
-
-        <dependency>
-            <groupId>com.fasterxml.jackson.core</groupId>
-            <artifactId>jackson-databind</artifactId>
-            <version>2.13.2.1</version>
-        </dependency>
-        <dependency>
             <groupId>releases.some.developer.client</groupId>
             <artifactId>reddit-client</artifactId>
             <version>1.0.1</version>
@@ -119,6 +108,26 @@
             <artifactId>twitter4j-stream</artifactId>
             <version>4.0.7</version>
         </dependency>
+        <dependency>
+            <groupId>org.openapitools</groupId>
+            <artifactId>jackson-databind-nullable</artifactId>
+            <version>0.2.2</version>
+        </dependency>
+
+        <!-- ONE-PUNCH-MAN START -->
+        <dependency>
+            <groupId>org.javacord</groupId>
+            <artifactId>javacord</artifactId>
+            <version>3.4.0</version>
+            <type>pom</type>
+        </dependency>
+        <dependency>
+            <groupId>com.squareup.okio</groupId>
+            <artifactId>okio</artifactId>
+            <version>2.8.0</version>
+        </dependency>
+
+        <!-- ONE-PUNCH-MAN  END -->
     </dependencies>
 
     <dependencyManagement>
@@ -137,6 +146,13 @@
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
+
+            <!--            OPENAPI-->
+<!--            <dependency>-->
+<!--                <groupId>io.springfox</groupId>-->
+<!--                <artifactId>springfox-swagger2</artifactId>-->
+<!--                <version>3.0.0</version>-->
+<!--            </dependency>-->
         </dependencies>
     </dependencyManagement>
 
@@ -156,6 +172,34 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
+            </plugin>
+            <plugin>
+                <groupId>org.openapitools</groupId>
+                <artifactId>openapi-generator-maven-plugin</artifactId>
+                <version>6.0.0</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>generate</goal>
+                        </goals>
+                        <configuration>
+                            <inputSpec>${project.basedir}/src/main/resources/news-api.yml</inputSpec>
+                            <output>${project.basedir}</output>
+                            <generatorName>spring</generatorName>
+                            <apiPackage>lt.liutikas.reddit.openapi.api</apiPackage>
+                            <modelPackage>lt.liutikas.reddit.openapi.model</modelPackage>
+                            <supportingFilesToGenerate>ApiUtil.java</supportingFilesToGenerate>
+<!--                            TODO try post processing https://openapi-generator.tech/docs/file-post-processing/-->
+<!--                            <enablePostProcessFile>true</enablePostProcessFile>-->
+<!--                            plus need to add env variable JAVA_POST_PROCESS_FILE-->
+                            <configOptions>
+                                <delegatePattern>true</delegatePattern>
+                                <openApiNullable>false</openApiNullable>
+                                <hideGenerationTimestamp>true</hideGenerationTimestamp>
+                            </configOptions>
+                        </configuration>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>
